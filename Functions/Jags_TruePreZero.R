@@ -1,0 +1,53 @@
+cat("model{ #ap denotes apparent, #main.ap denotes true prevalence
+    y ~ dbin(ap, n) 
+    #Uniform (non-informative) prior for true prevalence (tp)
+    ap<-main.ap*Se+(1-main.ap)*(1-Sp)
+    main.ap <- z* pstar
+    z ~ dbern(tau0)
+    pequal0 <- equals(main.ap, 0)    #Informative priors on Se and Sp
+    Se ~ dbeta(ase, bse) ## Mode=0.70, 95% sure Se > 0.55 (88.5, 10.22) 
+    Sp ~ dbeta(asp, bsp) ## Mode=0.99, 95% sure Sp > 0.95  dbeta(88.28, 1.882)
+    pstar ~ dbeta(astar, bstar) ## Mode=0.03, 95% sure pistar < 0.15  dbeta(1.80, 26.74)
+    #Se ~ dbeta(22.5, 1.22) ## Mode=0.70, 95% sure Se > 0.55
+    #Sp ~ dbeta(88.28, 1.882) ## Mode=0.99, 95% sure Sp > 0.95
+    #p ~ dbeta(1.80, 26.74) ## Mode=0.03, 95% sure pistar < 0.15
+    }", file=paste("TruezeroPre.txt"))
+
+#data - list(n=91, y=3,tau0=0.10)
+#initials -list(pstar=0.03, Se=0.70, Sp=0.99,z=0)}
+
+SaveParams <- c("main.ap","pstar","Se","Sp","ap","pequal0")
+
+# jagsoutput_Truezero<-jags.model(data=list(n=100,y=4,
+#                                           #ase=fb_SE$a,
+#                                           #bse=fb_SE$b,
+#                                           #asp=fb_SP$a,
+#                                           #bsp=fb_SP$b,
+#                                           #astar=fb$a,
+#                                           #bstar=fb$b,
+#                                           tau0=0.1),n.chains=2,
+#                                 file=paste("TruezeroPre.txt"),quiet=TRUE)
+# 
+# #   update(jagsoutput0, n.iter=nniter, n.thin=nnthin, n.burnin=floor(nniter/6), progress.bar="none")
+# Model1.mcmc <<- coda.samples(jagsoutput_Truezero,  n.iter=10000, 
+#                              n.thin=5, n.burnin=floor(10000/10),
+#                              variable.names=SaveParams)
+# 
+# plot(density(Model1.mcmc[[1]][,4]),xlim=c(0,1),ylim=c(0,10))
+
+jagsoutput_Truezero<-rjags::jags.model(data=list(n=input$n,y=input$y,
+                                          ase=fb_SE$a,
+                                          bse=fb_SE$b,
+                                          asp=fb_SP$a,
+                                          bsp=fb_SP$b,
+                                          astar=fb$a,
+                                          bstar=fb$b,
+                                          tau0=input$tau0),n.chains=input$nchains,
+                                file=paste("TruezeroPre.txt"),quiet=TRUE)
+
+#   update(jagsoutput0, n.iter=nniter, n.thin=nnthin, n.burnin=floor(nniter/6), progress.bar="none")
+Model1.mcmc <<- coda.samples(jagsoutput_Truezero,  n.iter=input$nniter, n.thin=input$nnthin, n.burnin=floor(input$nniter/10),
+                             variable.names=SaveParams)
+
+
+return(Model1.mcmc)

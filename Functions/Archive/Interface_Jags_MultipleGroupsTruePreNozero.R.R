@@ -1,0 +1,16 @@
+sidebarPanel(width = 4,
+             sliderInput(inputId = "k", 
+                         label = "Number of groups: ", 
+                         min=1, max=10000, value=70,step = 1),
+             sliderInput(inputId = "n", 
+                         label = "Sample size of group: ", 
+                         min=1, max=100000, value=10000,step = 100),
+             sliderInput(inputId = "nniter", 
+                         label = "Number of MCMC iterations: ", 
+                         min=10, max=100000, value=10000,step = 100),
+             sliderInput(inputId = "nnthin", 
+                         label = " Thinning interval: ",
+                         min=1, max=500, value=2,step = 1),
+             div(style="display:inline-block;width:45%;text-align: right;",actionButton("RunModel", "Run Model"),style=icon("check")),
+             div(style="display:inline-block;width:45%;text-align: left;",actionButton("buttonModelReset", "Reset..."),style=icon("check"))             
+)

@@ -1,0 +1,16 @@
+
+body{
+	height: 1075px;
+   background-image: linear-gradient(to left bottom, #585858, #FFFFFF);
+}
+
+
+
+.navbar .navbar-brand{
+	color: #585858;
+	font-weight:400;
+}
+
+a{
+	color: #585858;
+}

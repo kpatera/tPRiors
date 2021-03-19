@@ -1,0 +1,19 @@
+model{
+for(i in 1:k){
+y[i] ~ dbin(ap[i], n[i])
+ap[i] <- sub.p[i]*main.Se + (1-sub.p[i])*(1-main.Sp)
+sub.p[i] ~ dbeta(alpha,beta)
+}
+alpha <- main.ap*main.psi
+beta <- main.psi*(1-main.ap)
+main.ap ~ dbeta(amu, bmu) ## Mode=0.12, 95% sure < 0.30  dbeta(3.283, 17.744) 
+main.psi ~ dgamma(apsi, bpsi) ## Uses Median of 95th percentile of prevalence dgamma(4.524, 0.387)
+
+#informative prior for Se and Sp
+main.Se <- 1
+main.Sp <- 1
+
+
+#predictions
+main.pre.pstar.rep ~ dbeta(alpha,beta)
+}
