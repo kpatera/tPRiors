@@ -1,10 +1,11 @@
 # Fix nthin, nchains and nniter of multiple!!!
+# Fix slicker stuck in Multiple+zero+true 
 
 #---- Load packages ----#
 packages.list<-c("shiny","shinythemes","shinyWidgets","shinydashboard",
                  "PriorGen","R2jags","ggplot2","tidyr","rjags",
                  "shinyjs","rmarkdown","markdown","plotly","ggmcmc","knitr","shinyalert",
-                 "grid","DT","readxl","gridExtra","psych","rootSolve","perturb","devtools") # ,
+                 "grid","DT","readxl","gridExtra","psych","rootSolve","devtools") # ,
 #install.packages("Rtools")
 #install.packages("/APre_IWA/Functions/perturb_2.10.tar.gz", repos = NULL, type="source",
 #                 dependencies = TRUE)
@@ -42,6 +43,7 @@ invisible(lapply(Funcs,function(i){ source(paste("Functions/",i,sep="")) }))
 fb<-list(1,1)
 
 #---- Load pre-loaded datasets ----#
+require(readxl)
 Data1 <- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_4studies.xlsx"))
 Data2 <- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_Attica.xlsx"))
 Data3 <- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_NonAttica.xlsx"))

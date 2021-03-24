@@ -1106,10 +1106,10 @@ shinyServer(function(input, output, session) {
     if(input$ID_SingleMultiple=="Multiple populations"){
       if(input$LoadData=="Option1Preload"){
         req(!is.na(input$Indata1))
-        name_data <- input$Indata1
+        name_data <<- input$Indata1
       }else{
         req(!is.na(input$Indata2))
-        name_data <- input$Indata2
+        name_data <<- input$Indata2
       }
     }
     priors$mSetupmodel<-TRUE
