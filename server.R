@@ -1,6 +1,6 @@
 shinyServer(function(input, output, session) {
-  ########### Set up initial values ################################################ #
-  options(shiny.reactlog=TRUE) #THen press ctrl+f3
+  #---------- Set up initial values -----------#
+  options(shiny.reactlog=TRUE) #+ ctrl+F3
   priors <<- reactiveValues()
   cond<-reactiveValues()
   input<<-reactiveValues()
@@ -14,20 +14,14 @@ shinyServer(function(input, output, session) {
   priors$PriorSelect<-FALSE
   priors$mSetupmodel<-FALSE
   priors$mSetupPriors<-FALSE
-  #Model1.mcmc <- reactiveValues()
-  #input$ID_TrueApp<-FALSE
   
-  # prior_cond<<-" not "
-  
-  # priors$prior1<<-reactiveValues()
-  # priors$prior2<<-reactiveValues()
   
   ########### POP UP MESSAGE in the beginning ################################################ #
   
   # showModal(modalDialog(
   #   title = "Important message",
   #   easyClose = FALSE,
-  #   p("This tool aims at estimating the true prevalence based on the apparent prevalence of infection obtained from your sampling and adjusting for the diagnostic accuracy of the tests used.",
+  #   p("tPriors aims at Bayesian (true) prevalence estimation based on elicicated prior opinions.",
   #     tags$strong("
   #   Following Data Protection legislations, we would like to inform you before you use our web application that :"), "We collect data regardingn your app usage within the IWA app to conduct analysis of usage and develope the application further. By clicking",
   #     tags$i(tags$u("I consent")), "you consent to us utilizing the data via Google Analytics.
@@ -40,7 +34,7 @@ shinyServer(function(input, output, session) {
   
   
   
-  ######### PriorGen 3 routines ############################################################### #
+  #----- PriorGen routines ------#
   
   output$PriorGenPlot1 <- plotly::renderPlotly({
     #source("Functions/multiroot.R",local = TRUE)
@@ -451,7 +445,70 @@ shinyServer(function(input, output, session) {
     ply2 <- ggplotly(gg2)
     subplot(ply1, ply2, nrows=1,titleX = TRUE)
   })
+  
+  #------- Interactive conditional interface for prior elication and ploting ------#
+  output$Priors_fb<-renderUI({
+    if(input$ID_MeanMedianMode=="Percentiles"){
+      if(input$ID_TrueApp!="True prevalence"){
+        source("Functions/Interface_findBetaqq2.R",local = TRUE)$value
+      }else{
+        source("Functions/Interface_findBetaqq2_SE_SP.R",local = TRUE)$value
+      }
+    }else{
+      if(input$ID_SingleMultiple=="Single population"){
+        if(input$ID_TrueApp!="True prevalence"){
+          source("Functions/Interface_findBeta.R",local = TRUE)$value
+        }else{
+          source("Functions/Interface_findBeta_SE_SP.R",local = TRUE)$value
+        }
+      }else if(input$ID_SingleMultiple=="Multiple populations"){
+        if(input$ID_TrueApp=="True prevalence"){
+          if(input$ID_ZeroPrevalence=="Yes"){
+            source("Functions/Interface_findBetamupsi2_SE_SP_tau0.R",local = TRUE)$value
+          }else if(input$ID_ZeroPrevalence=="No"){
+            source("Functions/Interface_findBetamupsi2_SE_SP.R",local = TRUE)$value
+          }
+        }else{
+          source("Functions/Interface_findBetamupsi2.R",local = TRUE)$value
+        }
+      }
+    }
+  })
+  
+  output$Priors_Plot_Sum_fb <- renderUI({
+    if(priors$SetupPriors==TRUE){
+      if(input$ID_MeanMedianMode=="Percentiles"){
+        if(input$ID_TrueApp!="True prevalence"){
+          plotlyOutput("PriorGenPlot3")
+        }else{
+          plotlyOutput(width = '100%',height = '100%',"PriorGenPlot3_true")
+        }
+      }else{
+        if(input$ID_SingleMultiple=="Single population"){
+          if(input$ID_TrueApp!="True prevalence"){
+            plotlyOutput("PriorGenPlot1")
+          }else{
+            plotlyOutput(width = '100%',height = '100%',"PriorGenPlot1_true")
+          }
+        }else if(input$ID_SingleMultiple=="Multiple populations"){
+          if(input$ID_TrueApp!="True prevalence"){
+            plotlyOutput("PriorGenPlot2")
+          }else{
+            if(input$ID_ZeroPrevalence=="Yes"){
+              plotlyOutput(width = '100%',height = '100%',"PriorGenPlot2_true_zero")
+            }else if(input$ID_ZeroPrevalence=="No"){
+              plotlyOutput(width = '100%',height = '100%',"PriorGenPlot2_true")
+            }
+          }
+        }
+      }
+    }
+
+    
+  })
+  
    
+  #----- Plot inference for each model ------#
   
   output$APpre_Plot <- renderPlot({
     source("Functions/gss.R",local=TRUE)
@@ -632,9 +689,27 @@ shinyServer(function(input, output, session) {
     
   },width = 'auto', heigh='auto')
   
-  
-  
-  # Interactive plot output########################################################################## #
+  #----- Interactive conditional interface and inference plot for each model ------#
+  output$Bayesian_fb<-renderUI({
+    if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
+      source("Functions/Interface_Jags_ApparentPre.R",local = TRUE)$value # Done
+    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
+      source("Functions/Interface_Jags_TruePre.R",local = TRUE)$value # Done
+      #    }else if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+      #      source("Functions/Interface_Jags_MultipleGroupsApPreNozero.R",local = TRUE) # File ready
+      #    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+      #      source("Functions/Interface_Jags_MultipleGroupsTruePreNozero.R",local = TRUE) # File ready
+    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="Yes"){
+      source("Functions/Interface_Jags_TruePreZero.R",local = TRUE)$value # Done
+    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="Yes"){
+      source("Functions/Interface_Jags_MultipleGroupsTruePreZero.R",local = TRUE)$value # Done
+    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+      source("Functions/Interface_Jags_MultipleGroupsTruePre.R",local = TRUE)$value # Done
+    }else if(input$ID_TrueApp!="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+      source("Functions/Interface_Jags_MultipleGroupsAppPre.R",local = TRUE)$value # Done
+      
+    }
+  })
   
   output$APar1_Plot_fb <- renderUI({
     if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
@@ -656,7 +731,73 @@ shinyServer(function(input, output, session) {
   }
   })
   
-  # Interactive+dynamic sliders  #################################################################### #
+  #-----  Interactive + dynamic sliders/buttons ------#
+  output$zero_fb <- renderUI({
+    if(input$ID_TrueApp!="True prevalence"){
+      radioButtons(inputId = 'ID_ZeroPrevalence', choices=c("No"),
+                   label = 'Do you want to account for zero true prevalence?',
+                   selected = "No",inline = TRUE)
+    }else{
+      radioButtons(inputId = 'ID_ZeroPrevalence', choices=c("No","Yes"),
+                   label = 'Do you want to account for zero true prevalence?',
+                   selected = "No",inline = TRUE)
+    }
+  })
+  output$metric_fb <- renderUI({
+    if(input$ID_SingleMultiple=="Single population"){
+      radioButtons(inputId = 'ID_MeanMedianMode', choices=c("Mean",
+                                                            "Median",
+                                                            "Mode",
+                                                            "Percentiles"),
+                   label = 'Which prevelance statistical measure would you like to use for prior elicitation?',
+                   selected = "Mean",inline = TRUE)
+    }else{
+      radioButtons(inputId = 'ID_MeanMedianMode', choices=c("Mean"),
+                   label = 'Which prevelance statistical measure would you like to use for prior elicitation?',
+                   selected = "Mean",inline = TRUE)
+    }
+  })
+  output$report_fb <- renderUI({
+    if(priors$mSetupmodel==TRUE){uiOutput("Rmark")}
+  })
+  output$report_fb_side <- renderUI({
+    if(priors$mSetupmodel==TRUE){
+      source("Functions/Interface_DownloadResults.R",local = TRUE)$value # Done
+      
+    }
+  })
+  output$MultiDatasets_Out_fb <- renderUI({
+    
+    if(input$ID_SingleMultiple=="Multiple populations"){
+      source("Functions/Interface_MultiDatasetYes.R",local = TRUE)$value
+    }else{
+      source("Functions/Interface_MultiDatasetNo.R",local = TRUE)$value
+    }
+  })
+  output$MultiDataset_fb <- renderUI({
+    if(input$ID_SingleMultiple=="Multiple populations"){
+      if(input$LoadData=="Option1Preload"){
+        selectInput("Indata1", "Dataset:",
+                    c("Data1" = "Data1",
+                      "Data2" = "Data2",
+                      "Data3" = "Data3",
+                      "Data4" = "Data4"))
+      }else{
+        
+        fileInput(inputId = "Indata2", label = "Choose .xls(x) File",
+                  accept = c(
+                    "text/csv",
+                    "text/comma-separated-values,text/plain",
+                    ".csv",
+                    ".xls")
+        )    }
+    }
+    else if(input$ID_SingleMultiple!="Multiple populations"){
+    }
+    
+  })
+
+  
   output$sliders_fb <- renderUI({
     if(input$lower.value=="FALSE"){
       sliderInput(inputId = "PercentileValue1",label = paste("Specify the upper or lower limit for the ",input$ID_MeanMedianMode," at the specified level of confidence: "), 
@@ -689,108 +830,6 @@ shinyServer(function(input, output, session) {
   })
   outputOptions(output, "sliders_fb_SE", suspendWhenHidden = FALSE)
   outputOptions(output, "sliders_fb_SP", suspendWhenHidden = FALSE)
-
-  
-  output$zero_fb <- renderUI({
-    if(input$ID_TrueApp!="True prevalence"){
-      radioButtons(inputId = 'ID_ZeroPrevalence', choices=c("No"),
-                   label = 'Do you want to account for zero true prevalence?',
-                   selected = "No",inline = TRUE)
-    }else{
-      radioButtons(inputId = 'ID_ZeroPrevalence', choices=c("No","Yes"),
-                   label = 'Do you want to account for zero true prevalence?',
-                   selected = "No",inline = TRUE)
-    }
-  })
-  
-  output$report_fb <- renderUI({
-    if(priors$mSetupmodel==TRUE){uiOutput("Rmark")}
-  })
-  output$report_fb_side <- renderUI({
-    if(priors$mSetupmodel==TRUE){
-      source("Functions/Interface_DownloadResults.R",local = TRUE)$value # Done
-      
-    }
-  })
-  
-output$downloadModel <- downloadHandler(
-  filename <- function(){
-    paste("Model1.mcmc.RData")
-  },
-  content = function(file) {
-    save(Model1.mcmc, file = file)
-  }
-)
-output$downloadJags <- downloadHandler(
-  filename <- function(){
-    paste("JagsModes.txt")
-  },
-  content = function(file) {
-    save(generic_jags, file = file)
-  }
-)
-
-
-output$downloadData <- downloadHandler(
-  filename <- function(){
-    paste("InputData.RData")
-  },
-  content = function(file) {
-    save(temp_data, file = file)
-  }
-)
-  
-  
-  output$metric_fb <- renderUI({
-    if(input$ID_SingleMultiple=="Single population"){
-      radioButtons(inputId = 'ID_MeanMedianMode', choices=c("Mean",
-                                                            "Median",
-                                                            "Mode",
-                                                            "Percentiles"),
-                   label = 'Which prevelance statistical measure would you like to use for prior elicitation?',
-                   selected = "Mean",inline = TRUE)
-    }else{
-      radioButtons(inputId = 'ID_MeanMedianMode', choices=c("Mean"),
-                   label = 'Which prevelance statistical measure would you like to use for prior elicitation?',
-                   selected = "Mean",inline = TRUE)
-    }
-  })
-  
-  # COndition for sample size and positives bugged.
-  # output$DataInput_fb <- renderUI({
-  #   numericInput(inputId = "y", label = "Number of positive tests: ",min = 1, max = 1000000, step = 1, value = input$n)
-  # })
-  
-  output$MultiDatasets_Out_fb <- renderUI({
-    
-    if(input$ID_SingleMultiple=="Multiple populations"){
-      source("Functions/Interface_MultiDatasetYes.R",local = TRUE)$value
-    }else{
-      source("Functions/Interface_MultiDatasetNo.R",local = TRUE)$value
-    }
-  })
-  output$MultiDataset_fb <- renderUI({
-    if(input$ID_SingleMultiple=="Multiple populations"){
-      if(input$LoadData=="Option1Preload"){
-        selectInput("Indata1", "Dataset:",
-                    c("Data1" = "Data1",
-                      "Data2" = "Data2",
-                      "Data3" = "Data3",
-                      "Data4" = "Data4"))
-      }else{
-        
-        fileInput(inputId = "Indata2", label = "Choose .xls(x) File",
-                  accept = c(
-                    "text/csv",
-                    "text/comma-separated-values,text/plain",
-                    ".csv",
-                    ".xls")
-        )    }
-    }
-    else if(input$ID_SingleMultiple!="Multiple populations"){
-    }
-    
-  })
   
   output$sliders2_fb <- renderUI({
     if(input$lower.value2=="FALSE"){
@@ -915,148 +954,46 @@ output$downloadData <- downloadHandler(
   outputOptions(output, "sliders_qq22_SP_fb", suspendWhenHidden = FALSE)
   outputOptions(output, "MultiDataset_fb", suspendWhenHidden = FALSE)
 
-  
-  output$Priors_fb<-renderUI({
-    if(input$ID_MeanMedianMode=="Percentiles"){
-      if(input$ID_TrueApp!="True prevalence"){
-        source("Functions/Interface_findBetaqq2.R",local = TRUE)$value
-      }else{
-        source("Functions/Interface_findBetaqq2_SE_SP.R",local = TRUE)$value
-      }
-    }else{
-      if(input$ID_SingleMultiple=="Single population"){
-        if(input$ID_TrueApp!="True prevalence"){
-          source("Functions/Interface_findBeta.R",local = TRUE)$value
-        }else{
-          source("Functions/Interface_findBeta_SE_SP.R",local = TRUE)$value
-        }
-      }else if(input$ID_SingleMultiple=="Multiple populations"){
-        if(input$ID_TrueApp=="True prevalence"){
-          if(input$ID_ZeroPrevalence=="Yes"){
-            source("Functions/Interface_findBetamupsi2_SE_SP_tau0.R",local = TRUE)$value
-          }else if(input$ID_ZeroPrevalence=="No"){
-          source("Functions/Interface_findBetamupsi2_SE_SP.R",local = TRUE)$value
-        }
-        }else{
-          source("Functions/Interface_findBetamupsi2.R",local = TRUE)$value
-        }
-      }
-    }
-  })
-  
-  output$Priors_Plot_Sum_fb <- renderUI({
-    if(priors$SetupPriors==TRUE){
-      if(input$ID_MeanMedianMode=="Percentiles"){
-        if(input$ID_TrueApp!="True prevalence"){
-          plotlyOutput("PriorGenPlot3")
-        }else{
-          plotlyOutput(width = '100%',height = '100%',"PriorGenPlot3_true")
-        }
-      }else{
-        if(input$ID_SingleMultiple=="Single population"){
-          if(input$ID_TrueApp!="True prevalence"){
-            plotlyOutput("PriorGenPlot1")
-          }else{
-            plotlyOutput(width = '100%',height = '100%',"PriorGenPlot1_true")
-          }
-        }else if(input$ID_SingleMultiple=="Multiple populations"){
-          if(input$ID_TrueApp!="True prevalence"){
-          plotlyOutput("PriorGenPlot2")
-          }else{
-            if(input$ID_ZeroPrevalence=="Yes"){
-              plotlyOutput(width = '100%',height = '100%',"PriorGenPlot2_true_zero")
-            }else if(input$ID_ZeroPrevalence=="No"){
-              plotlyOutput(width = '100%',height = '100%',"PriorGenPlot2_true")
-            }
-          }
-        }
-      }
-    }
-    
-    # 
-    # 
-    # if(priors$SetupPriors==FALSE){
-    # } else if(priors$SetupPriors==TRUE){
-    #   if(input$ID_MeanMedianMode=="Percentiles"){
-    #     plotlyOutput("PriorGenPlot3")
-    #   } else{
-    #     if(input$ID_SingleMultiple=="Single population"){
-    #       plotlyOutput("PriorGenPlot1")
-    #     }else if(input$ID_SingleMultiple=="Multiple populations"){
-    #       plotlyOutput("PriorGenPlot2")
-    #     }
-    #   }
-    # }
-    
-  })
-  
-  # conditions<-reactive({
-  # cond1<<-(input$ID_MeanMedianMode!="Percentiles" & input$ID_SingleMultiple=="Single population")
-  # cond2<<-(input$ID_MeanMedianMode!="Percentiles" & input$ID_SingleMultiple=="Multiple populations")
-  # cond3<<-(input$ID_MeanMedianMode=="Percentiles")
-  # cond4<<-(input$ID_SingleMultiple=="Single population")
-  # cond5<<-(input$ID_SingleMultiple!="Single population")
-  # cond6<<-(input$ID_TrueApp!="True prevalence")
-  # cond7<<-(input$ID_TrueApp=="True prevalence")
-  # cond8<<-(input$ID_TrueApp=="True prevalence")
-  # cond9<<-(input$ID_TrueApp=="True prevalence")
-  # list(cond1,cond2,cond3,cond4,cond5,cond6,cond7,cond8,cond9)
+  #------ Condition for sample size and positives bugged. ------#
+  # output$DataInput_fb <- renderUI({
+  #   numericInput(inputId = "y", label = "Number of positive tests: ",
+  #min = 1, max = 1000000, step = 1, value = input$n)
   # })
   
   
-  # Bayesian Models #################################################################################### #
-  output$Bayesian_fb<-renderUI({
-    if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
-      source("Functions/Interface_Jags_ApparentPre.R",local = TRUE)$value # Done
-    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
-      source("Functions/Interface_Jags_TruePre.R",local = TRUE)$value # Done
-      #    }else if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
-      #      source("Functions/Interface_Jags_MultipleGroupsApPreNozero.R",local = TRUE) # File ready
-      #    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
-      #      source("Functions/Interface_Jags_MultipleGroupsTruePreNozero.R",local = TRUE) # File ready
-    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="Yes"){
-      source("Functions/Interface_Jags_TruePreZero.R",local = TRUE)$value # Done
-    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="Yes"){
-      source("Functions/Interface_Jags_MultipleGroupsTruePreZero.R",local = TRUE)$value # Done
-    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
-      source("Functions/Interface_Jags_MultipleGroupsTruePre.R",local = TRUE)$value # Done
-    }else if(input$ID_TrueApp!="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
-      source("Functions/Interface_Jags_MultipleGroupsAppPre.R",local = TRUE)$value # Done
-      
+  
+  #------- Download stuff ---------#
+  
+  output$downloadModel <- downloadHandler(
+    filename <- function(){
+      paste("Model1.mcmc.RData")
+    },
+    content = function(file) {
+      save(Model1.mcmc, file = file)
     }
-  })
- 
-  ######## Output of selected priors ################################################################### #
-  observeEvent(input$buttonPrior,{
-    priors$PriorSelect<-TRUE
-    if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="Νο"){
-      priors$prior<<-list(a=fb$a,b=fb$b)
+  )
+  output$downloadJags <- downloadHandler(
+    filename <- function(){
+      paste("JagsModes.txt")
+    },
+    content = function(file) {
+      save(generic_jags, file = file)
     }
-    if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
-      priors$prior<<-list(a=fb$a,b=fb$b)
+  )
+  output$downloadData <- downloadHandler(
+    filename <- function(){
+      paste("InputData.RData")
+    },
+    content = function(file) {
+      save(temp_data, file = file)
     }
-  })
-  # output$PriorSelectionText<-renderText(paste("Prior is",prior_cond,"defined"))
-  
-  observeEvent(input$buttonSetup,{
-    priors$temp<-"Status: 'Set'";
-    priors$temp2<-paste("Your input assumes that: \n 1. ",input$ID_SingleMultiple," will be modelled, \n 2. ",input$ID_ZeroPrevalence,", zero prevalence will be modelled, 3. the ",input$ID_TrueApp," will be modelled and \n 4. (the) '",input$ID_MeanMedianMode,"' will be used to elicitate prior knowledge",sep="")
-    priors$icons<-"thumbs-up"#   prior_cond<<-" "
-    priors$color<-"green"
-    priors$SetupPriors<-TRUE
-  })
-  
-  # Download report ################################################################################# #
-  
-  
-  
-  output$downloadReport <- downloadHandler(
+  )
+  output$downloadReport <- downloadHandler( # OPEN
     filename = function() {
       paste("my-report", sep = ".", switch(
         input$format, PDF = "pdf", HTML = "html", Word = "docx"
       ))
     },
-    
     content = function(file) {
       src <- normalizePath("report.Rmd")
       
@@ -1075,33 +1012,28 @@ output$downloadData <- downloadHandler(
     }
   )
   
-  # Initial screen + buttons ################################################################################## #
-  
-  
+  #-------- Initial screen stats --------#
   output$NumberPriorSetups <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
       paste0("4"),"prior elicitation approaches",
       icon = icon("chevron-down"),color = "teal")
   })
-
   output$NumberModels <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
       paste0("8")," prevelance model variations",
       icon = icon("arrows-alt"),color = "blue")
   })
-
   output$NumberDemos <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
       paste0("3"),"preloaded datasets for demonstration",
       icon = icon("thumbs-up"),color = "red")
   })
-
+  #-------- Intermediate screen banners --------#
   output$Boxsetup1 <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
       paste0(priors$temp),paste(priors$temp2),
       icon = icon(priors$icons),color = priors$color)
   })
-
   output$Boxsetup2 <- shinydashboard::renderValueBox({
     if(priors$PriorSelect==FALSE){
       shinydashboard::valueBox(
@@ -1115,7 +1047,6 @@ output$downloadData <- downloadHandler(
       )
     }
   })
-
   output$Boxsetup3 <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
       
@@ -1125,7 +1056,6 @@ output$downloadData <- downloadHandler(
     )
 
   })
-
   output$Boxsetup4 <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
       paste0("Status report:"),if(priors$mSetupmodel==FALSE){"Please finish with all previous steps before accesing the report"}else{"The report will become available below"},
@@ -1135,6 +1065,7 @@ output$downloadData <- downloadHandler(
 
   })
   
+  #-------- Reset buttons ----------#
   observeEvent(input$buttonReset, {
     # shinyjs::reset("setup-panel")
     # priors$color<-"red"
@@ -1144,20 +1075,33 @@ output$downloadData <- downloadHandler(
     # priors$SetupPriors<-FALSE
     session$reload()
   })
-  
-  # needs fix inside
   observeEvent(input$buttonPriorReset, {
     #shinyjs::reset("priors-panel")
     #priors$PriorSelect<-FALSE
     session$reload()
   })
-  # needs fix inside
   observeEvent(input$buttonModelReset, {
     #shinyjs::reset("model-panel")
     #priors$SetupPriors<-FALSE
     session$reload()
   })
-  
+  #-------- Fix buttons ----------#
+  observeEvent(input$buttonSetup,{
+    priors$temp<-"Status: 'Set'";
+    priors$temp2<-paste("Your input assumes that: \n 1. ",input$ID_SingleMultiple," will be modelled, \n 2. ",input$ID_ZeroPrevalence,", zero prevalence will be modelled, 3. the ",input$ID_TrueApp," will be modelled and \n 4. (the) '",input$ID_MeanMedianMode,"' will be used to elicitate prior knowledge",sep="")
+    priors$icons<-"thumbs-up"#   prior_cond<<-" "
+    priors$color<-"green"
+    priors$SetupPriors<-TRUE
+  })
+  observeEvent(input$buttonPrior,{
+    priors$PriorSelect<-TRUE
+    if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="Νο"){
+      priors$prior<<-list(a=fb$a,b=fb$b)
+    }
+    if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
+      priors$prior<<-list(a=fb$a,b=fb$b)
+    }
+  })
   observeEvent(input$buttonFixModel, {
     if(input$ID_SingleMultiple=="Multiple populations"){
       if(input$LoadData=="Option1Preload"){
@@ -1171,8 +1115,36 @@ output$downloadData <- downloadHandler(
     priors$mSetupmodel<-TRUE
   })
   
-  # Report download in html - pdf - word
+  #-------- Help set prior buttons ---------#
+  observeEvent(input$buttonPriorHelp3, {
+    showModal(modalDialog(
+      title = "Example 3",
+      paste0("Let assume that the mean prevalence of a disease/infection for the units within an area/region is thought to be 0.20 and we are 99% confident that it is not more than 0.40. Within this area/group, we are also confident that 90% of all units have a prevalence less or equal to 0.50 and we are 95% certain that it does not exceed 0.60. 
+             Then we have to set <<themean=0.20, percentile=0.99, lower.v=TRUE, percentile.value=0.30, psi.percentile=0.90, percentile.median=0.50, percentile95value=0.60>>"),
+      easyClose = TRUE,
+      footer = NULL
+    ))
+  })
+  observeEvent(input$buttonPriorHelp2, {
+    showModal(modalDialog(
+      title = "Example 2",
+      paste0("Let assume that our beliefs point that 20% of the units in an area/region have a prevalence of disease/infection less than or equal to 0.30 while at the same time we are 90% certain that the prevalence is less than 0.60. 
+      Then we have to set <<percentile.value1=0.30, percentile1=0.20, percentile.value2=0.60, percentile2=0.90>>"),
+      easyClose = TRUE,
+      footer = NULL
+    ))
+  })
+  observeEvent(input$buttonPriorHelp1, {
+    showModal(modalDialog(
+      title = "Example 1",
+      paste0("Let assume that based on the available literature the mean value for the sensitivity of a test is expected to be 0.90 and we can be 95% sure that it is higher than 0.80. 
+             Then we have to set, <<themean=0.90, percentile=0.95,lower.v=FALSE, percentile.value=0.80>>"),
+      easyClose = TRUE,
+      footer = NULL
+    ))
+  })
   
+  #--------  Report rmakdown --------#
   output$Rmark <- renderUI({
     if(input$ID_TrueApp=="True prevalence"){
       temp<-"TPpre_Report_True.Rmd"
@@ -1188,90 +1160,8 @@ output$downloadData <- downloadHandler(
     }
     includeHTML(render(paste0("./Rmarkdown/",temp), quiet = TRUE,output_format = "html_document"))
   })
-  
-  # output$downloadReport <- downloadHandler(
-  #   # For PDF output, change this to "report.pdf"
-  #   # filename = function() {
-  #   #   paste('my-report', sep = '.', switch(
-  #   #     input$format, PDF = 'pdf', HTML = 'html', Word = 'docx'
-  #   #   ))
-  #   # },
-  #   filename = function() {
-  #     paste('my-report', sep = '.', switch(
-  #       input$format, PDF = 'pdf', HTML = 'html', Word = 'docx'
-  #     ))
-  #   },
-  #   content = function(file) {
-  #     # Copy the report file to a temporary directory before processing it, in
-  #     # case we don't have write permissions to the current working dir (which
-  #     # can happen when deployed).
-  #     if(input$ID_MeanMedianMode!="Percentiles"){
-  #       tempReport <- file.path("Rmarkdown/temp/TPpre_Report.Rmd")
-  #       file.copy("Rmarkdown/TPpre_Report.Rmd", tempReport, overwrite = TRUE)
-  #     }
-  #     if(input$ID_MeanMedianMode=="Percentiles"){
-  #       tempReport <- file.path("Rmarkdown/temp/TPpre_Report_Perc.Rmd")
-  #       file.copy("Rmarkdown/TPpre_Report_Perc.Rmd", tempReport, overwrite = TRUE)
-  #     }
-  #     if(input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="Yes"){
-  #       tempReport <- file.path("Rmarkdown/temp/TPpre_Report_MultZero.Rmd")
-  #       file.copy("Rmarkdown/TPpre_Report_Mult.Rmd", tempReport, overwrite = TRUE)
-  #     }
-  #     if(input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
-  #       tempReport <- file.path("Rmarkdown/temp/TPpre_Report_Mult.Rmd")
-  #       file.copy("Rmarkdown/TPpre_Report_Mult.Rmd", tempReport, overwrite = TRUE)
-  #     }
-  #     # Set up parameters to pass to Rmd document
-  #     params <- list(fb=fb,input=input,table2=table2)
-  #     
-  #     # n = input$n, 
-  #     # y = input$y, 
-  #     # fb = fb,
-  #     # pop=input$ID_SingleMultiple,
-  #     # zero=input$ID_ZeroPrevalence,
-  #     # pre=input$ID_TrueApp,
-  #     # mea=input$ID_MeanMedianMode
-  #     
-  #     # Knit the document, passing in the `params` list, and eval it in a
-  #     # child of the global environment (this isolates the code in the document
-  #     # from the code in this app).
-  #     rmarkdown::render(input = tempReport,output_format = ,
-  #                       switch(
-  #                         input$format,
-  #                         PDF = pdf_document(),
-  #                         HTML = html_document(),
-  #                         Word = word_document()
-  #                       ),output_file = file,
-  #                       params = params,
-  #                       envir = new.env(parent = globalenv())
-  #     )
-  #   }
-  # )
-  
-  # output$downloadReport <- 
-  #   downloadHandler(
-  #     "TPpre_Report.pdf",
-  #     content = 
-  #       function(file)
-  #       {
-  #         rmarkdown::render(
-  #           input = "Rmarkdown/TPpre_Report.Rmd",
-  #           output_file = "TPpre_Report.pdf",
-  #           params = list(table = table(),
-  #                         plot = plot())
-  #         ) 
-  #         readBin(con = "TPpre_Report.pdf", 
-  #                 what = "raw",
-  #                 n = file.info("TPpre_Report.pdf")[, "size"]) %>%
-  #           writeBin(con = file)
-  #       }
-  #   )
-  
-  # observe({
-  #   shinyjs::hide(selector = "#navbar li a[data-value=report-tab]")
-  # #shinyjs::show(selector = "#navbar li a[data-value=model-panel]")
-  # })
-  
+
+  #------- Load multiple datasets -------#
   dataset<<- reactive({
     if(input$ID_SingleMultiple=="Multiple populations"){
       if(input$LoadData=="Option1Preload"){
@@ -1286,6 +1176,7 @@ output$downloadData <- downloadHandler(
     return(temp_data)
   })
   
+  #------- Export dataset to print in Shiny GUI -------#
   output$table2 <- renderDataTable({
     if(input$ID_SingleMultiple=="Multiple populations"){
       if(input$LoadData=="Option1Preload"){
@@ -1301,36 +1192,4 @@ output$downloadData <- downloadHandler(
       
     }
   })
-  
-  observeEvent(input$buttonPriorHelp3, {
-    showModal(modalDialog(
-      title = "Example 3",
-      paste0("Let assume that the mean prevalence of a disease/infection for the units within an area/region is thought to be 0.20 and we are 99% confident that it is not more than 0.40. Within this area/group, we are also confident that 90% of all units have a prevalence less or equal to 0.50 and we are 95% certain that it does not exceed 0.60. 
-             Then we have to set <<themean=0.20, percentile=0.99, lower.v=TRUE, percentile.value=0.30, psi.percentile=0.90, percentile.median=0.50, percentile95value=0.60>>"),
-      easyClose = TRUE,
-      footer = NULL
-    ))
-  })
-  
-  
-  observeEvent(input$buttonPriorHelp2, {
-    showModal(modalDialog(
-      title = "Example 2",
-      paste0("Let assume that our beliefs point that 20% of the units in an area/region have a prevalence of disease/infection less than or equal to 0.30 while at the same time we are 90% certain that the prevalence is less than 0.60. 
-      Then we have to set <<percentile.value1=0.30, percentile1=0.20, percentile.value2=0.60, percentile2=0.90>>"),
-      easyClose = TRUE,
-      footer = NULL
-    ))
-  })
-  
-  observeEvent(input$buttonPriorHelp1, {
-    showModal(modalDialog(
-      title = "Example 1",
-      paste0("Let assume that based on the available literature the mean value for the sensitivity of a test is expected to be 0.90 and we can be 95% sure that it is higher than 0.80. 
-             Then we have to set, <<themean=0.90, percentile=0.95,lower.v=FALSE, percentile.value=0.80>>"),
-      easyClose = TRUE,
-      footer = NULL
-    ))
-  })
-  
 })
