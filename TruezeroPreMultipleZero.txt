@@ -18,7 +18,7 @@ main.Se ~ dbeta(ase, bse) I(0.01,0.99) ## Mode=0.25; 95% sure < 0.30
 main.Sp ~ dbeta(asp, bsp) I(0.01,0.99) ## Mode=0.98, 95% sure > 0.96
 
 #informative prior for the probability of zero between group/herd prevalence
-main.tau0 ~ dbeta(atau0, btau0)## Mode=0.60, 95% sure < 0.827
+main.tau0 ~ dbeta(atau0, btau0) I(0.01,0.99)## Mode=0.60, 95% sure < 0.827
 
 #predictions
 pre.z.rep ~ dbern(main.tau0)

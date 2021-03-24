@@ -1,0 +1,30 @@
+cat("model{
+    y ~ dbinom(main.ap, n)
+    #Uniform (non-informative) prior for apparent prevalence (ap)
+    main.ap  ~ dbeta(a,b)########################################################### Check if they are the same.
+    aplessthanSetvalue <- step(perVal-main.ap)
+
+  }", file=paste("ApparentPre.txt"))
+
+#data - list(n=4072, y=1210)
+#initials - list(p=0.1, Se=0.90, Sp=0.85)
+SaveParams <- c("main.ap",'aplessthanSetvalue')
+#nniter=10000; nnthin=2
+
+jagsoutput_Appa<-rjags::jags.model(data=list(n=input$n,y=input$y,perVal=input$perVal,
+                                      a=fb$a, b=fb$b),
+                            inits=NULL, n.chains=input$nchains,n.adapt = floor(input$nniter/10),
+                            file=paste("ApparentPre.txt"),quiet=TRUE)
+
+# jagsoutput_Appa<-jags.model(data=list(n=40,y=12,
+#                                       a=2, b=14),
+#                             inits=NULL, n.chains=2,n.adapt = floor(100000/10),
+#                             file=paste("ApparentPre.txt"),quiet=TRUE)
+
+Model1.mcmc <<- coda.samples(jagsoutput_Appa,  n.iter=input$nniter,thin =input$nnthin,
+                             variable.names=SaveParams,seed=998)
+
+# Model1.mcmc <<- coda.samples(jagsoutput_Appa,  n.iter=100000,thin =5,
+#                              variable.names=SaveParams)
+
+return(Model1.mcmc)

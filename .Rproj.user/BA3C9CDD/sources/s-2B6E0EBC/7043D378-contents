@@ -1,0 +1,10 @@
+fluidPage(width = 2,
+             tabsetPanel(
+               tabPanel("Input",
+                        downloadButton("downloadData",label = "Download data")
+               ),
+               tabPanel("Output",
+                        downloadButton("downloadModel",label = "Download MCMC samples")
+               )
+             )
+)

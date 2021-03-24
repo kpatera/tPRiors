@@ -1,0 +1,17 @@
+sidebarPanel(width = 4,
+             tabPanel("Prevalence",
+                      sliderInput(inputId = "PercentileValue3_1", 
+                                  label = "Specify the value for the 1st percentile", 
+                                  min=0, max=1, value=0.3,step = 0.001),
+                      sliderInput(inputId = "Percentile3_1", 
+                                  label = "Specify which is the percentile that corresponds to the above 1st percentile: ",
+                                  min=0, max=1, value=0.3,step = 0.001),
+                      uiOutput("sliders_qq_fb"),
+                      sliderInput(inputId = "Percentile3_2", 
+                                  label="Specify which is the percentile that corresponds to the above 2nd percentile: ",
+                                  min=0, max=1, value=0.8,step = 0.001),
+                      div(style="display:inline-block;width:45%;text-align: left;",actionButton("buttonPriorReset", "Reset tPriors"),style=icon("check")),
+                      div(style="display:inline-block;width:35%;text-align: center;",actionButton("buttonPriorHelp2", "Example"),style=icon("check")),
+                      div(style="display:inline-block;width:45%;text-align: right;",actionButton("buttonPrior", "Set prior!"),style=icon("check"))
+             )
+)

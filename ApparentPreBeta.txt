@@ -1,5 +1,0 @@
-model{
-    y ~ dbin(ap, n)
-    #Uniform (non-informative) prior for apparent prevalence (ap)
-    ap  ~ dbeta(ab,bb) ########################################################### Check if they are the same.
-  }
