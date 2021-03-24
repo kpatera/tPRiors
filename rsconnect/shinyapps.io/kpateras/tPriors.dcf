@@ -5,8 +5,8 @@ account: kpateras
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3745856
-bundleId: 4389246
+bundleId: 4389305
 url: https://kpateras.shinyapps.io/tPriors/
-when: 1616589777.75159
+when: 1616590886.00615
 asMultiple: FALSE
 asStatic: FALSE
