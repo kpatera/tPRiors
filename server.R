@@ -974,7 +974,7 @@ shinyServer(function(input, output, session) {
   )
   output$downloadJags <- downloadHandler(
     filename <- function(){
-      paste("JagsModes.txt")
+      paste("JagsModes.rData")
     },
     content = function(file) {
       save(generic_jags, file = file)
