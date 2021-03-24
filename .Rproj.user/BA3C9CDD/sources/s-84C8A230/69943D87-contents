@@ -16,20 +16,20 @@ shinyServer(function(input, output, session) {
   priors$mSetupPriors<-FALSE
   
   
-  ########### POP UP MESSAGE in the beginning ################################################ #
+  #------ POP UP MESSAGE in the beginning -------#
   
-  # showModal(modalDialog(
-  #   title = "Important message",
-  #   easyClose = FALSE,
-  #   p("tPriors aims at Bayesian (true) prevalence estimation based on elicicated prior opinions.",
-  #     tags$strong("
-  #   Following Data Protection legislations, we would like to inform you before you use our web application that :"), "We collect data regardingn your app usage within the IWA app to conduct analysis of usage and develope the application further. By clicking",
-  #     tags$i(tags$u("I consent")), "you consent to us utilizing the data via Google Analytics.
-  #         We refer interested users to our policy by clicking the 'Privacy notice' tab from within the app, and also ",tags$a(href="https://policies.google.com/privacy?hl=en", "Google Privacy & Terms.",target="_blank") ),
-  #   br(),
-  #   modalButton("I consent"),
-  #   footer = NULL
-  # ))
+  showModal(modalDialog(
+    title = "Important message",
+    easyClose = FALSE,
+    p("tPriors aims at Bayesian (true) prevalence estimation based on elicicated prior opinions.",
+      tags$strong("
+    Following Data Protection legislations, we would like to inform you before you use our web application that :"), "We collect data regardingn your app usage within the IWA app to conduct analysis of usage and develope the application further. By clicking",
+      tags$i(tags$u("I consent")), "you consent to us utilizing the data via Google Analytics.
+          We refer interested users to our policy by clicking the 'Privacy notice' tab from within the app, and also ",tags$a(href="https://policies.google.com/privacy?hl=en", "Google Privacy & Terms.",target="_blank") ),
+    br(),
+    modalButton("I consent"),
+    footer = NULL
+  ))
   
   
   

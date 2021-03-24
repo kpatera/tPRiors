@@ -1,5 +1,5 @@
-# Fix nthin, nchains and nniter of multiple!!!
-# Fix slicker stuck in Multiple+zero+true 
+# Fix nthin, nchains and nniter of multiple!
+# Fix slicker stuck in Multiple+zero+true..
 
 #---- Load packages ----#
 packages.list<-c("shiny","shinythemes","shinyWidgets","shinydashboard",
