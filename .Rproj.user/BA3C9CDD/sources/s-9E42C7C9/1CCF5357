@@ -1,0 +1,26 @@
+{
+    "id": "1CCF5357",
+    "path": "~/GitHub/tPriors/Functions/Interface_findBetamupsi2_SE_SP_tau0.R",
+    "project_path": "Functions/Interface_findBetamupsi2_SE_SP_tau0.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1616755786519.0,
+    "source_on_save": false,
+    "relative_order": 6,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "23,29",
+        "scrollLine": "13"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1616755920,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1616755920427,
+    "read_only": false,
+    "read_only_alternatives": []
+}

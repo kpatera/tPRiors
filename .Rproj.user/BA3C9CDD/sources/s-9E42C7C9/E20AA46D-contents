@@ -33,7 +33,7 @@ If the true prevalence (inline equation test: $\pi_{t}$) is modelled the followi
 
 ------------------------------------------------------------------------
 
-## The elicited prevalence prior
+## The prevalence elicited prior
 
 The selected prior distribution of the `r input$ID_TrueApp` has the following descriptive characteristics and density plot.
 
@@ -45,6 +45,7 @@ summary(sample_beta)
 
 ```{r echo = FALSE}
 renderPlotly({
+    priors$prior<<-list(a=fb$a,b=fb$b)
     x<-seq(0,1,length.out = 2000)
     Prevalence<-dbeta(x = x,shape1 = fb$a,shape2 = fb$b)
     df1 <- data.frame(x, Prevalence)
@@ -86,6 +87,7 @@ summary(sample_beta_SP)
 
 ```{r echo = FALSE}
 renderPlotly({
+    priors$prior<<-list(a=fb$a,b=fb$b)
     x<-seq(0,1,length.out = 2000)
     Sensitivity<-dbeta(x = x,shape1 = fb_SE$a,shape2 = fb_SE$b)
     Specificity<-dbeta(x = x,shape1 = fb_SP$a,shape2 = fb_SP$b)
