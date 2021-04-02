@@ -1,5 +1,4 @@
 sidebarPanel(width = 4,
-             
              tabsetPanel(
                tabPanel("Data input",
                         numericInput("n", "Sample size: ",min = 2, max = 1000000, value = 72),

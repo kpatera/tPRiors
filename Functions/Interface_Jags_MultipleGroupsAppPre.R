@@ -5,7 +5,7 @@ sidebarPanel(width = 4,
                                      c("Preload" = "Option1Preload",
                                        "Upload" = "Option2Upload"),inline = TRUE),
                         uiOutput("MultiDataset_fb"),
-                        numericInput("perVal", "Set prevalence checkpoint: ",min = 0, max = 1, value = 0.05,step=0.01),
+                        sliderInput("perVal", "Set prevalence checkpoint: ",min = 0, max = 1, value = 0.05,step=0.01),
                         div(style="display:inline-block;width:45%;text-align: left;",actionButton("buttonModelReset", "Reset tPriors"),style=icon("check")),
                         div(style="display:inline-block;width:45%;text-align: right;",actionButton("buttonFixModel", "Fix model"),style=icon("check"))             
                ),

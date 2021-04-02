@@ -92,13 +92,18 @@ renderPlotly({
     Lik <- data.frame(density=rbinom(n = 20000, size =  input$n, prob = input$y/input$n)/input$n)
     post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' ; Lik$Distribution <- 'likelihood'
     triple <- rbind(post, pri, Lik)
-    p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2)+
+    p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust = 2)+
       xlim(0, 1)+ theme(legend.position="top")
     ggplotly(p1)
   })
 ```
 
-
+## Predictions
+Predictive distribution of $y$ for a single new study with $n=100$.
+```{r echo=FALSE}
+    S<-ggs(Model1.mcmc)
+    ggs_density(S,family = "pre")
+```
 
 
 ------------------------------------------------------------------------
@@ -129,5 +134,38 @@ End of tPriors report.
 
 ------------------------------------------------------------------------
 
-To further access the analysis we provide below three files under the tabs; 1) Input (for multiple groups), 2) Model and 3) Output. The use should first open Rstudio and then search and open the rData file of interest.
+# Instructions for using the resulted .rData files
 
+Users can further access the analysis with the following .rData files. We provide below three files under the tabs; 1) Input (for multiple groups), 2) Model and 3) Output. The user should first open R or Rstudio and then search and open the .rData file of interest through the tab <files> or through the load function. The input data in R form can be loaded by "load("~/.../InputData.RData")". The final JAGS model can be loaded in R via "load("~/.../JagsModel.rData")", while the MCMC samples can be directly loaded in R via "load(~/.../Model1.mcmc.RData), where "..." stands for the local directory path where the file of interest has been placed.
+
+# Working with the <Model.mcmc> object
+
+The Model.mcmc object contains MCMC samples produced by the current Bayesian analysis set-up. When loaded in R the user can perform further descriptive analysis and check more diagnostics, which is especially important in multiple populations where the number of parameters becomes very large and inference may become unstable. We provide a number of potentially useful descriptive and diagnostic plots from the CODA package alone or in combination with the ggmcmc R package.
+
+traceplot(Model1.mcmc)
+
+autocorr.plot(Model1.mcmc)
+
+geweke.plot(Model1.mcmc)
+
+
+When working with multiple population models that contain many parameters it can be convinient to use the family option of the ggs function group. In the case of multiple populations if family="main" then only main parameters are being plotter, if family="sub" then only study parameters are selected, while if family="pre" then predictive parameters are selected and returned. Some examples are provided below. 
+
+
+S2<-ggs(Model1.mcmc)
+
+ggs_histogram(S2,family = "main") # Histograms (Main)
+
+ggs_density(S2,family = "main") # Density plots for main parameters 
+
+ggs_density(S2,family = "sub") # Density plots for study prevalences
+
+ggs_density(S2,family = "pre") # Density plots for predictive parameters
+
+ggs_traceplot(S2,family = "main") # Trace plots (Main)
+
+ggs_running(S2,family = "main") # Running means plots (Main)
+
+ggs_compare_partial(S2,family = "main") # Partial chain comparison plots (Main)
+
+ggs_autocorrelation(S2,family = "main") # Autocorrelation plots (Main)

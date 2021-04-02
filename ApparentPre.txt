@@ -1,7 +1,8 @@
 model{
     y ~ dbinom(main.ap, n)
+    pre.y ~ dbinom(main.ap, m)
+
     #Uniform (non-informative) prior for apparent prevalence (ap)
     main.ap  ~ dbeta(a,b)########################################################### Check if they are the same.
-    aplessthanSetvalue <- step(perVal-main.ap)
-
+    plessthanSetvalue <- step(perVal-main.ap)
   }

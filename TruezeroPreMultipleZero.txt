@@ -4,26 +4,28 @@ y[i] ~ dbin(ap[i], n[i])
 ap[i] <- sub.p[i]*main.Se + (1-sub.p[i])*(1-main.Sp)
 sub.p[i] <- z[i] * pstar[i]
 z[i] ~ dbern(main.tau0)
-
 #informative hyperpior for prevalence
 pstar[i] ~ dbeta(alpha,beta) T(0.001,0.999)
 }
+
 alpha <- main.ap*psi
 beta <- psi*(1-main.ap)
-main.ap ~ dbeta(amu, bmu) T(0.001,0.999) ## Mode=0.12, 95% sure < 0.30  dbeta(3.283, 17.744) 
-psi ~ dgamma(apsi, bpsi) T(0.001,0.999) ## Uses Median of 95th percentile of prevalence dgamma(4.524, 0.387)
+main.ap ~ dbeta(amu, bmu) T(0.001,0.999) 
+psi ~ dgamma(apsi, bpsi) T(0.001,0.999)  
 
 #informative prior for Se and Sp
-main.Se ~ dbeta(ase, bse) T(0.001,0.999) ## Mode=0.25; 95% sure < 0.30
-main.Sp ~ dbeta(asp, bsp) T(0.001,0.999) ## Mode=0.98, 95% sure > 0.96
+main.Se ~ dbeta(ase, bse) T(0.001,0.999) 
+main.Sp ~ dbeta(asp, bsp) T(0.001,0.999) 
 
-#informative prior for the probability of zero between group/herd prevalence
-main.tau0 ~ dbeta(atau0, btau0) T(0.001,0.999) ## Mode=0.60, 95% sure < 0.827
+#informative prior for the probability of zero between region prevalence
+main.tau0 ~ dbeta(atau0, btau0) T(0.001,0.999) 
 
 #predictions
+y.pre ~ dbin(main.ap,m)
 pre.z.rep ~ dbern(main.tau0)
 pre.pstar.rep ~ dbeta(alpha,beta)
 pre.p.rep <- pre.z.rep*pre.pstar.rep
 pre.pequal0 <- equals(pre.p.rep,0)
 pre.plessthan0.05 <- step(0.05-pre.p.rep)
+plessthanSetvalue <- step(perVal-main.ap)
 }

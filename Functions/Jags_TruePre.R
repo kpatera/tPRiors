@@ -1,25 +1,21 @@
-cat("model{ #ap denots apparent prevalences #main.ap true prevalence
+cat("model{ #ap denotes apparent prevalences #main.ap true prevalence
     y ~ dbin(ap, n)
-    ap<-main.ap*Se+(1-main.ap)*(1-Sp)
+    pre.y ~ dbin(ap, m)
+    ap<-main.ap*main.Se+(1-main.ap)*(1-main.Sp)
     #Uniform (non-informative) prior for apparent prevalence (ap)
-    main.ap  ~ dbeta(a,b) ########################################################### Check if they are the same.
-    Se ~ dbeta(ase, bse)   	  #0.85 (0.70–0.95)
-    Sp ~ dbeta(asp, bsp)    		 #0.77 (0.49–0.96)
+    main.ap  ~ dbeta(a,b) 
+    main.Se ~ dbeta(ase, bse)  
+    main.Sp ~ dbeta(asp, bsp) 
+    plessthanSetvalue <- step(perVal-main.ap)
   }", file=paste("TruePre.txt"))
 
-#data - list(n=4072, y=1210)
+SaveParams <- c("main.ap","ap","main.Se","main.Sp","plessthanSetvalue","pre.y")
 
-#initials - list(main.ap=0.1, Se=0.90, Sp=0.85)
-
-SaveParams <- c("main.ap","ap","Se","Sp")
-
-generic_jags<-jagsoutput_True<-rjags::jags.model(data=list(n=input$n,y=input$y,
-                                      ase=fb_SE$a,
-                                      bse=fb_SE$b,
-                                      asp=fb_SP$a,
-                                      bsp=fb_SP$b,
-                                      a=fb$a,
-                                      b=fb$b),
+generic_jags<-jagsoutput_True<-rjags::jags.model(data=list(n=input$n,y=input$y, m=100,
+                                      ase=fb_SE$a, bse=fb_SE$b,
+                                      asp=fb_SP$a, bsp=fb_SP$b,
+                                      a=fb$a, b=fb$b,
+                                      perVal=input$perVal),
                             inits=NULL, n.chains=input$nchains,file=paste("TruePre.txt"),quiet=TRUE)
 
 Model1.mcmc <<- coda.samples(jagsoutput_True,  n.iter=input$nniter, n.thin=input$nnthin, n.burnin=floor(input$nniter/10),
