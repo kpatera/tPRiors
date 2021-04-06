@@ -27,7 +27,7 @@ shinyUI(
                                 h5("(d) In tab (Report) the program returns a dynamic output that changes based on (a), (b) and (c)."),
                                 h5("(e) In tab (Acks) acknoweledgments and useful links can be found."),
                                 br(),
-                                h5("Open: 1. MULTIPLE+TRUE(+ZERO) nniter inputs"),
+                                h5("Note: If the sliders in tab (Priors) act not normal, press the Reset button and try again."),
                                 hr(),
                                 h5("The development of tPriors was funded by H2020 project unCoVer:Unravelling Data for Rapid Evidence-Based Response. More details can be found in the manuscript .... tPriors: An R Shiny tool for generating prior and producing posterior distributions for disease prevalence"),
                                 hr(),

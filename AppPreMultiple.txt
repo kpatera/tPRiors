@@ -3,8 +3,10 @@ model{
 for(i in 1:k){
 y[i] ~ dbin(ap[i], n[i])
 ap[i] <- sub.p[i]*main.Se + (1-sub.p[i])*(1-main.Sp)
+
 sub.p[i] ~ dbeta(alpha,beta) T(0.001,0.999)
 }
+
 alpha <- main.ap*main.psi
 beta <- main.psi*(1-main.ap)
 main.ap ~ dbeta(amu, bmu) T(0.001,0.999)

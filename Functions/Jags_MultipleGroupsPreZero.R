@@ -8,10 +8,10 @@ z[i] ~ dbern(main.tau0)
 pstar[i] ~ dbeta(alpha,beta) T(0.001,0.999)
 }
 
-alpha <- main.ap*psi
-beta <- psi*(1-main.ap)
+alpha <- main.ap*main.psi
+beta <- main.psi*(1-main.ap)
 main.ap ~ dbeta(amu, bmu) T(0.001,0.999) 
-psi ~ dgamma(apsi, bpsi) T(0.001,0.999)  
+main.psi ~ dgamma(apsi, bpsi) T(0.001,0.999)  
 
 #informative prior for Se and Sp
 main.Se ~ dbeta(ase, bse) T(0.001,0.999) 
@@ -30,7 +30,7 @@ pre.plessthan0.05 <- step(0.05-pre.p.rep)
 plessthanSetvalue <- step(perVal-main.ap)
 }", file=paste("TruezeroPreMultipleZero.txt"))
 
-SaveParams <- c("main.ap","psi","main.tau0","main.Sp","main.Se","sub.p","y.pre",
+SaveParams <- c("main.ap","main.psi","main.tau0","main.Sp","main.Se","sub.p","y.pre",
                 "pstar","pre.z.rep","pre.pstar.rep","pre.p.rep","pre.pequal0",
                 "pre.plessthan0.05","plessthanSetvalue")
 

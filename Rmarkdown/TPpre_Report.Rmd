@@ -27,7 +27,7 @@ The following section describes your input. During set-up the user assumed that:
 
 ------------------------------------------------------------------------
 
-If the true prevalence (inline equation test: $\pi_{t}$) is modelled the following relation is utilized to acquire its posterior distribution, inline equation test: $\pi_{a} = \pi_{t}\cdot S_{e}(1-\pi_{t})\cdot (1-S_{p})$, where inline equation test: $S_{p},S_{e}$ denotes the specificity and sensitivity of the diagnostic test and inline equation test: $\pi_{a}$ the apparent prevalence.
+If the true prevalence (inline equation test: ($\pi_{t}$) is modelled the following relation is utilized to acquire its posterior distribution, inline equation test: $\pi_{a} = \pi_{t}\cdot S_{e}(1-\pi_{t})\cdot (1-S_{p})$, where inline equation test: $S_{p},S_{e}$ denotes the specificity and sensitivity of the diagnostic test and inline equation test: $\pi_{a}$ the apparent prevalence.
 
 ------------------------------------------------------------------------
 

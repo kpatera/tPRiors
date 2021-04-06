@@ -18,18 +18,18 @@ shinyServer(function(input, output, session) {
   
   #------ POP UP MESSAGE in the beginning -------#
   
-  # showModal(modalDialog(
-  #   title = "Important message",
-  #   easyClose = FALSE,
-  #   p("tPriors aims at Bayesian (true) prevalence estimation based on elicicated prior opinions.",
-  #     tags$strong("
-  #   Following Data Protection legislations, we would like to inform you before you use our web application that :"), "We collect data regardingn your app usage within the IWA app to conduct analysis of usage and develope the application further. By clicking",
-  #     tags$i(tags$u("I consent")), "you consent to us utilizing the data via Google Analytics.
-  #         We refer interested users to our policy by clicking the 'Privacy notice' tab from within the app, and also ",tags$a(href="https://policies.google.com/privacy?hl=en", "Google Privacy & Terms.",target="_blank") ),
-  #   br(),
-  #   modalButton("I consent"),
-  #   footer = NULL
-  # ))
+  showModal(modalDialog(
+    title = "Important message",
+    easyClose = FALSE,
+    p("tPriors aims at Bayesian (true) prevalence estimation based on elicicated prior opinions.",
+      tags$strong("
+    Following Data Protection legislations, we would like to inform you before you use our web application that :"), "We collect data regardingn your app usage within the IWA app to conduct analysis of usage and develope the application further. By clicking",
+      tags$i(tags$u("I consent")), "you consent to us utilizing the data via Google Analytics.
+          We refer interested users to our policy by clicking the 'Privacy notice' tab from within the app, and also ",tags$a(href="https://policies.google.com/privacy?hl=en", "Google Privacy & Terms.",target="_blank") ),
+    br(),
+    modalButton("I consent"),
+    footer = NULL
+  ))
   
   
   
@@ -260,16 +260,14 @@ shinyServer(function(input, output, session) {
   
   output$PriorGenPlot2_true <- plotly::renderPlotly({
     #source("Functions/multiroot.R",local = TRUE)
-   source("Functions/findbetamupsi2.R")
-  # source("Functions/findbetamupsi3.R")
-  # source("Functions/findbetamupsi4.R")
-   
+    source("Functions/findbetamupsi2.R")
+    
     fb<<-findbetamupsi2(themean=input$PriorMean2, percentile=input$Percentile2,
                         lower.v=input$lower.value2,percentile.value=input$PercentileValue2,
                         psi.percentile=input$PercentilePsi2, percentile.median=input$PercentileMedian2,
                         percentile95value=input$Percentile95value2)
     # fb<-NULL
-    fb$aa<-fb$atotalbeta; fb$bb<-fb$btotalbeta
+    fb$aa<<-fb$atotalbeta; fb$bb<<-fb$btotalbeta
     fb$a<<-fb$abeta; fb$b<<-fb$bbeta
     fb$ag<<-fb$agamma; fb$bg<<-fb$bgamma
     
@@ -279,14 +277,15 @@ shinyServer(function(input, output, session) {
                            percentile95value=input$Percentile95value2_SE)
     # fb_SE<-NULL
     fb_SE$a<<-fb_SE$abeta; fb_SE$b<<-fb_SE$bbeta
-
+    
     fb_SP<<-findbetamupsi2(themean=input$PriorMean2_SP, percentile=input$Percentile2_SP,
                            lower.v=input$lower.value2_SP,percentile.value=input$PercentileValue2_SP,
                            psi.percentile=input$PercentilePsi2_SP, percentile.median=input$PercentileMedian2_SP,
                            percentile95value=input$Percentile95value2_SP)
-    #fb_SP<-NULL
-    fb_SP$aa<<-fb_SP$abeta; fb_SP$bb<<-fb_SP$bbeta
-
+    # fb_SP<-NULL
+    fb_SP$a<<-fb_SP$abeta; fb_SP$b<<-fb_SP$bbeta
+    
+    
     priors$prior<<-list(aa=fb$atotalbeta,bb=fb$btotalbeta,
                         a=fb$abeta,b=fb$bbeta,
                         ag=fb$agamma,bg=fb$bgamma)
@@ -294,6 +293,7 @@ shinyServer(function(input, output, session) {
     x<-seq(0,1,length.out = 2000)
     mu.Prevalence<-dbeta(x = x,shape1 = fb$abeta,shape2 = fb$bbeta)
     psi.Prevalence<-dbeta(x = x,shape1 = fb$agamma,shape2 = fb$bgamma)
+    
     Sensitivity<-dbeta(x = x,shape1 = fb_SE$abeta,shape2 = fb_SE$bbeta)
     Specificity<-dbeta(x = x,shape1 = fb_SP$abeta,shape2 = fb_SP$bbeta)
     df1 <- data.frame(x, mu.Prevalence,psi.Prevalence)
@@ -325,15 +325,6 @@ shinyServer(function(input, output, session) {
     ply1 <- ggplotly(gg1)
     ply2 <- ggplotly(gg2)
     subplot(ply1, ply2, nrows=1,titleX = TRUE)
-    
-    
-    #fig1 <- plot_ly(x = ~x, y = ~dbeta(x = x,shape1 = fb$atotalbeta, shape2 = fb$btotalbeta), type = 'scatter', mode = 'lines', fill = 'tozeroy', width=400, height=400)
-    #fig1 <- fig1 %>% layout(xaxis = list(title = 'Beta'), yaxis = list(title = 'Density'))
-    #fig1
-    #fig2 <- plot_ly(x = ~x, y = ~dgamma(x = x,shape1 = fb$agamma,shape2 = fb$bgamma), type = 'scatter', mode = 'lines', fill = 'tozeroy', width=400, height=400)
-    #fig2 <- fig2 %>% layout(xaxis = list(title = 'Gamma'), yaxis = list(title = 'Density'))
-    
-    #subplot(fig1, fig2, nrows = 2, margin = 0.04, heights = c(0.5, 0.5))
   })
   
   output$PriorGenPlot2_true_zero <- plotly::renderPlotly({
@@ -719,24 +710,21 @@ shinyServer(function(input, output, session) {
   output$MultTRpre_Plot <- renderPlot({
     source("Functions/gss.R",local=TRUE)
     source("Functions/Jags_MultipleGroupsPre.R",local=TRUE)$value
-    #Simple plot 
-    #plot(density(Model1.mcmc[[1]][,1]),ylim=c(0,100),xlim=c(0,1),lwd=5, main = "Posterior (black) and Prior (red) distribution of APpre")
-    #lines(1:1000/1000,dbeta(seq(0,1,length.out = 1000),a,b),type = "l",col="red",lwd=5)
-    #ggplot
+    
     Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
     post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
     pri <-  data.frame(density=rbeta(10000,shape1 = priors$prior$a,shape2=priors$prior$b))
-   # Lik <- data.frame(density=rbinom(n = 10000, size =  sum(input$n), prob = sum(input$y/input$n))/sum(input$n))
-    post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' #; Lik$Distribution <- 'likelihood'
-    triple <- rbind(post, pri)#, Lik)
+    post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' 
+    triple <- rbind(post, pri)
     p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2) +
       xlim(0, 1) + theme(legend.position="top") + scale_fill_brewer(palette="Dark2")
     
     S <- ggmcmc::ggs(Model1.mcmc)
     levels(S$Parameter)[levels(S$Parameter)=="main.ap"]<-"True prevalence"
-    p2<-ggs_traceplot(S,family = "prevalence")
-   # SPre<-get_family(D = S,family = "pre")
-    #p3<-ggs_density(SPre)
+    levels(S$Parameter)[levels(S$Parameter)=="main.tau0"]<-"Pr(zero prevalence)"
+    p2<-ggs_traceplot(S,family = "main")
+    #    SPre<-get_family(D = S,family = "pre")
+    #    p3<-ggs_density(SPre)
     
     Sless<-data.frame(S[S$Parameter=="plessthanSetvalue",])
     xinput_Table<-data.frame(table(factor(Sless$value,levels = c(0,1), labels=c("No","Yes"))))
@@ -748,16 +736,9 @@ shinyServer(function(input, output, session) {
     pright<-grid.arrange(p1,ncol=1)
     pleft <-grid.arrange(p2,p3,ncol=1)
     gridExtra::grid.arrange(pright,pleft,ncol=2)
-    #   https://cran.r-project.org/web/packages/ggmcmc/vignettes/using_ggmcmc.html
-    #   S.full <- ggs(radon$s.radon, par_labels=L.radon.intercepts, family="^alpha")
-    #   ggs_caterpillar(S.full)  },width = 400, heigh=400)
-    # Z <- data.frame(
-    #   Parameter=paste("alpha[", radon$counties$id.county, "]", sep=""),
-    #   value=radon$counties$uranium)
-    # ggs_caterpillar(ggs(radon$s.radon, family="^alpha"), X=Z, horizontal=FALSE)
-    
+
   },width = 'auto', heigh='auto')
-  
+
   output$MultTRpreZero_Plot <- renderPlot({
     source("Functions/gss.R",local=TRUE)
     source("Functions/Jags_MultipleGroupsPreZero.R",local=TRUE)$value
@@ -1165,7 +1146,13 @@ shinyServer(function(input, output, session) {
       paste("InputData.RData")
     },
     content = function(file) {
-      save(temp_data, file = file)
+      if(input$ID_SingleMultiple=="Single population"){
+        Multi_data=temp_data
+      save(Multi_data, file = file)
+      }
+      Single_data=list(y=input$y,n=input$n)
+      save(Single_data, file = file)
+      
     }
   )
   output$downloadReport <- downloadHandler( # OPEN

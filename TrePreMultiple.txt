@@ -13,8 +13,8 @@ main.ap ~ dbeta(amu, bmu) T(0.001,0.999)
 main.psi ~ dgamma(apsi, bpsi) T(0.001,0.999)
 
 #informative prior for Se and Sp
-main.Se ~ dbeta(ase, bse) T(0.001,0.999)
-main.Sp ~ dbeta(asp, bsp) T(0.001,0.999)
+main.Se ~ dbeta(ase, bse) I(0.001,0.999)
+main.Sp ~ dbeta(asp, bsp) I(0.001,0.999)
 
 #predictions
 y.pre ~ dbin(main.ap,m)

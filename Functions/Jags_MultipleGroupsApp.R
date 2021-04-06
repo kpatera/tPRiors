@@ -23,6 +23,7 @@ pre.pstar.rep ~ dbeta(alpha,beta)
 pre.pequal0 <- equals(pre.pstar.rep,0)
 pre.plessthan0.05 <- step(0.05-pre.pstar.rep)
 plessthanSetvalue <- step(perVal-main.ap)
+
 }", file=paste("AppPreMultiple.txt"))
 
 
@@ -36,8 +37,8 @@ dtst$country<-factor(dtst$country)
 dtst$ID<-1:length(dtst$region)
 
 
-generic_jags<-jagsoutput_AppMult<-rjags::jags.model(data=list(n=dtst$n,y=dtst$positive, 
-                                                              k=length(dtst$n),m=100,
+generic_jags<-jagsoutput_AppMult<-rjags::jags.model(data=list(n=dtst$n,y=dtst$positive,m=100,
+                                                              k=length(dtst$n),
                                                               amu=fb$a, bmu=fb$b,
                                                               apsi=fb$ag, bpsi=fb$bg,
                                                               perVal=input$perVal),

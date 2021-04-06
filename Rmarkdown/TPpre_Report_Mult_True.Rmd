@@ -28,7 +28,7 @@ The following section describes your input. During set-up the user assumed that:
 
 ------------------------------------------------------------------------
 
-If the true prevalence (inline equation test: $\pi_{t}$) is modelled the following relation is utilized to acquire its posterior distribution, inline equation test: $\pi_{a} = \pi_{t}\cdot S_{e}(1-\pi_{t})\cdot (1-S_{p})$, where inline equation test: $S_{p},S_{e}$ denotes the specificity and sensitivity of the diagnostic test and inline equation test: $\pi_{a}$ the apparent prevalence.
+If the true prevalence (inline equation test: ($\pi_{t}$) is modelled the following relation is utilized to acquire its posterior distribution, inline equation test: $\pi_{a} = \pi_{t}\cdot S_{e}(1-\pi_{t})\cdot (1-S_{p})$, where inline equation test: $S_{p},S_{e}$ denotes the specificity and sensitivity of the diagnostic test and inline equation test: $\pi_{a}$ the apparent prevalence.
 
 ------------------------------------------------------------------------
 
@@ -133,7 +133,8 @@ sum(Model1.mcmc_df$main.ap>input$perVal)/length(Model1.mcmc_df$main.ap)
 ```{r echo=FALSE}
 renderPlotly({
     priors$prior<<-list(a=fb$a,b=fb$b)
-    post <-  data.frame(density=data.frame(density=Model1.mcmc[[1]][,1])[,1])
+    Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
+    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
     pri <-  data.frame(density=rbeta(10000,shape1 = priors$prior$a,shape2=priors$prior$b))
     #Lik <- data.frame(density=rbinom(n = 10000, size =  input$n, prob = input$y/input$n)/input$n)
     post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' #; Lik$Distribution <- 'likelihood'

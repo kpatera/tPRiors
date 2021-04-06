@@ -1,5 +1,6 @@
 # Boxplots for regions?
-# Check TRUE MULTIPLE why sub are reverted?
+# Timer for analysis.
+# Check conditions multiple+true
 
 #---- Load packages ----#
 packages.list<-c("shiny","shinythemes","shinyWidgets","shinydashboard",
