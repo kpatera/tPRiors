@@ -939,7 +939,6 @@ shinyServer(function(input, output, session) {
     
   })
 
-  
   output$sliders_fb <- renderUI({
     if(input$lower.value=="FALSE"){
       sliderInput(inputId = "PercentileValue1",label = paste("Specify the upper or lower limit for the ",input$ID_MeanMedianMode," at the specified level of confidence: "), 
@@ -1068,7 +1067,7 @@ shinyServer(function(input, output, session) {
                   value=max(input$Percentile95value2_SE,input$PercentileMedian2_SE+0.001), min=0, max=1, step = 0.001)
     }
   })
-  #tau0 missing
+
   output$sliders_qq_fb<-renderUI({ 
     sliderInput(inputId = "PercentileValue3_2", label = "Specify the value for the 2nd percentile", 
                 min=0, max=1, value=max(input$PercentileValue3_1+0.001,input$PercentileValue3_2),step = 0.001)
@@ -1113,7 +1112,6 @@ shinyServer(function(input, output, session) {
   outputOptions(output, "sliders_qq22_SE_fb", suspendWhenHidden = FALSE)
   outputOptions(output, "sliders_qq22_SP_fb", suspendWhenHidden = FALSE)
   outputOptions(output, "sliders_qq22_tau0_fb", suspendWhenHidden = FALSE)
-  # outputOptions(output, "MultiDataset_fb", suspendWhenHidden = FALSE)
 
   #------ Condition for sample size and positives bugged. ------#
   # output$DataInput_fb <- renderUI({
@@ -1155,7 +1153,7 @@ shinyServer(function(input, output, session) {
       
     }
   )
-  output$downloadReport <- downloadHandler( # OPEN
+  output$downloadReport <- downloadHandler( # STILL OPEN
     filename = function() {
       paste("my-report", sep = ".", switch(
         input$format, PDF = "pdf", HTML = "html", Word = "docx"

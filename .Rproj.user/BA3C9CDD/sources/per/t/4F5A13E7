@@ -1,0 +1,25 @@
+{
+    "id": "4F5A13E7",
+    "path": "~/GitHub/tPriors/global.R",
+    "project_path": "global.R",
+    "type": "r_source",
+    "hash": "769337888",
+    "contents": "",
+    "dirty": false,
+    "created": 1608550094661.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "cursorPosition": "2,32",
+        "scrollLine": "0",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1617619638,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1617619638841,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -184,7 +184,7 @@ End of tPriors report.
 
 # Instructions for using the resulted .rData files
 
-Users can further access the analysis with the following .rData files. We provide below three files under the tabs; 1) Input (for multiple groups), 2) Model and 3) Output. The user should first open R or Rstudio and then search and open the .rData file of interest through the tab <files> or through the load function. The input data in R form can be loaded by "load("~/.../InputData.RData")". The final JAGS model can be loaded in R via "load("~/.../JagsModel.rData")", while the MCMC samples can be directly loaded in R via "load(~/.../Model1.mcmc.RData), where "..." stands for the local directory path where the file of interest has been placed.
+Users can further access the analysis with the following .rData files. We provide below three files under the tabs; 1) Input, 2) Model and 3) Output. The user should first open R or Rstudio and then search and open the .rData file of interest through the tab <files> or through the load function. The input data in R form can be loaded by "load("~/.../InputData.RData")". The final JAGS model can be loaded in R via "load("~/.../JagsModel.rData")", while the MCMC samples can be directly loaded in R via "load(~/.../Model1.mcmc.RData), where "..." stands for the local directory path where the file of interest has been placed.
 
 # Working with the <Model.mcmc> object
 
