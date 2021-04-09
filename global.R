@@ -1,6 +1,5 @@
 # Boxplots for regions?
 # Timer for analysis.
-# Check conditions multiple+true
 
 #---- Load packages ----#
 packages.list<-c("shiny","shinythemes","shinyWidgets","shinydashboard",
