@@ -19,7 +19,7 @@ shinyUI(
                                 #                                    h3("(vi) the", tags$strong(" probability that the prevalence within the country is lower than a minimum acceptable threshold.")),
                                 h4("Below the user can find a brief description of the shiny application functions and options."),
                                 br(),
-                                h5("We advise users to Reset |tPriors| when they want to change a previously set setting."),
+                                h5("We advise users to Reset |tPRiors| when they want to change a previously set setting."),
                                 br(),
                                 h5("(a) In tab (Set up) the user following questions can fix the parameters of the analysis (Choose model, priors, special characteristics) "),
                                 h5("(b) In tab (Priors) the user can elicitate the prior distribution(s) with the aid of sliders and visual confirmation"),
@@ -29,7 +29,7 @@ shinyUI(
                                 br(),
                                 h5("Note: If the sliders in tab (Priors) act not normal, press the Reset button and try again."),
                                 hr(),
-                                h5("The development of tPriors was funded by H2020 project unCoVer:Unravelling Data for Rapid Evidence-Based Response. More details can be found in the manuscript .... tPriors: An R Shiny tool for generating prior and producing posterior distributions for disease prevalence"),
+                                h5("The development of tPRiors was funded by H2020 project unCoVer:Unravelling Data for Rapid Evidence-Based Response. More details can be found in the manuscript .... tPRiors: An R Shiny tool for generating prior and producing posterior distributions for disease prevalence"),
                                 hr(),
                                 br(),
                                 fluidRow(
@@ -56,7 +56,7 @@ shinyUI(
                         hr(),
                         uiOutput("metric_fb"),
                         hr(),
-                        div(style="display:inline-block;width:45%;text-align: left;",actionButton("buttonReset", "Reset tPriors"),style=icon("check")),
+                        div(style="display:inline-block;width:45%;text-align: left;",actionButton("buttonReset", "Reset tPRiors"),style=icon("check")),
                         div(style="display:inline-block;width:45%;text-align: right;",actionButton("buttonSetup", "Fix setup!"),style=icon("check")),
                       ),
                       mainPanel(
@@ -187,7 +187,7 @@ shinyUI(
              tabPanel("Acks",
                       fluidPage(
                         fluidRow(box(align="center",width = 12,background = "black",
-                                     h3("tPriors was created using Shiny, JAGS and PriorGen to implement the full hierarchical model for prevalence estimation. tPriors is powered by the following R packages:"))),
+                                     h3("tPRiors was created using Shiny, JAGS and PriorGen to implement the full hierarchical model for prevalence estimation. tPRiors is powered by the following R packages:"))),
                         #fluidRow(column(6,img(src='hotline.png', align = "left"))),
                         fluidRow(
                           box(align="center",width = 3,background = "light-blue",h3("ggplot2")),
@@ -209,7 +209,7 @@ shinyUI(
                           box(align="center",width = 4,background = "orange",h3("ggmcmc")),
                           box(align="center",width = 4,background = "orange",h3("PriorGen")))
 #                         fluidRow(box(align="left",width = 12,background = "black",
-#                                      h3("The development of tPriors was funded by H2020 project unCoVer:Unravelling Data for Rapid Evidence-Based Response. More details can be found in the manuscript Pateras K, ..., Kostoulas P. tPriors: An R Shiny tool for generating prior and
+#                                      h3("The development of tPRiors was funded by H2020 project unCoVer:Unravelling Data for Rapid Evidence-Based Response. More details can be found in the manuscript Pateras K, ..., Kostoulas P. tPRiors: An R Shiny tool for generating prior and
 # producing posterior distributions for disease prevalence")))
                         #)
                         

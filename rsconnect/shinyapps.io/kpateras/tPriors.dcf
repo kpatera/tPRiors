@@ -1,12 +1,12 @@
-name: tPriors
-title: tPriors
+name: tPRiors
+title: tPRiors
 username:
 account: kpateras
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 3745856
-bundleId: 4441607
-url: https://kpateras.shinyapps.io/tPriors/
-when: 1617796616.64413
+appId: 3992308
+bundleId: 4490577
+url: https://kpateras.shinyapps.io/tPRiors/
+when: 1618837935.61327
 asMultiple: FALSE
 asStatic: FALSE

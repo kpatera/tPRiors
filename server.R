@@ -14,22 +14,22 @@ shinyServer(function(input, output, session) {
   priors$PriorSelect<-FALSE
   priors$mSetupmodel<-FALSE
   priors$mSetupPriors<-FALSE
-  
-  
+  #input <- reactiveValues(buttonPrior = NULL)
+
   #------ POP UP MESSAGE in the beginning -------#
   
-  showModal(modalDialog(
-    title = "Important message",
-    easyClose = FALSE,
-    p("tPriors aims at Bayesian (true) prevalence estimation based on elicicated prior opinions.",
-      tags$strong("
-    Following Data Protection legislations, we would like to inform you before you use our web application that :"), "We collect data regardingn your app usage within the IWA app to conduct analysis of usage and develope the application further. By clicking",
-      tags$i(tags$u("I consent")), "you consent to us utilizing the data via Google Analytics.
-          We refer interested users to our policy by clicking the 'Privacy notice' tab from within the app, and also ",tags$a(href="https://policies.google.com/privacy?hl=en", "Google Privacy & Terms.",target="_blank") ),
-    br(),
-    modalButton("I consent"),
-    footer = NULL
-  ))
+  # showModal(modalDialog(
+  #   title = "Important message",
+  #   easyClose = FALSE,
+  #   p("tPriors aims at Bayesian (true) prevalence estimation based on elicicated prior opinions.",
+  #     tags$strong("
+  #   Following Data Protection legislations, we would like to inform you before you use our web application that :"), "We collect data regardingn your app usage within the IWA app to conduct analysis of usage and develope the application further. By clicking",
+  #     tags$i(tags$u("I consent")), "you consent to us utilizing the data via Google Analytics.
+  #         We refer interested users to our policy by clicking the 'Privacy notice' tab from within the app, and also ",tags$a(href="https://policies.google.com/privacy?hl=en", "Google Privacy & Terms.",target="_blank") ),
+  #   br(),
+  #   modalButton("I consent"),
+  #   footer = NULL
+  # ))
   
   
   
@@ -38,12 +38,13 @@ shinyServer(function(input, output, session) {
   
   output$PriorGenPlot1 <- plotly::renderPlotly({
     #source("Functions/multiroot.R",local = TRUE)
+    if(input$lower.value=="Yes"){lower.value=TRUE}else{lower.value=FALSE}
     if(input$ID_MeanMedianMode=="Mean" & !is.null(input[["PriorMetric"]])){
-      fb<<-findbeta2(themean =input$PriorMetric, percentile=input$Percentile1,lower.v=input$lower.value, percentile.value=input$PercentileValue1)
+      fb<<-findbeta2(themean =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
     }else if(input$ID_MeanMedianMode=="Median"){
-      fb<<-findbeta2(themedian=input$PriorMetric, percentile=input$Percentile1,lower.v=input$lower.value, percentile.value=input$PercentileValue1)
+      fb<<-findbeta2(themedian=input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
     }else if(input$ID_MeanMedianMode=="Mode"){
-      fb<<-findbeta2(themode =input$PriorMetric, percentile=input$Percentile1,lower.v=input$lower.value, percentile.value=input$PercentileValue1)
+      fb<<-findbeta2(themode =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
     }
     # find beta based on prior knowledge
     
@@ -72,18 +73,21 @@ shinyServer(function(input, output, session) {
   
   output$PriorGenPlot1_true <- plotly::renderPlotly({
     #source("Functions/multiroot.R",local = TRUE)
+    if(input$lower.value=="Yes"){lower.value=TRUE}else{lower.value=FALSE}
+    if(input$lower.value_SP=="Yes"){lower.value_SP=TRUE}else{lower.value_SP=FALSE}
+    if(input$lower.value_SE=="Yes"){lower.value_SE=TRUE}else{lower.value_SE=FALSE}
     if(input$ID_MeanMedianMode=="Mean"){
-      fb<<-findbeta2(themean =input$PriorMetric, percentile=input$Percentile1,lower.v=input$lower.value, percentile.value=input$PercentileValue1)
-      fb_SE<<-findbeta2(themean =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=input$lower.value_SE, percentile.value=input$PercentileValue1_SE)
-      fb_SP<<-findbeta2(themean =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=input$lower.value_SP, percentile.value=input$PercentileValue1_SP)
+      fb<<-findbeta2(themean =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+      fb_SE<<-findbeta2(themean =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+      fb_SP<<-findbeta2(themean =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
     }else if(input$ID_MeanMedianMode=="Median"){
-      fb<<-findbeta2(themedian=input$PriorMetric, percentile=input$Percentile1,lower.v=input$lower.value, percentile.value=input$PercentileValue1)
-      fb_SE<<-findbeta2(themedian =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=input$lower.value_SE, percentile.value=input$PercentileValue1_SE)
-      fb_SP<<-findbeta2(themedian =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=input$lower.value_SP, percentile.value=input$PercentileValue1_SP)
+      fb<<-findbeta2(themedian=input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+      fb_SE<<-findbeta2(themedian =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+      fb_SP<<-findbeta2(themedian =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
     }else if(input$ID_MeanMedianMode=="Mode"){
-      fb<<-findbeta2(themode =input$PriorMetric, percentile=input$Percentile1,lower.v=input$lower.value, percentile.value=input$PercentileValue1)
-      fb_SE<<-findbeta2(themode =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=input$lower.value_SE, percentile.value=input$PercentileValue1_SE)
-      fb_SP<<-findbeta2(themode =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=input$lower.value_SP, percentile.value=input$PercentileValue1_SP)
+      fb<<-findbeta2(themode =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+      fb_SE<<-findbeta2(themode =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+      fb_SP<<-findbeta2(themode =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
     }
     priors$prior<<-list(a=fb$a,b=fb$b,ase=fb_SE$a,bse=fb_SE$b,asp=fb_SP$a,bsp=fb_SP$b)
     # find beta based on prior knowledge
@@ -144,21 +148,25 @@ shinyServer(function(input, output, session) {
   
   output$PriorGenPlot1_true_zero <- plotly::renderPlotly({
     #source("Functions/multiroot.R",local = TRUE)
+    if(input$lower.value=="Yes"){lower.value=TRUE}else{lower.value=FALSE}
+    if(input$lower.value_SP=="Yes"){lower.value_SP=TRUE}else{lower.value_SP=FALSE}
+    if(input$lower.value_SE=="Yes"){lower.value_SE=TRUE}else{lower.value_SE=FALSE}
+    if(input$lower.value_tau0=="Yes"){lower.value_tau0=TRUE}else{lower.value_tau0=FALSE}
     if(input$ID_MeanMedianMode=="Mean"){
-      fb<<-findbeta2(themean =input$PriorMetric, percentile=input$Percentile1,lower.v=input$lower.value, percentile.value=input$PercentileValue1)
-      fb_SE<<-findbeta2(themean =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=input$lower.value_SE, percentile.value=input$PercentileValue1_SE)
-      fb_SP<<-findbeta2(themean =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=input$lower.value_SP, percentile.value=input$PercentileValue1_SP)
-      fb_tau0<<-findbeta2(themean =input$PriorMetric_tau0, percentile=input$Percentile1_tau0,lower.v=input$lower.value_tau0, percentile.value=input$PercentileValue1_tau0)
+      fb<<-findbeta2(themean =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+      fb_SE<<-findbeta2(themean =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+      fb_SP<<-findbeta2(themean =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
+      fb_tau0<<-findbeta2(themean =input$PriorMetric_tau0, percentile=input$Percentile1_tau0,lower.v=lower.value_tau0, percentile.value=input$PercentileValue1_tau0)
     }else if(input$ID_MeanMedianMode=="Median"){
-      fb<<-findbeta2(themedian=input$PriorMetric, percentile=input$Percentile1,lower.v=input$lower.value, percentile.value=input$PercentileValue1)
-      fb_SE<<-findbeta2(themedian =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=input$lower.value_SE, percentile.value=input$PercentileValue1_SE)
-      fb_SP<<-findbeta2(themedian =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=input$lower.value_SP, percentile.value=input$PercentileValue1_SP)
-      fb_tau0<<-findbeta2(themedian =input$PriorMetric_tau0, percentile=input$Percentile1_tau0,lower.v=input$lower.value_tau0, percentile.value=input$PercentileValue1_tau0)
+      fb<<-findbeta2(themedian=input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+      fb_SE<<-findbeta2(themedian =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+      fb_SP<<-findbeta2(themedian =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
+      fb_tau0<<-findbeta2(themedian =input$PriorMetric_tau0, percentile=input$Percentile1_tau0,lower.v=lower.value_tau0, percentile.value=input$PercentileValue1_tau0)
     }else if(input$ID_MeanMedianMode=="Mode"){
-      fb<<-findbeta2(themode =input$PriorMetric, percentile=input$Percentile1,lower.v=input$lower.value, percentile.value=input$PercentileValue1)
-      fb_SE<<-findbeta2(themode =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=input$lower.value_SE, percentile.value=input$PercentileValue1_SE)
-      fb_SP<<-findbeta2(themode =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=input$lower.value_SP, percentile.value=input$PercentileValue1_SP)
-      fb_tau0<<-findbeta2(themode =input$PriorMetric_tau0, percentile=input$Percentile1_tau0,lower.v=input$lower.value_tau0, percentile.value=input$PercentileValue1_tau0)
+      fb<<-findbeta2(themode =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+      fb_SE<<-findbeta2(themode =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+      fb_SP<<-findbeta2(themode =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
+      fb_tau0<<-findbeta2(themode =input$PriorMetric_tau0, percentile=input$Percentile1_tau0,lower.v=lower.value_tau0, percentile.value=input$PercentileValue1_tau0)
     }
     
     
@@ -203,8 +211,9 @@ shinyServer(function(input, output, session) {
   #  require(rootSolve);require(PriorGen) 
   # source("Functions/multiroot.R",local = TRUE)
    #source("Functions/findbetamupsi2.R",local = TRUE)
+    if(input$lower.value2=="Yes"){lower.value2=TRUE}else{lower.value2=FALSE}
     fb<<-findbetamupsi2(themean=input$PriorMean2, percentile=input$Percentile2,
-                        lower.v=input$lower.value2,percentile.value=input$PercentileValue2,
+                        lower.v=lower.value2,percentile.value=input$PercentileValue2,
                         psi.percentile=input$PercentilePsi2, percentile.median=input$PercentileMedian2,
                         percentile95value=input$Percentile95value2)
     # fb<-NULL
@@ -261,9 +270,12 @@ shinyServer(function(input, output, session) {
   output$PriorGenPlot2_true <- plotly::renderPlotly({
     #source("Functions/multiroot.R",local = TRUE)
     source("Functions/findbetamupsi2.R")
-    
+    if(input$lower.value2=="Yes"){lower.value2=TRUE}else{lower.value2=FALSE}
+    if(input$lower.value2_SP=="Yes"){lower.value2_SP=TRUE}else{lower.value2_SP=FALSE}
+    if(input$lower.value2_SE=="Yes"){lower.value2_SE=TRUE}else{lower.value2_SE=FALSE}
+
     fb<<-findbetamupsi2(themean=input$PriorMean2, percentile=input$Percentile2,
-                        lower.v=input$lower.value2,percentile.value=input$PercentileValue2,
+                        lower.v=lower.value2,percentile.value=input$PercentileValue2,
                         psi.percentile=input$PercentilePsi2, percentile.median=input$PercentileMedian2,
                         percentile95value=input$Percentile95value2)
     # fb<-NULL
@@ -272,14 +284,14 @@ shinyServer(function(input, output, session) {
     fb$ag<<-fb$agamma; fb$bg<<-fb$bgamma
     
     fb_SE<<-findbetamupsi2(themean=input$PriorMean2_SE, percentile=input$Percentile2_SE,
-                           lower.v=input$lower.value2_SE,percentile.value=input$PercentileValue2_SE,
+                           lower.v=lower.value2_SE,percentile.value=input$PercentileValue2_SE,
                            psi.percentile=input$PercentilePsi2_SE, percentile.median=input$PercentileMedian2_SE,
                            percentile95value=input$Percentile95value2_SE)
     # fb_SE<-NULL
     fb_SE$a<<-fb_SE$abeta; fb_SE$b<<-fb_SE$bbeta
     
     fb_SP<<-findbetamupsi2(themean=input$PriorMean2_SP, percentile=input$Percentile2_SP,
-                           lower.v=input$lower.value2_SP,percentile.value=input$PercentileValue2_SP,
+                           lower.v=lower.value2_SP,percentile.value=input$PercentileValue2_SP,
                            psi.percentile=input$PercentilePsi2_SP, percentile.median=input$PercentileMedian2_SP,
                            percentile95value=input$Percentile95value2_SP)
     # fb_SP<-NULL
@@ -330,9 +342,13 @@ shinyServer(function(input, output, session) {
   output$PriorGenPlot2_true_zero <- plotly::renderPlotly({
     #source("Functions/multiroot.R",local = TRUE)
     source("Functions/findbetamupsi2.R")
-
+    if(input$lower.value2=="Yes"){lower.value2=TRUE}else{lower.value2=FALSE}
+    if(input$lower.value2_SP=="Yes"){lower.value2_SP=TRUE}else{lower.value2_SP=FALSE}
+    if(input$lower.value2_SE=="Yes"){lower.value2_SE=TRUE}else{lower.value2_SE=FALSE}
+    if(input$lower.value2_tau0=="Yes"){lower.value2_tau0=TRUE}else{lower.value2_tau0=FALSE}
+    
     fb<<-findbetamupsi2(themean=input$PriorMean2, percentile=input$Percentile2,
-                        lower.v=input$lower.value2,percentile.value=input$PercentileValue2,
+                        lower.v=lower.value2,percentile.value=input$PercentileValue2,
                         psi.percentile=input$PercentilePsi2, percentile.median=input$PercentileMedian2,
                         percentile95value=input$Percentile95value2)
     # fb<-NULL
@@ -341,14 +357,14 @@ shinyServer(function(input, output, session) {
     fb$ag<<-fb$agamma; fb$bg<<-fb$bgamma
     
     fb_SE<<-findbetamupsi2(themean=input$PriorMean2_SE, percentile=input$Percentile2_SE,
-                           lower.v=input$lower.value2_SE,percentile.value=input$PercentileValue2_SE,
+                           lower.v=lower.value2_SE,percentile.value=input$PercentileValue2_SE,
                            psi.percentile=input$PercentilePsi2_SE, percentile.median=input$PercentileMedian2_SE,
                            percentile95value=input$Percentile95value2_SE)
     # fb_SE<-NULL
     fb_SE$a<<-fb_SE$abeta; fb_SE$b<<-fb_SE$bbeta
     
     fb_SP<<-findbetamupsi2(themean=input$PriorMean2_SP, percentile=input$Percentile2_SP,
-                           lower.v=input$lower.value2_SP,percentile.value=input$PercentileValue2_SP,
+                           lower.v=lower.value2_SP,percentile.value=input$PercentileValue2_SP,
                            psi.percentile=input$PercentilePsi2_SP, percentile.median=input$PercentileMedian2_SP,
                            percentile95value=input$Percentile95value2_SP)
     # fb_SP<-NULL
@@ -356,7 +372,7 @@ shinyServer(function(input, output, session) {
     
     
     fb_tau0<<-findbetamupsi2(themean=input$PriorMean2_tau0, percentile=input$Percentile2_tau0,
-                           lower.v=input$lower.value2_tau0,percentile.value=input$PercentileValue2_tau0,
+                           lower.v=lower.value2_tau0,percentile.value=input$PercentileValue2_tau0,
                            psi.percentile=input$PercentilePsi2_tau0, percentile.median=input$PercentileMedian2_tau0,
                            percentile95value=input$Percentile95value2_tau0)
     # fb_tau0<-NULL
@@ -568,6 +584,7 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  observeEvent(once = TRUE,input$buttonPrior,{
   output$Priors_Plot_Sum_fb <- renderUI({
     if(priors$SetupPriors==TRUE){
       if(input$ID_MeanMedianMode=="Percentiles"){
@@ -606,6 +623,7 @@ shinyServer(function(input, output, session) {
     }
     
     
+  })
   })
   
    
@@ -853,6 +871,7 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  observeEvent(input$buttonFixModel, {
   output$APar1_Plot_fb <- renderUI({
     if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
       plotOutput("APpre_Plot")
@@ -872,13 +891,11 @@ shinyServer(function(input, output, session) {
       plotOutput("MultTRapp_Plot")
   }
   })
+  })
   
   #-----  Interactive + dynamic sliders/buttons ------#
   output$zero_fb <- renderUI({
     if(input$ID_TrueApp!="True prevalence"){
-      radioButtons(inputId = 'ID_ZeroPrevalence', choices=c("No"),
-                   label = 'Do you want to account for zero true prevalence?',
-                   selected = "No",inline = TRUE)
     }else{
       radioButtons(inputId = 'ID_ZeroPrevalence', choices=c("No","Yes"),
                    label = 'Do you want to account for zero true prevalence?',
@@ -940,7 +957,7 @@ shinyServer(function(input, output, session) {
   })
 
   output$sliders_fb <- renderUI({
-    if(input$lower.value=="FALSE"){
+    if(input$lower.value=="No"){
       sliderInput(inputId = "PercentileValue1",label = paste("Specify the upper or lower limit for the ",input$ID_MeanMedianMode," at the specified level of confidence: "), 
                   value = min(input$PercentileValue1,input$PriorMetric), min=0, max=1,step = 0.001)
     }else{
@@ -950,7 +967,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb_SE <- renderUI({
-    if(input$lower.value_SE=="FALSE"){
+    if(input$lower.value_SE=="No"){
       sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the upper or lower limit for the sensitivity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SE,input$PriorMetric_SE), min=0, max=1,step = 0.001)
     }else{
@@ -960,7 +977,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb_SP <- renderUI({
-    if(input$lower.value_SP=="FALSE"){
+    if(input$lower.value_SP=="No"){
       sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SP,input$PriorMetric_SP), min=0, max=1,step = 0.001)
     }else{
@@ -970,7 +987,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb_tau0 <- renderUI({
-    if(input$lower.value_tau0=="FALSE"){
+    if(input$lower.value_tau0=="No"){
       sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_tau0,input$PriorMetric_tau0), min=0, max=1,step = 0.001)
     }else{
@@ -985,7 +1002,7 @@ shinyServer(function(input, output, session) {
   outputOptions(output, "sliders_fb_tau0", suspendWhenHidden = FALSE)
   
   output$sliders2_fb <- renderUI({
-    if(input$lower.value2=="FALSE"){
+    if(input$lower.value2=="No"){
       updateSliderInput(session = session,inputId = "PercentileValue2", label = "Specify the lower limit for the mean/median/mode at the specified level of confidence: ",
                   value = min(input$PercentileValue2,input$PriorMean2-0.001), min=0, max=1,step = 0.001)
     }else{
@@ -994,7 +1011,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders22_fb <- renderUI({
-    if(input$lower.value2=="FALSE"){
+    if(input$lower.value2=="No"){
       updateSliderInput(session = session,inputId = "PercentileMedian2", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
                   value = min(input$PercentileValue2-0.001,input$PercentileMedian2,input$PriorMean2-0.001), min=0, max=1,step = 0.001)
     }else{
@@ -1003,7 +1020,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders23_fb <- renderUI({
-    if(input$lower.value2=="FALSE"){
+    if(input$lower.value2=="No"){
       updateSliderInput(session = session,inputId = "Percentile95value2", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
                   value=min(input$Percentile95value2,input$PercentileMedian2-0.001), min=0, max=1, step = 0.001)
     }else{
@@ -1013,7 +1030,7 @@ shinyServer(function(input, output, session) {
   })
  
   output$sliders2_SP_fb <- renderUI({
-    if(input$lower.value2_SP=="FALSE"){
+    if(input$lower.value2_SP=="No"){
       updateSliderInput(session = session,inputId = "PercentileValue2_SP", label = "Specify the upper or lower limit for the mean/median/mode at the specified level of confidence: ", 
                   value = min(input$PercentileValue2_SP,input$PriorMean2_SP-0.001), min=0, max=1,step = 0.001)
     }else{
@@ -1022,7 +1039,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders22_SP_fb <- renderUI({
-    if(input$lower.value2_SP=="FALSE"){
+    if(input$lower.value2_SP=="No"){
       updateSliderInput(session = session,inputId = "PercentileMedian2_SP", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ", 
                   value = min(input$PercentileValue2_SP-0.001,input$PercentileMedian2_SP,input$PriorMean2_SP-0.001), min=0, max=1,step = 0.001)
     }else{
@@ -1031,7 +1048,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders23_SP_fb <- renderUI({
-    if(input$lower.value2_SP=="FALSE"){
+    if(input$lower.value2_SP=="No"){
       updateSliderInput(session = session,inputId = "Percentile95value2_SP", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile", 
                   min=0, max=1, value=min(input$Percentile95value2_SP,input$PercentileMedian2_SP-0.001),step = 0.001)
     }else{
@@ -1041,7 +1058,7 @@ shinyServer(function(input, output, session) {
   })
 
   output$sliders2_SE_fb <- renderUI({
-    if(input$lower.value2_SE=="FALSE"){
+    if(input$lower.value2_SE=="No"){
       updateSliderInput(session = session,inputId = "PercentileValue2_SE", label = "Specify the lower limit for the mean/median/mode at the specified level of confidence: ", 
                   value = min(input$PercentileValue2_SE,input$PriorMean2_SE-0.001), min=0, max=1,step = 0.001)
     }else{
@@ -1050,7 +1067,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders22_SE_fb <- renderUI({
-    if(input$lower.value2_SE=="FALSE"){
+    if(input$lower.value2_SE=="No"){
       updateSliderInput(session = session,inputId = "PercentileMedian2_SE", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ", 
                   value = min(input$PercentileValue2_SE-0.001,input$PercentileMedian2_SE,input$PriorMean2_SE-0.001), min=0, max=1,step = 0.001)
     }else{
@@ -1059,7 +1076,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders23_SE_fb <- renderUI({
-    if(input$lower.value2_SE=="FALSE"){
+    if(input$lower.value2_SE=="No"){
       updateSliderInput(session = session,inputId = "Percentile95value2_SE", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile", 
                   value=min(input$Percentile95value2_SE,input$PercentileMedian2_SE-0.001), min=0, max=1, step = 0.001)
     }else{

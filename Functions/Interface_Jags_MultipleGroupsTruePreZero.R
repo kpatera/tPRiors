@@ -15,7 +15,7 @@ sidebarPanel(width = 4,
                         numericInput("nnthin", "Thinning interval: ",min = 2, max = 1000, value = 5),
                         sliderInput(inputId = "nchains", 
                                     label = " Number of MCMC chains: ",
-                                    min=1, max=4, value=2, step = 1)#,
+                                    min=1, max=3, value=2, step = 1)#,
                         #  div(style="display:inline-block;width:45%;text-align: left;",actionButton("buttonModelReset", "Reset..."),style=icon("check")),
                         #  div(style="display:inline-block;width:45%;text-align: right;",actionButton("buttonFixModel", "Fix model"),style=icon("check"))             
                )

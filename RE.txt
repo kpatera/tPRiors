@@ -1,0 +1,14 @@
+model 
+{ 
+  for (i in 1:Nstud)
+  {
+    P[i] <- 1/V[i]
+    y[i] ~ dnorm(delta[i], P[i]) #study effects
+    delta[i] ~ dnorm(d, prec)    #random level effects between studies
+  }   
+  d ~ dnorm(0, 1)
+  OR <- exp(d)
+  tau~dunif(0,1)
+  tau.sq<-tau*tau
+  prec<-1/(tau.sq)
+}
