@@ -3,7 +3,13 @@
 
 # OPEN (Moderate) Timer for priors/analysis.
 # Collect info for shiny competition
-# Fix banner as tPRiors
+#--Data and code used in the app should be publicly available and/or openly licensed.
+#--Your app should be deployed on shinyapps.io.
+#--Your app should be in a public RStudio Cloud project. (Be sure to set access to everyone.)
+#--If you’re new to RStudio Cloud and shinyapps.io, you can create an account for free. Additionally, 
+  #you can find instructions specific to this contest here and find the general RStudio Cloud guide here.
+
+
 # 2. OPEN (MAJOR) - Allow for the ability to change different options (i.e. mean median percentile)  
   #for different prior specifications. So can we move this option at the beginning of each prior tag?
 # 4. OPEN (Moderate) - We need to include the option for non-informative priors for each prior tag 
