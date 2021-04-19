@@ -2,20 +2,14 @@
 
 
 # OPEN (Moderate) Timer for priors/analysis.
-# Collect info for shiny competition
-#--Data and code used in the app should be publicly available and/or openly licensed.
-#--Your app should be deployed on shinyapps.io.
-#--Your app should be in a public RStudio Cloud project. (Be sure to set access to everyone.)
-#--If you’re new to RStudio Cloud and shinyapps.io, you can create an account for free. Additionally, 
-  #you can find instructions specific to this contest here and find the general RStudio Cloud guide here.
-
-
 # 2. OPEN (MAJOR) - Allow for the ability to change different options (i.e. mean median percentile)  
   #for different prior specifications. So can we move this option at the beginning of each prior tag?
 # 4. OPEN (Moderate) - We need to include the option for non-informative priors for each prior tag 
 #(where we can have convergence with non informative priors - all apparent prevalence options).
 
-
+# DONE - Collect info for shiny competition
+#https://blog.rstudio.com/2021/03/11/time-to-shiny/
+#https://rstudio.cloud/project/2459882
 # 6. DONE (CHECK) - Η μπάρα παίζει στα priors (το ξέρεις..)
 #True prevalence, n populations
 # OPEN (moderate) - Se and Sp priors should be standard (not with mu psi). The four last options should be removed.
