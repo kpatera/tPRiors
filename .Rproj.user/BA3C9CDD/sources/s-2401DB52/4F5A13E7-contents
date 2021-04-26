@@ -2,7 +2,7 @@
 
 
 # OPEN (Moderate) Timer for priors/analysis.
-# 2. OPEN (MAJOR) - Allow for the ability to change different options (i.e. mean median percentile)  
+# 2. OPEN (Large) - Allow for the ability to change different options (i.e. mean median percentile)  
   #for different prior specifications. So can we move this option at the beginning of each prior tag?
 
 
@@ -63,8 +63,8 @@ fb<-list(1,1)
 
 #---- Load pre-loaded datasets ----#
 require(readxl)
-Data1 <- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_4studies.xlsx"))
-Data2 <- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_Attica.xlsx"))
-Data3 <- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_NonAttica.xlsx"))
-Data4 <- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d.xlsx"))
+Example1_4Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_4studies.xlsx"))
+Example2_40Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_Attica.xlsx"))
+Example3_102Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_NonAttica.xlsx"))
+Example4_129studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d.xlsx"))
 name_data<-"sidebar user input"

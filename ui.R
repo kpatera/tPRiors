@@ -56,6 +56,8 @@ shinyUI(
                         hr(),
                         uiOutput("zero_fb"),
                         hr(),
+                        uiOutput("metric_fb"),
+                        hr(),
                         div(style="display:inline-block;width:45%;text-align: left;",actionButton("buttonReset", "Reset tPRiors"),style=icon("check")),
                         div(style="display:inline-block;width:45%;text-align: right;",actionButton("buttonSetup", "Fix setup!"),style=icon("check")),
                       ),

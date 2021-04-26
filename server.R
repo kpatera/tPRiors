@@ -38,11 +38,11 @@ shinyServer(function(input, output, session) {
     #source("Functions/multiroot.R",local = TRUE)
     fb<<-findbeta2(themean =0.2, percentile=0.9,lower.v=TRUE, percentile.value=0.5)
     if(input$priorNonInf=="Beta(1,1)") {
-      fb$a<<-1; fb$b<<-1}
+      fb$a<<-1;fb$atotalbeta<<-1; fb$b<<-1;fb$btotalbeta<<-1}
     if(input$priorNonInf=="Beta(0.5,0.5)") {
-      fb$a<<-0.5; fb$b<<-0.5}
+      fb$a<<-0.5;fb$atotalbeta<<-0.5; fb$b<<-0.5;fb$btotalbeta<<-0.5}
     if(input$priorNonInf=="Beta(2,2)") {
-      fb$a<<-2; fb$b<<-2}
+      fb$a<<-2;fb$atotalbeta<<-2; fb$b<<-2;fb$btotalbeta<<-2}
     priors$prior<<-list(a=fb$a,b=fb$b)
     
     x<-seq(0,1,length.out = 2000)
@@ -772,7 +772,7 @@ shinyServer(function(input, output, session) {
       xlim(0, 1) + theme(legend.position="top") + scale_fill_brewer(palette="Dark2")
     
     S <- ggmcmc::ggs(Model1.mcmc)
-    levels(S$Parameter)[levels(S$Parameter)=="main.ap"]<-"True prevalence"
+    levels(S$Parameter)[levels(S$Parameter)=="main.pstar.rep"]<-"True prevalence"
     levels(S$Parameter)[levels(S$Parameter)=="main.tau0"]<-"Pr(zero prevalence)"
     p2<-ggs_traceplot(S,family = "main")
     #    SPre<-get_family(D = S,family = "pre")
@@ -808,7 +808,7 @@ shinyServer(function(input, output, session) {
       xlim(0, 1) + theme(legend.position="top") + scale_fill_brewer(palette="Dark2")
     
     S <- ggmcmc::ggs(Model1.mcmc)
-    levels(S$Parameter)[levels(S$Parameter)=="main.ap"]<-"True prevalence"
+    levels(S$Parameter)[levels(S$Parameter)=="main.pstar.rep"]<-"True prevalence"
     levels(S$Parameter)[levels(S$Parameter)=="main.tau0"]<-"Pr(zero prevalence)"
     p2<-ggs_traceplot(S,family = "main")
 #    SPre<-get_family(D = S,family = "pre")
@@ -848,7 +848,7 @@ shinyServer(function(input, output, session) {
     #lines(1:1000/1000,dbeta(seq(0,1,length.out = 1000),a,b),type = "l",col="red",lwd=5)
     #ggplot
     Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
-    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
+    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
     pri <-  data.frame(density=rbeta(10000,shape1 = fb$atotalbeta,shape2=fb$btotalbeta))
     #mn=mean((sum(dataset()$positive/dataset()$n))/sum(dataset()$n))
     #tau=sd(dataset()$positive/dataset()$n)
@@ -1001,12 +1001,11 @@ shinyServer(function(input, output, session) {
     if(input$ID_SingleMultiple=="Multiple populations"){
       if(input$LoadData=="Option1Preload"){
         selectInput("Indata1", "Dataset:",
-                    c("Data1" = "Data1",
-                      "Data2" = "Data2",
-                      "Data3" = "Data3",
-                      "Data4" = "Data4"))
+                    c("Example1_4Studies" = "Example1_4Studies",
+                      "Example2_40Studies" = "Example2_40Studies",
+                      "Example3_102Studies" = "Example3_102Studies",
+                      "Example4_129studies" = "Example4_129studies"))
       }else{
-        
         fileInput(inputId = "Indata2", label = "Choose .xls(x) File",
                   accept = c(
                     "text/csv",
@@ -1216,7 +1215,6 @@ shinyServer(function(input, output, session) {
   # outputOptions(output, "sliders2_SP_fb", suspendWhenHidden = FALSE)
   # outputOptions(output, "sliders22_SP_fb", suspendWhenHidden = FALSE)
   # outputOptions(output, "sliders23_SP_fb", suspendWhenHidden = FALSE)
-  # 
   # outputOptions(output, "sliders2_SE_fb", suspendWhenHidden = FALSE)
   # outputOptions(output, "sliders22_SE_fb", suspendWhenHidden = FALSE)
   # outputOptions(output, "sliders23_SE_fb", suspendWhenHidden = FALSE)
