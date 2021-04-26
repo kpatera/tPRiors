@@ -4,18 +4,21 @@
 # OPEN (Moderate) Timer for priors/analysis.
 # 2. OPEN (MAJOR) - Allow for the ability to change different options (i.e. mean median percentile)  
   #for different prior specifications. So can we move this option at the beginning of each prior tag?
-# 4. OPEN (Moderate) - We need to include the option for non-informative priors for each prior tag 
-#(where we can have convergence with non informative priors - all apparent prevalence options).
 
+
+
+
+#True prevalence, n populations
+# DONE (small) - For mu, psi priors it is better if you could give them the plot of a Be(mu*psi, psi*(1-mu)) 
+#that will help them visualise what their prior is telling about prevalence overall.
+# DONE (moderate) YOU ARE HERE! - Se and Sp priors should be standard (not with mu psi). The four last options should be removed.
+# DONE (moderate) - Se/Sp priors and zero prevalence priors should not have the mu,psi options.
+# 4. DONE (Moderate) - We need to include the option for non-informative priors for each prior tag 
+#(where we can have convergence with non informative priors - all apparent prevalence options).
 # DONE - Collect info for shiny competition
 #https://blog.rstudio.com/2021/03/11/time-to-shiny/
 #https://rstudio.cloud/project/2459882
 # 6. DONE (CHECK) - Η μπάρα παίζει στα priors (το ξέρεις..)
-#True prevalence, n populations
-# OPEN (moderate) - Se and Sp priors should be standard (not with mu psi). The four last options should be removed.
-# OPEN (small) - For mu, psi priors it is better if you could give them the plot of a Be(mu*psi, psi*(1-mu)) 
-#that will help them visualise what their prior is telling about prevalence overall.
-# OPEN (moderate) - Se/Sp priors and zero prevalence priors should not have the mu,psi options.
 
 # 5. DONE (Moderate similar to 1) - Model setup: perhaps have the update only after clicking the “Fix model”?
 # 3. DONE (Small + 1) - Percentile specifications to have limit/step of 1 (i.e. 0.90, 0.91, 0.92 etc)

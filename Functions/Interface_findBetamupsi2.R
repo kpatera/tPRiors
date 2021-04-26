@@ -2,7 +2,7 @@ sidebarPanel(width = 4,
              tabsetPanel(
                tabPanel("Prevalence",
                         hr(),
-                        h3("Set a sensitivity prior"),
+                        h3("Set a prevalence prior"),
                         hr(),
                         sliderInput(inputId = "PriorMean2", 
                                     label = "Specify your prior belief about the mean: ", 

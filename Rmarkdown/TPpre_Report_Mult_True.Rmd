@@ -39,8 +39,8 @@ If the true prevalence (inline equation test: ($\pi_{t}$) is modelled the follow
 The selected prior distribution of the `r input$ID_TrueApp` has the following descriptive characteristics and density plot.
 
 ```{r echo=FALSE}
-paste0("Summary of ",input$ID_TrueApp," Beta(",fb$abeta,",", fb$bbeta,") prior")
-sample_beta<-rbeta(n = 10000,fb$a, fb$b)
+paste0("Summary of ",input$ID_TrueApp," Beta(",round(fb$atotalbeta,4),",", round(fb$btotalbeta,4),") prior")
+sample_beta<-rbeta(n = 10000,fb$atotalbeta, fb$btotalbeta)
 summary(sample_beta)
 ```
 
@@ -48,7 +48,7 @@ summary(sample_beta)
 renderPlotly({
 x<-seq(0,1,length.out = 2000)
     #plot(x,dbeta(x = x,dbeta(x = x,shape1 = fb$a,shape2 = fb$b),shape1 = fb$a,shape2 = fb$b),type = "l",lwd=3,ylab = "Density Beta")
-    Prevalence<-dbeta(x = x,shape1 = fb$abeta,shape2 = fb$bbeta)
+    Prevalence<-dbeta(x = x,shape1 = fb$atotalbeta,shape2 = fb$btotalbeta)
     df <- data.frame(x, Prevalence)
     df <- gather(df, func, val, -x)
     gg <- ggplot(df, aes(x=x, y=val, group=func))
@@ -74,11 +74,11 @@ The selected prior distribution of the Sensitivity and Specificity have the foll
 
 ```{r echo=FALSE}
 #priors$priorT<<-list(a=fb$a,b=fb$b, ase=fb_SE$a,bse=fb_SE$b, asp=fb_SP$a,bsp=fb_SP$b)
-paste0("Summary of sensitivity Beta(",fb_SE$abeta,",", fb_SE$bbeta,") prior")
-sample_beta_SE<-rbeta(n = 10000,fb_SE$abeta, fb_SE$bbeta)
+paste0("Summary of sensitivity Beta(",round(fb_SE$a,4),",", round(fb_SE$b,4),") prior")
+sample_beta_SE<-rbeta(n = 10000,fb_SE$a, fb_SE$b)
 summary(sample_beta_SE)
-paste0("Summary of specificity Beta(",fb_SP$abeta,",", fb_SP$bbeta,") prior")
-sample_beta_SP<-rbeta(n = 10000,fb_SP$abeta, fb_SP$bbeta)
+paste0("Summary of specificity Beta(",round(fb_SP$a,4),",", round(fb_SP$b,4),") prior")
+sample_beta_SP<-rbeta(n = 10000,fb_SP$a, fb_SP$b)
 summary(sample_beta_SP)
 ```
 
@@ -86,8 +86,8 @@ summary(sample_beta_SP)
 ```{r echo = FALSE}
 renderPlotly({
     x<-seq(0,1,length.out = 2000)
-    Sensitivity<-dbeta(x = x,shape1 = fb_SE$abeta,shape2 = fb_SE$bbeta)
-    Specificity<-dbeta(x = x,shape1 = fb_SP$abeta,shape2 = fb_SP$bbeta)
+    Sensitivity<-dbeta(x = x,shape1 = fb_SE$a,shape2 = fb_SE$b)
+    Specificity<-dbeta(x = x,shape1 = fb_SP$a,shape2 = fb_SP$b)
     df2 <- data.frame(x, Sensitivity, Specificity)
     df2 <- gather(df2, func, val, -x)
     

@@ -37,10 +37,10 @@ dtst$ID<-1:length(dtst$region)
 
 
 generic_jags<-jagsoutput_TrueMult<-rjags::jags.model(data=list(n=dtst$n,y=dtst$positive, k=length(dtst$n),m=100,
-                                                               ase=fb_SE$abeta, bse=fb_SE$bbeta,
-                                                               asp=fb_SP$abeta, bsp=fb_SP$bbeta,
-                                                               amu=fb$a, bmu=fb$b,
-                                                               apsi=fb$ag, bpsi=fb$bg,
+                                                               ase=fb_SE$a, bse=fb_SE$b,
+                                                               asp=fb_SP$a, bsp=fb_SP$b,
+                                                               amu=fb$abeta, bmu=fb$bbeta,
+                                                               apsi=fb$agamma, bpsi=fb$bgamma,
                                                                perVal=input$perVal),
                                                      inits=NULL, n.chains=input$nchains,n.adapt = floor(input$nniter/10),
                                                      file=paste("TrePreMultiple.txt"),quiet=TRUE)

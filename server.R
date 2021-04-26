@@ -31,10 +31,41 @@ shinyServer(function(input, output, session) {
   #   footer = NULL
   # ))
   
-  
-  
-  
   #----- PriorGen routines ------#
+  
+  
+  output$PriorGenPlot0 <- plotly::renderPlotly({
+    #source("Functions/multiroot.R",local = TRUE)
+    fb<<-findbeta2(themean =0.2, percentile=0.9,lower.v=TRUE, percentile.value=0.5)
+    if(input$priorNonInf=="Beta(1,1)") {
+      fb$a<<-1; fb$b<<-1}
+    if(input$priorNonInf=="Beta(0.5,0.5)") {
+      fb$a<<-0.5; fb$b<<-0.5}
+    if(input$priorNonInf=="Beta(2,2)") {
+      fb$a<<-2; fb$b<<-2}
+    priors$prior<<-list(a=fb$a,b=fb$b)
+    
+    x<-seq(0,1,length.out = 2000)
+    #plot(x,dbeta(x = x,dbeta(x = x,shape1 = fb$a,shape2 = fb$b),shape1 = fb$a,shape2 = fb$b),type = "l",lwd=3,ylab = "Density Beta")
+    Prevalence<-dbeta(x = x,shape1 = fb$a,shape2 = fb$b)
+    df <- data.frame(x, Prevalence)
+    df <- gather(df, func, val, -x)
+    gg <- ggplot(df, aes(x=x, y=val, group=func))
+    gg <- gg + geom_line(aes(color=func),size=1.3) 
+    gg <- gg + scale_y_continuous(expand=c(0, 0))
+    gg <- gg + scale_color_manual(name="Prior(s)", 
+                                  values=c("#e69138"),
+                                  labels=c("Prevalence"))
+    gg <- gg + labs(x="Density", y="Probability distribution functions")
+    gg <- gg + theme_bw()
+    gg <- gg + theme(panel.border=element_blank())
+    gg <- gg + theme(axis.line=element_line(size=0.15, color="#2b2b2b"))
+    ggplotly(gg)
+    #fig <- plot_ly(x = ~x, y = ~dbeta(x = x,shape1 = fb$a,shape2 = fb$b), type = 'scatter', mode = 'lines', fill = 'tozeroy',
+    #               width=400, height=400)
+    #fig <- fig %>% layout(xaxis = list(title = 'Beta'), yaxis = list(title = 'Density'))
+    #fig
+  })
   
   output$PriorGenPlot1 <- plotly::renderPlotly({
     #source("Functions/multiroot.R",local = TRUE)
@@ -225,38 +256,24 @@ shinyServer(function(input, output, session) {
     x<-seq(0,1,length.out = 2000)
     #plot(x,dbeta(x = x,dbeta(x = x,shape1 = fb$a,shape2 = fb$b),shape1 = fb$a,shape2 = fb$b),type = "l",lwd=3,ylab = "Density Beta")
    # priors$prior<<-list(a=fb$a,b=fb$b)
+    Prev.Prevalence<-dbeta(x = x,shape1 = fb$atotalbeta,shape2 = fb$btotalbeta)
     mu.Prevalence<-dbeta(x = x,shape1 = fb$abeta,shape2 = fb$bbeta)
     psi.Prevalence<-dbeta(x = x,shape1 = fb$agamma,shape2 = fb$bgamma)
-    df1 <- data.frame(x, mu.Prevalence)
-    df2 <- data.frame(x, psi.Prevalence)
+    df1 <- data.frame(x, Prev.Prevalence)
     df1 <- gather(df1, func, val, -x)
-    df2 <- gather(df2, func, val, -x)
     
     gg1 <- ggplot(df1, aes(x=x, y=val, group=func))
     gg1 <- gg1 + geom_line(aes(color=func),size=1.3) 
     gg1 <- gg1 + scale_y_continuous(expand=c(0, 0))
     gg1 <- gg1 + scale_color_manual(name="Prior(s)", 
                                     values=c("#e69138"),
-                                    labels=c("mu.Prevalence"))
+                                    labels=c("Prev.Prevalence"))
     gg1 <- gg1 + labs(x="Density", y="Probability distribution functions")
     gg1 <- gg1 + theme_bw()
     gg1 <- gg1 + theme(panel.border=element_blank())
     gg1 <- gg1 + theme(axis.line=element_line(size=0.15, color="#2b2b2b"))
-    gg1
-    gg2 <- ggplot(df2, aes(x=x, y=val, group=func))
-    gg2 <- gg2 + geom_line(aes(color=func),size=1.3)
-    gg2 <- gg2 + scale_y_continuous(expand=c(0, 0))
-    gg2 <- gg2 + scale_color_manual(name="",
-                                    values=c("#4a86e8"),
-                                    labels=c("psi.Prevalence"))
-    gg2 <- gg2 + labs(x="Density", y="Probability distribution functions")
-    gg2 <- gg2 + theme_bw()
-    gg2 <- gg2 + theme(panel.border=element_blank())
-    gg2 <- gg2 + theme(axis.line=element_line(size=0.15, color="#2b2b2b"))
     ply1 <- ggplotly(gg1)
-    ply2 <- ggplotly(gg2)
-    subplot(ply1, ply2, nrows=1,titleX = TRUE)
-    
+    ply1
     
     #fig1 <- plot_ly(x = ~x, y = ~dbeta(x = x,shape1 = fb$atotalbeta, shape2 = fb$btotalbeta), type = 'scatter', mode = 'lines', fill = 'tozeroy', width=400, height=400)
     #fig1 <- fig1 %>% layout(xaxis = list(title = 'Beta'), yaxis = list(title = 'Density'))
@@ -283,19 +300,24 @@ shinyServer(function(input, output, session) {
     fb$a<<-fb$abeta; fb$b<<-fb$bbeta
     fb$ag<<-fb$agamma; fb$bg<<-fb$bgamma
     
-    fb_SE<<-findbetamupsi2(themean=input$PriorMean2_SE, percentile=input$Percentile2_SE,
-                           lower.v=lower.value2_SE,percentile.value=input$PercentileValue2_SE,
-                           psi.percentile=input$PercentilePsi2_SE, percentile.median=input$PercentileMedian2_SE,
-                           percentile95value=input$Percentile95value2_SE)
-    # fb_SE<-NULL
-    fb_SE$a<<-fb_SE$abeta; fb_SE$b<<-fb_SE$bbeta
+    # fb_SE<<-findbetamupsi2(themean=input$PriorMean2_SE, percentile=input$Percentile2_SE,
+    #                        lower.v=lower.value2_SE,percentile.value=input$PercentileValue2_SE,
+    #                        psi.percentile=input$PercentilePsi2_SE, percentile.median=input$PercentileMedian2_SE,
+    #                        percentile95value=input$Percentile95value2_SE)
+    # # fb_SE<-NULL
+    # fb_SE$a<<-fb_SE$abeta; fb_SE$b<<-fb_SE$bbeta
+    # 
+    # fb_SP<<-findbetamupsi2(themean=input$PriorMean2_SP, percentile=input$Percentile2_SP,
+    #                        lower.v=lower.value2_SP,percentile.value=input$PercentileValue2_SP,
+    #                        psi.percentile=input$PercentilePsi2_SP, percentile.median=input$PercentileMedian2_SP,
+    #                        percentile95value=input$Percentile95value2_SP)
+    # # fb_SP<-NULL
+    # fb_SP$a<<-fb_SP$abeta; fb_SP$b<<-fb_SP$bbeta
     
-    fb_SP<<-findbetamupsi2(themean=input$PriorMean2_SP, percentile=input$Percentile2_SP,
-                           lower.v=lower.value2_SP,percentile.value=input$PercentileValue2_SP,
-                           psi.percentile=input$PercentilePsi2_SP, percentile.median=input$PercentileMedian2_SP,
-                           percentile95value=input$Percentile95value2_SP)
-    # fb_SP<-NULL
-    fb_SP$a<<-fb_SP$abeta; fb_SP$b<<-fb_SP$bbeta
+    
+    fb_SE<<-findbeta2(themean =input$PriorMetric2_SE, percentile=input$Percentile2_SE,lower.v=lower.value2_SE, percentile.value=input$PercentileValue1_SE)
+    fb_SP<<-findbeta2(themean =input$PriorMetric2_SP, percentile=input$Percentile2_SP,lower.v=lower.value2_SP, percentile.value=input$PercentileValue1_SP)
+    
     
     
     priors$prior<<-list(aa=fb$atotalbeta,bb=fb$btotalbeta,
@@ -305,10 +327,10 @@ shinyServer(function(input, output, session) {
     x<-seq(0,1,length.out = 2000)
     mu.Prevalence<-dbeta(x = x,shape1 = fb$abeta,shape2 = fb$bbeta)
     psi.Prevalence<-dbeta(x = x,shape1 = fb$agamma,shape2 = fb$bgamma)
-    
-    Sensitivity<-dbeta(x = x,shape1 = fb_SE$abeta,shape2 = fb_SE$bbeta)
-    Specificity<-dbeta(x = x,shape1 = fb_SP$abeta,shape2 = fb_SP$bbeta)
-    df1 <- data.frame(x, mu.Prevalence,psi.Prevalence)
+    Prev.Prevalence<-dbeta(x = x,shape1 = fb$atotalbeta, shape2 = fb$btotalbeta) 
+    Sensitivity<-dbeta(x = x,shape1 = fb_SE$a,shape2 = fb_SE$b)
+    Specificity<-dbeta(x = x,shape1 = fb_SP$a,shape2 = fb_SP$b)
+    df1 <- data.frame(x, Prev.Prevalence)
     df2 <- data.frame(x, Sensitivity,Specificity)
     df1 <- gather(df1, func, val, -x)
     df2 <- gather(df2, func, val, -x)
@@ -317,8 +339,8 @@ shinyServer(function(input, output, session) {
     gg1 <- gg1 + geom_line(aes(color=func),size=1.3) 
     gg1 <- gg1 + scale_y_continuous(expand=c(0, 0))
     gg1 <- gg1 + scale_color_manual(name="Prior(s)", 
-                                    values=c("#e69138","#4a86e8"),
-                                    labels=c("mu.Prevalence","psi.Prevalence"))
+                                    values=c("#e69138"),
+                                    labels=c("Prevalence"))
     gg1 <- gg1 + labs(x="Density", y="Probability distribution functions")
     gg1 <- gg1 + theme_bw()
     gg1 <- gg1 + theme(panel.border=element_blank())
@@ -355,29 +377,32 @@ shinyServer(function(input, output, session) {
     fb$aa<<-fb$atotalbeta; fb$bb<<-fb$btotalbeta
     fb$a<<-fb$abeta; fb$b<<-fb$bbeta
     fb$ag<<-fb$agamma; fb$bg<<-fb$bgamma
-    
-    fb_SE<<-findbetamupsi2(themean=input$PriorMean2_SE, percentile=input$Percentile2_SE,
-                           lower.v=lower.value2_SE,percentile.value=input$PercentileValue2_SE,
-                           psi.percentile=input$PercentilePsi2_SE, percentile.median=input$PercentileMedian2_SE,
-                           percentile95value=input$Percentile95value2_SE)
-    # fb_SE<-NULL
-    fb_SE$a<<-fb_SE$abeta; fb_SE$b<<-fb_SE$bbeta
-    
-    fb_SP<<-findbetamupsi2(themean=input$PriorMean2_SP, percentile=input$Percentile2_SP,
-                           lower.v=lower.value2_SP,percentile.value=input$PercentileValue2_SP,
-                           psi.percentile=input$PercentilePsi2_SP, percentile.median=input$PercentileMedian2_SP,
-                           percentile95value=input$Percentile95value2_SP)
-    # fb_SP<-NULL
-    fb_SP$a<<-fb_SP$abeta; fb_SP$b<<-fb_SP$bbeta
-    
-    
-    fb_tau0<<-findbetamupsi2(themean=input$PriorMean2_tau0, percentile=input$Percentile2_tau0,
-                           lower.v=lower.value2_tau0,percentile.value=input$PercentileValue2_tau0,
-                           psi.percentile=input$PercentilePsi2_tau0, percentile.median=input$PercentileMedian2_tau0,
-                           percentile95value=input$Percentile95value2_tau0)
-    # fb_tau0<-NULL
-    fb_tau0$a<<-fb_tau0$abeta; fb_tau0$b<<-fb_tau0$bbeta
-    
+    # 
+    # fb_SE<<-findbetamupsi2(themean=input$PriorMean2_SE, percentile=input$Percentile2_SE,
+    #                        lower.v=lower.value2_SE,percentile.value=input$PercentileValue2_SE,
+    #                        psi.percentile=input$PercentilePsi2_SE, percentile.median=input$PercentileMedian2_SE,
+    #                        percentile95value=input$Percentile95value2_SE)
+    # # fb_SE<-NULL
+    # fb_SE$a<<-fb_SE$abeta; fb_SE$b<<-fb_SE$bbeta
+    # 
+    # fb_SP<<-findbetamupsi2(themean=input$PriorMean2_SP, percentile=input$Percentile2_SP,
+    #                        lower.v=lower.value2_SP,percentile.value=input$PercentileValue2_SP,
+    #                        psi.percentile=input$PercentilePsi2_SP, percentile.median=input$PercentileMedian2_SP,
+    #                        percentile95value=input$Percentile95value2_SP)
+    # # fb_SP<-NULL
+    # fb_SP$a<<-fb_SP$abeta; fb_SP$b<<-fb_SP$bbeta
+    # 
+    # 
+    # fb_tau0<<-findbetamupsi2(themean=input$PriorMean2_tau0, percentile=input$Percentile2_tau0,
+    #                        lower.v=lower.value2_tau0,percentile.value=input$PercentileValue2_tau0,
+    #                        psi.percentile=input$PercentilePsi2_tau0, percentile.median=input$PercentileMedian2_tau0,
+    #                        percentile95value=input$Percentile95value2_tau0)
+    # # fb_tau0<-NULL
+    # fb_tau0$a<<-fb_tau0$abeta; fb_tau0$b<<-fb_tau0$bbeta
+    # 
+    fb_SE<<-findbeta2(themean =input$PriorMetric2_SE, percentile=input$Percentile2_SE,lower.v=lower.value2_SE, percentile.value=input$PercentileValue1_SE)
+    fb_SP<<-findbeta2(themean =input$PriorMetric2_SP, percentile=input$Percentile2_SP,lower.v=lower.value2_SP, percentile.value=input$PercentileValue1_SP)
+    fb_tau0<<-findbeta2(themean =input$PriorMetric2_tau0, percentile=input$Percentile2_tau0,lower.v=lower.value2_tau0, percentile.value=input$PercentileValue1_tau0)
     
     
     priors$prior<<-list(aa=fb$atotalbeta,bb=fb$btotalbeta,
@@ -385,13 +410,12 @@ shinyServer(function(input, output, session) {
                         ag=fb$agamma,bg=fb$bgamma)
     
     x<-seq(0,1,length.out = 2000)
-    mu.Prevalence<-dbeta(x = x,shape1 = fb$abeta,shape2 = fb$bbeta)
-    psi.Prevalence<-dbeta(x = x,shape1 = fb$agamma,shape2 = fb$bgamma)
+    Prev.Prevalence<-dbeta(x = x,shape1 = fb$atotalbeta,shape2 = fb$btotalbeta)
     Prob.Zero.Prev<-dbeta(x = x,shape1 = fb_tau0$a,shape2 = fb_tau0$b)
     
-    Sensitivity<-dbeta(x = x,shape1 = fb_SE$abeta,shape2 = fb_SE$bbeta)
-    Specificity<-dbeta(x = x,shape1 = fb_SP$abeta,shape2 = fb_SP$bbeta)
-    df1 <- data.frame(x, mu.Prevalence,psi.Prevalence,Prob.Zero.Prev)
+    Sensitivity<-dbeta(x = x,shape1 = fb_SE$a,shape2 = fb_SE$b)
+    Specificity<-dbeta(x = x,shape1 = fb_SP$a,shape2 = fb_SP$b)
+    df1 <- data.frame(x, Prev.Prevalence, Prob.Zero.Prev)
     df2 <- data.frame(x, Sensitivity,Specificity)
     df1 <- gather(df1, func, val, -x)
     df2 <- gather(df2, func, val, -x)
@@ -400,8 +424,8 @@ shinyServer(function(input, output, session) {
     gg1 <- gg1 + geom_line(aes(color=func),size=1.3) 
     gg1 <- gg1 + scale_y_continuous(expand=c(0, 0))
     gg1 <- gg1 + scale_color_manual(name="Prior(s)", 
-                                    values=c("#e69138","#4a86e8","#999999"),
-                                    labels=c("mu.Prevalence","psi.Prevalence","Zero.Prob.Prev"))
+                                    values=c("#e69138","#999999"),
+                                    labels=c("Prev.Prevalence","Zero.Prob.Prev"))
     gg1 <- gg1 + labs(x="Density", y="Probability distribution functions")
     gg1 <- gg1 + theme_bw()
     gg1 <- gg1 + theme(panel.border=element_blank())
@@ -549,81 +573,91 @@ shinyServer(function(input, output, session) {
   
   #------- Interactive conditional interface for prior elication and ploting ------#
   output$Priors_fb<-renderUI({
-    if(input$ID_MeanMedianMode=="Percentiles"){
-      if(input$ID_TrueApp!="True prevalence"){
-        source("Functions/Interface_findBetaqq2.R",local = TRUE)$value
-      }else{
-        if(input$ID_ZeroPrevalence=="Yes"){
-          source("Functions/Interface_findBetaqq2_SE_SP_tau0.R",local = TRUE)$value
-        }else{
-          source("Functions/Interface_findBetaqq2_SE_SP.R",local = TRUE)$value
-        }
-      }
+    if(input$ID_Informative=="No"){
+      source("Functions/Interface_findBeta_NonInformative.R",local = TRUE)$value
     }else{
-      if(input$ID_SingleMultiple=="Single population"){
-        if(input$ID_TrueApp!="True prevalence"){
-          source("Functions/Interface_findBeta.R",local = TRUE)$value
-        }else{
-          if(input$ID_ZeroPrevalence=="Yes"){
-            source("Functions/Interface_findBeta_SE_SP_tau0.R",local = TRUE)$value
-          }else{
-            source("Functions/Interface_findBeta_SE_SP.R",local = TRUE)$value
-          }
-        }
-      }else if(input$ID_SingleMultiple=="Multiple populations"){
-        if(input$ID_TrueApp=="True prevalence"){
-          if(input$ID_ZeroPrevalence=="Yes"){
-            source("Functions/Interface_findBetamupsi2_SE_SP_tau0.R",local = TRUE)$value
-          }else if(input$ID_ZeroPrevalence=="No"){
-            source("Functions/Interface_findBetamupsi2_SE_SP.R",local = TRUE)$value
-          }
-        }else{
-          source("Functions/Interface_findBetamupsi2.R",local = TRUE)$value
-        }
-      }
-    }
-  })
-  
-  observeEvent(once = TRUE,input$buttonPrior,{
-  output$Priors_Plot_Sum_fb <- renderUI({
-    if(priors$SetupPriors==TRUE){
       if(input$ID_MeanMedianMode=="Percentiles"){
         if(input$ID_TrueApp!="True prevalence"){
-          plotlyOutput("PriorGenPlot3")
+          source("Functions/Interface_findBetaqq2.R",local = TRUE)$value
         }else{
-          if(input$ID_ZeroPrevalence=="No"){
-            plotlyOutput(width = '100%',height = '100%',"PriorGenPlot3_true")
+          if(input$ID_ZeroPrevalence=="Yes"){
+            source("Functions/Interface_findBetaqq2_SE_SP_tau0.R",local = TRUE)$value
           }else{
-            plotlyOutput(width = '100%',height = '100%',"PriorGenPlot3_true_zero")
+            source("Functions/Interface_findBetaqq2_SE_SP.R",local = TRUE)$value
           }
         }
       }else{
         if(input$ID_SingleMultiple=="Single population"){
           if(input$ID_TrueApp!="True prevalence"){
-            plotlyOutput("PriorGenPlot1")
+            source("Functions/Interface_findBeta.R",local = TRUE)$value
           }else{
-            if(input$ID_ZeroPrevalence=="No"){
-              plotlyOutput(width = '100%',height = '100%',"PriorGenPlot1_true")
+            if(input$ID_ZeroPrevalence=="Yes"){
+              source("Functions/Interface_findBeta_SE_SP_tau0.R",local = TRUE)$value
             }else{
-              plotlyOutput(width = '100%',height = '100%',"PriorGenPlot1_true_zero")
+              source("Functions/Interface_findBeta_SE_SP.R",local = TRUE)$value
             }
           }
         }else if(input$ID_SingleMultiple=="Multiple populations"){
-          if(input$ID_TrueApp!="True prevalence"){
-            plotlyOutput("PriorGenPlot2")
-          }else{
+          if(input$ID_TrueApp=="True prevalence"){
             if(input$ID_ZeroPrevalence=="Yes"){
-              plotlyOutput(width = '100%',height = '100%',"PriorGenPlot2_true_zero")
+              source("Functions/Interface_findBetamupsi2_SE_SP_tau0.R",local = TRUE)$value
             }else if(input$ID_ZeroPrevalence=="No"){
-              plotlyOutput(width = '100%',height = '100%',"PriorGenPlot2_true")
+              source("Functions/Interface_findBetamupsi2_SE_SP.R",local = TRUE)$value
             }
+          }else{
+            source("Functions/Interface_findBetamupsi2.R",local = TRUE)$value
           }
         }
       }
     }
     
-    
   })
+  
+  observeEvent(once = TRUE,input$buttonPrior,{
+    output$Priors_Plot_Sum_fb <- renderUI({
+      if(priors$SetupPriors==TRUE){
+        if(input$ID_Informative=="No"){
+          plotlyOutput("PriorGenPlot0")
+          
+        }else{
+          if(input$ID_MeanMedianMode=="Percentiles"){
+            if(input$ID_TrueApp!="True prevalence"){
+              plotlyOutput("PriorGenPlot3")
+            }else{
+              if(input$ID_ZeroPrevalence=="No"){
+                plotlyOutput(width = '100%',height = '100%',"PriorGenPlot3_true")
+              }else{
+                plotlyOutput(width = '100%',height = '100%',"PriorGenPlot3_true_zero")
+              }
+            }
+          }else{
+            if(input$ID_SingleMultiple=="Single population"){
+              if(input$ID_TrueApp!="True prevalence"){
+                plotlyOutput("PriorGenPlot1")
+              }else{
+                if(input$ID_ZeroPrevalence=="No"){
+                  plotlyOutput(width = '100%',height = '100%',"PriorGenPlot1_true")
+                }else{
+                  plotlyOutput(width = '100%',height = '100%',"PriorGenPlot1_true_zero")
+                }
+              }
+            }else if(input$ID_SingleMultiple=="Multiple populations"){
+              if(input$ID_TrueApp!="True prevalence"){
+                plotlyOutput("PriorGenPlot2")
+              }else{
+                if(input$ID_ZeroPrevalence=="Yes"){
+                  plotlyOutput(width = '100%',height = '100%',"PriorGenPlot2_true_zero")
+                }else if(input$ID_ZeroPrevalence=="No"){
+                  plotlyOutput(width = '100%',height = '100%',"PriorGenPlot2_true")
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      
+    })
   })
   
    
@@ -637,7 +671,7 @@ shinyServer(function(input, output, session) {
     #lines(1:1000/1000,dbeta(seq(0,1,length.out = 1000),a,b),type = "l",col="red",lwd=5)
     Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
     post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
-    pri <-  data.frame(density=rbeta(10000,shape1 = priors$prior$a,shape2=priors$prior$b))
+    pri <-  data.frame(density=rbeta(10000,shape1 = fb$a,shape2=fb$b))
     Lik <- data.frame(density=rbinom(n = 10000, size =  input$n, prob = input$y/input$n)/input$n)
     post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' ; Lik$Distribution <- 'likelihood'
     triple <- rbind(post, pri, Lik)
@@ -803,7 +837,11 @@ shinyServer(function(input, output, session) {
   
   output$MultTRapp_Plot <- renderPlot({
     source("Functions/gss.R",local=TRUE)
-    source("Functions/Jags_MultipleGroupsApp.R",local=TRUE)$value
+    if(input$ID_Informative=="Yes"){
+      source("Functions/Jags_MultipleGroupsApp.R",local=TRUE)$value
+    }else{
+      source("Functions/Jags_MultipleGroupsApp_NonInf.R",local=TRUE)$value
+    }
     #Simple plot 
     #Model1.mcmc<-Model1.mcmc
     #plot(density(Model1.mcmc[[1]][,1]),ylim=c(0,100),xlim=c(0,1),lwd=5, main = "Posterior (black) and Prior (red) distribution of APpre")
@@ -811,7 +849,7 @@ shinyServer(function(input, output, session) {
     #ggplot
     Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
     post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
-    pri <-  data.frame(density=rbeta(10000,shape1 = priors$prior$a,shape2=priors$prior$b))
+    pri <-  data.frame(density=rbeta(10000,shape1 = fb$atotalbeta,shape2=fb$btotalbeta))
     #mn=mean((sum(dataset()$positive/dataset()$n))/sum(dataset()$n))
     #tau=sd(dataset()$positive/dataset()$n)
     #Lik <- data.frame(density=rbinom(n = 10000, size =  sum(dataset()$n), 
@@ -824,7 +862,7 @@ shinyServer(function(input, output, session) {
        xlim(0, 1) + theme(legend.position="top") + scale_fill_brewer(palette="Dark2")
    
      S <- ggmcmc::ggs(Model1.mcmc)
-     levels(S$Parameter)[levels(S$Parameter)=="main.ap"]<-"Apparent prevalence"
+     levels(S$Parameter)[levels(S$Parameter)=="main.pstar.rep"]<-"Apparent prevalence"
      p2<-ggs_traceplot(S,family = "prevalence")
      
      SPre<-get_family(D = S,family = "pre")
@@ -851,28 +889,42 @@ shinyServer(function(input, output, session) {
   
   #----- Interactive conditional interface and inference plot for each model ------#
   output$Bayesian_fb<-renderUI({
-    if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
-      source("Functions/Interface_Jags_ApparentPre.R",local = TRUE)$value # Done
-    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
-      source("Functions/Interface_Jags_TruePre.R",local = TRUE)$value # Done
-      #    }else if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
-      #      source("Functions/Interface_Jags_MultipleGroupsApPreNozero.R",local = TRUE) # File ready
-      #    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
-      #      source("Functions/Interface_Jags_MultipleGroupsTruePreNozero.R",local = TRUE) # File ready
-    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="Yes"){
-      source("Functions/Interface_Jags_TruePreZero.R",local = TRUE)$value # Done
-    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="Yes"){
-      source("Functions/Interface_Jags_MultipleGroupsTruePreZero.R",local = TRUE)$value # Done
-    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
-      source("Functions/Interface_Jags_MultipleGroupsTruePre.R",local = TRUE)$value # Done
-    }else if(input$ID_TrueApp!="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
-      source("Functions/Interface_Jags_MultipleGroupsAppPre.R",local = TRUE)$value # Done
-      
+    if(input$ID_Informative=="No"){
+      if(input$ID_SingleMultiple=="Single population"){
+        source("Functions/Interface_Jags_ApparentPre.R",local = TRUE)$value # Done
+      }else{
+        source("Functions/Interface_Jags_MultipleGroupsAppPre.R",local = TRUE)$value # Done
+      }
+    }else{
+      if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
+        source("Functions/Interface_Jags_ApparentPre.R",local = TRUE)$value # Done
+      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
+        source("Functions/Interface_Jags_TruePre.R",local = TRUE)$value # Done
+        #    }else if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+        #      source("Functions/Interface_Jags_MultipleGroupsApPreNozero.R",local = TRUE) # File ready
+        #    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+        #      source("Functions/Interface_Jags_MultipleGroupsTruePreNozero.R",local = TRUE) # File ready
+      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="Yes"){
+        source("Functions/Interface_Jags_TruePreZero.R",local = TRUE)$value # Done
+      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="Yes"){
+        source("Functions/Interface_Jags_MultipleGroupsTruePreZero.R",local = TRUE)$value # Done
+      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+        source("Functions/Interface_Jags_MultipleGroupsTruePre.R",local = TRUE)$value # Done
+      }else if(input$ID_TrueApp!="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+        source("Functions/Interface_Jags_MultipleGroupsAppPre.R",local = TRUE)$value # Done 
+      }
     }
   })
   
   observeEvent(input$buttonFixModel, {
   output$APar1_Plot_fb <- renderUI({
+    if(input$ID_Informative=="No"){
+      if(input$ID_SingleMultiple=="Single population"){
+        plotOutput("APpre_Plot")
+      }else{
+        plotOutput("MultTRapp_Plot")
+      }
+    }else{
     if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
       plotOutput("APpre_Plot")
     }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
@@ -889,13 +941,25 @@ shinyServer(function(input, output, session) {
        plotOutput("MultTRpre_Plot")
     }else if(input$ID_TrueApp!="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
       plotOutput("MultTRapp_Plot")
-  }
+    }
+    }
   })
   })
   
   #-----  Interactive + dynamic sliders/buttons ------#
+  output$TrueApp_fb <- renderUI({
+    if(input$ID_Informative=="No"){
+      }else{
+      radioButtons(inputId = 'ID_TrueApp', choices=c("True prevalence",
+                                                     "Apparent prevalence"),
+                   label = 'Do you want to model the true prevalence or the apparent prevalence?',
+                   selected = "True prevalence",inline = TRUE)
+      
+    }
+  })
+
   output$zero_fb <- renderUI({
-    if(input$ID_TrueApp!="True prevalence"){
+    if(input$ID_TrueApp!="True prevalence" | input$ID_Informative=="No"){
     }else{
       radioButtons(inputId = 'ID_ZeroPrevalence', choices=c("No","Yes"),
                    label = 'Do you want to account for zero true prevalence?',
@@ -967,7 +1031,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb_SE <- renderUI({
-    if(input$lower.value_SE=="No"){
+    if(input$lower.value_SE=="No" | input$lower.value2_SE=="No"){
       sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the upper or lower limit for the sensitivity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SE,input$PriorMetric_SE), min=0, max=1,step = 0.001)
     }else{
@@ -977,12 +1041,32 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb_SP <- renderUI({
-    if(input$lower.value_SP=="No"){
+    if(input$lower.value_SP=="No" | input$lower.value2_SP=="No"){
       sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SP,input$PriorMetric_SP), min=0, max=1,step = 0.001)
     }else{
       sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
                   value = max(input$PercentileValue1_SP,input$PriorMetric_SP), min=0, max=1,step = 0.001)
+      
+    }
+  })
+  output$sliders_fb2_SE <- renderUI({
+    if(input$lower.value2_SE=="No"){
+      sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the upper or lower limit for the sensitivity at the specified level of confidence: "), 
+                  value = min(input$PercentileValue1_SE,input$PriorMetric2_SE), min=0, max=1,step = 0.001)
+    }else{
+      sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the upper or lower limit for the sensitivity at the specified level of confidence: "), 
+                  value = max(input$PercentileValue1_SE,input$PriorMetric2_SE), min=0, max=1,step = 0.001)
+      
+    }
+  })
+  output$sliders_fb2_SP <- renderUI({
+    if(input$lower.value2_SP=="No"){
+      sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+                  value = min(input$PercentileValue1_SP,input$PriorMetric2_SP), min=0, max=1,step = 0.001)
+    }else{
+      sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+                  value = max(input$PercentileValue1_SP,input$PriorMetric2_SP), min=0, max=1,step = 0.001)
       
     }
   })
@@ -996,10 +1080,23 @@ shinyServer(function(input, output, session) {
       
     }
   })
+  output$sliders_fb2_tau0 <- renderUI({
+    if(input$lower.value2_tau0=="No"){
+      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+                  value = min(input$PercentileValue1_tau0,input$PriorMetric2_tau0), min=0, max=1,step = 0.001)
+    }else{
+      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+                  value = max(input$PercentileValue1_tau0,input$PriorMetric2_tau0), min=0, max=1,step = 0.001)
+      
+    }
+  })
   
   outputOptions(output, "sliders_fb_SE", suspendWhenHidden = FALSE)
   outputOptions(output, "sliders_fb_SP", suspendWhenHidden = FALSE)
   outputOptions(output, "sliders_fb_tau0", suspendWhenHidden = FALSE)
+  outputOptions(output, "sliders_fb2_SE", suspendWhenHidden = FALSE)
+  outputOptions(output, "sliders_fb2_SP", suspendWhenHidden = FALSE)
+  outputOptions(output, "sliders_fb2_tau0", suspendWhenHidden = FALSE)
   
   output$sliders2_fb <- renderUI({
     if(input$lower.value2=="No"){
@@ -1031,56 +1128,56 @@ shinyServer(function(input, output, session) {
  
   output$sliders2_SP_fb <- renderUI({
     if(input$lower.value2_SP=="No"){
-      updateSliderInput(session = session,inputId = "PercentileValue2_SP", label = "Specify the upper or lower limit for the mean/median/mode at the specified level of confidence: ", 
+      updateSliderInput(session = session,inputId = "PercentileValue2_SP", label = "Specify the upper or lower limit for the mean/median/mode at the specified level of confidence: ",
                   value = min(input$PercentileValue2_SP,input$PriorMean2_SP-0.001), min=0, max=1,step = 0.001)
     }else{
-      updateSliderInput(session = session,inputId = "PercentileValue2_SP", label = "Specify the upper or lower limit for the mean/median/mode at the specified level of confidence: ", 
+      updateSliderInput(session = session,inputId = "PercentileValue2_SP", label = "Specify the upper or lower limit for the mean/median/mode at the specified level of confidence: ",
                   value = max(input$PercentileValue2_SP,input$PriorMean2_SP+0.001), min=0, max=1,step = 0.001)
     }
   })
   output$sliders22_SP_fb <- renderUI({
     if(input$lower.value2_SP=="No"){
-      updateSliderInput(session = session,inputId = "PercentileMedian2_SP", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ", 
+      updateSliderInput(session = session,inputId = "PercentileMedian2_SP", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
                   value = min(input$PercentileValue2_SP-0.001,input$PercentileMedian2_SP,input$PriorMean2_SP-0.001), min=0, max=1,step = 0.001)
     }else{
-      updateSliderInput(session = session,inputId = "PercentileMedian2_SP", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ", 
+      updateSliderInput(session = session,inputId = "PercentileMedian2_SP", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
                   value = max(input$PercentileValue2_SP+0.001,input$PercentileMedian2_SP,input$PriorMean2_SP+0.001), min=0, max=1,step = 0.001)
     }
   })
   output$sliders23_SP_fb <- renderUI({
     if(input$lower.value2_SP=="No"){
-      updateSliderInput(session = session,inputId = "Percentile95value2_SP", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile", 
+      updateSliderInput(session = session,inputId = "Percentile95value2_SP", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
                   min=0, max=1, value=min(input$Percentile95value2_SP,input$PercentileMedian2_SP-0.001),step = 0.001)
     }else{
-      updateSliderInput(session = session,inputId = "Percentile95value2_SP", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile", 
+      updateSliderInput(session = session,inputId = "Percentile95value2_SP", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
                   min=0, max=1, value=max(input$Percentile95value2_SP,input$PercentileMedian2_SP+0.001),step = 0.001)
     }
   })
 
   output$sliders2_SE_fb <- renderUI({
     if(input$lower.value2_SE=="No"){
-      updateSliderInput(session = session,inputId = "PercentileValue2_SE", label = "Specify the lower limit for the mean/median/mode at the specified level of confidence: ", 
+      updateSliderInput(session = session,inputId = "PercentileValue2_SE", label = "Specify the lower limit for the mean/median/mode at the specified level of confidence: ",
                   value = min(input$PercentileValue2_SE,input$PriorMean2_SE-0.001), min=0, max=1,step = 0.001)
     }else{
-      updateSliderInput(session = session,inputId = "PercentileValue2_SE", label = "Specify the upper limit for the mean/median/mode at the specified level of confidence: ", 
+      updateSliderInput(session = session,inputId = "PercentileValue2_SE", label = "Specify the upper limit for the mean/median/mode at the specified level of confidence: ",
                   value = max(input$PercentileValue2_SE,input$PriorMean2_SE+0.001), min=0, max=1,step = 0.001)
     }
   })
   output$sliders22_SE_fb <- renderUI({
     if(input$lower.value2_SE=="No"){
-      updateSliderInput(session = session,inputId = "PercentileMedian2_SE", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ", 
+      updateSliderInput(session = session,inputId = "PercentileMedian2_SE", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
                   value = min(input$PercentileValue2_SE-0.001,input$PercentileMedian2_SE,input$PriorMean2_SE-0.001), min=0, max=1,step = 0.001)
     }else{
-      updateSliderInput(session = session,inputId = "PercentileMedian2_SE", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ", 
+      updateSliderInput(session = session,inputId = "PercentileMedian2_SE", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
                   value = max(input$PercentileValue2_SE+0.001,input$PercentileMedian2_SE,input$PriorMean2_SE+0.001), min=0, max=1,step = 0.001)
     }
   })
   output$sliders23_SE_fb <- renderUI({
     if(input$lower.value2_SE=="No"){
-      updateSliderInput(session = session,inputId = "Percentile95value2_SE", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile", 
+      updateSliderInput(session = session,inputId = "Percentile95value2_SE", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
                   value=min(input$Percentile95value2_SE,input$PercentileMedian2_SE-0.001), min=0, max=1, step = 0.001)
     }else{
-      updateSliderInput(session = session,inputId = "Percentile95value2", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile", 
+      updateSliderInput(session = session,inputId = "Percentile95value2", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
                   value=max(input$Percentile95value2_SE,input$PercentileMedian2_SE+0.001), min=0, max=1, step = 0.001)
     }
   })
@@ -1112,17 +1209,17 @@ shinyServer(function(input, output, session) {
   })  
   
   
-   outputOptions(output, "sliders2_fb", suspendWhenHidden = FALSE)
-   outputOptions(output, "sliders22_fb", suspendWhenHidden = FALSE)
-   outputOptions(output, "sliders23_fb", suspendWhenHidden = FALSE)
+  outputOptions(output, "sliders2_fb", suspendWhenHidden = FALSE)
+  outputOptions(output, "sliders22_fb", suspendWhenHidden = FALSE)
+  outputOptions(output, "sliders23_fb", suspendWhenHidden = FALSE)
 
-  outputOptions(output, "sliders2_SP_fb", suspendWhenHidden = FALSE)
-  outputOptions(output, "sliders22_SP_fb", suspendWhenHidden = FALSE)
-  outputOptions(output, "sliders23_SP_fb", suspendWhenHidden = FALSE)
-
-  outputOptions(output, "sliders2_SE_fb", suspendWhenHidden = FALSE)
-  outputOptions(output, "sliders22_SE_fb", suspendWhenHidden = FALSE)
-  outputOptions(output, "sliders23_SE_fb", suspendWhenHidden = FALSE)
+  # outputOptions(output, "sliders2_SP_fb", suspendWhenHidden = FALSE)
+  # outputOptions(output, "sliders22_SP_fb", suspendWhenHidden = FALSE)
+  # outputOptions(output, "sliders23_SP_fb", suspendWhenHidden = FALSE)
+  # 
+  # outputOptions(output, "sliders2_SE_fb", suspendWhenHidden = FALSE)
+  # outputOptions(output, "sliders22_SE_fb", suspendWhenHidden = FALSE)
+  # outputOptions(output, "sliders23_SE_fb", suspendWhenHidden = FALSE)
   
   outputOptions(output, "sliders_qq_fb", suspendWhenHidden = FALSE)
   outputOptions(output, "sliders_qq22_fb", suspendWhenHidden = FALSE)
@@ -1270,7 +1367,7 @@ shinyServer(function(input, output, session) {
   #-------- Fix buttons ----------#
   observeEvent(input$buttonSetup,{
     priors$temp<-"Status: 'Set'";
-    priors$temp2<-paste("Your input assumes that: \n 1. ",input$ID_SingleMultiple," will be modelled, \n 2. ",input$ID_ZeroPrevalence,", zero prevalence will be modelled, 3. the ",input$ID_TrueApp," will be modelled and \n 4. (the) '",input$ID_MeanMedianMode,"' will be used to elicitate prior knowledge",sep="")
+    priors$temp2<-paste("Your input assumes that: \n 1. ",input$ID_SingleMultiple," will be modelled, \n 2. ",input$ID_ZeroPrevalence,", zero prevalence will be modelled, 3. the ",input$ID_TrueApp," will be modelled and \n 4. ",input$ID_Informative," informative prior(s) will be modelled",sep="")
     priors$icons<-"thumbs-up"#   prior_cond<<-" "
     priors$color<-"green"
     priors$SetupPriors<-TRUE
@@ -1328,21 +1425,29 @@ shinyServer(function(input, output, session) {
   
   #--------  Report rmakdown --------#
   output$Rmark <- renderUI({
-    if(input$ID_TrueApp=="True prevalence"){
-      temp<-"TPpre_Report_True.Rmd"
-    }else{
-      temp<-"TPpre_Report.Rmd"
-    }
-    if(input$ID_SingleMultiple=="Multiple populations"){
-      if(input$ID_TrueApp=="True prevalence"){
-        temp<-"TPpre_Report_Mult_True.Rmd"
+    if(input$ID_Informative=="No"){
+      if(input$ID_SingleMultiple=="Multiple populations"){
+        temp<-"TPpre_Report_Mult.Rmd"
       }else{
-      temp<-"TPpre_Report_Mult.Rmd"
+        temp<-"TPpre_Report.Rmd"
+      }
+    }else{
+      if(input$ID_TrueApp=="True prevalence"){
+        temp<-"TPpre_Report_True.Rmd"
+      }else{
+        temp<-"TPpre_Report.Rmd"
+      }
+      if(input$ID_SingleMultiple=="Multiple populations"){
+        if(input$ID_TrueApp=="True prevalence"){
+          temp<-"TPpre_Report_Mult_True.Rmd"
+        }else{
+          temp<-"TPpre_Report_Mult.Rmd"
+        }
       }
     }
     includeHTML(render(paste0("./Rmarkdown/",temp), quiet = TRUE,output_format = "html_document"))
   })
-
+  
   #------- Load multiple datasets -------#
   dataset<<- reactive({
     if(input$ID_SingleMultiple=="Multiple populations"){
