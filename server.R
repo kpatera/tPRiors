@@ -251,7 +251,9 @@ shinyServer(function(input, output, session) {
     fb$aa<<-fb$atotalbeta; fb$bb<<-fb$btotalbeta
     fb$a<<-fb$abeta; fb$b<<-fb$bbeta
     fb$ag<<-fb$agamma; fb$bg<<-fb$bgamma
-    priors$prior<<-list(a=fb$abeta,b=fb$bbeta)
+    priors$prior<<-list(aa=fb$atotalbeta,bb=fb$btotalbeta,
+                        a=fb$abeta,b=fb$bbeta,
+                        ag=fb$agamma,bg=fb$bgamma)
     
     x<-seq(0,1,length.out = 2000)
     #plot(x,dbeta(x = x,dbeta(x = x,shape1 = fb$a,shape2 = fb$b),shape1 = fb$a,shape2 = fb$b),type = "l",lwd=3,ylab = "Density Beta")
