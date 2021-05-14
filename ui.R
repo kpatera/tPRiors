@@ -16,7 +16,7 @@ shinyUI(
                                 h5("(d) In tab (Report) the program returns a dynamic output that changes based on (a), (b) and (c)."),
                                 h5("(e) In tab (Acks) acknoweledgments and useful links can be found."),
                                 br(),
-                                h5("Settings may still be changed even after a tab has been fixed by the user. Though, we advise users to perform a 'Reset' οf |tPRiors| when they want to change a previously fixed setting."),
+                                h5("Settings may still be changed even after a tab has been fixed by the user. Though, we advise users to perform a 'Reset' of |tPRiors| when they want to change a previously fixed setting."),
                                 br(),
                                 #h5("Note: If the sliders in tab (Priors) act not normal, press the Reset button and try again."),
                                 #hr(),
