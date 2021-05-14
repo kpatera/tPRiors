@@ -22,6 +22,6 @@ fb<-list(1,1)
 require(readxl)
 Example1_4Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_4studies.xlsx"))
 Example2_40Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_Attica.xlsx"))
-Example3_102Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_NonAttica.xlsx"))
+#Example3_102Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_NonAttica.xlsx"))
 Example4_129studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d.xlsx"))
 name_data<-"sidebar user input"

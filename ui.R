@@ -3,29 +3,20 @@ shinyUI(
              #theme = shinytheme("yeti"),
              shinyWidgets::useShinydashboard(),
              #shinythemes::themeSelector(), 
-             #titlePanel("IWA : Interactive Web Application for Bayesian Hierarchical true prevalence estimation"),
              #tabsetPanel(type = "tabs",
              tabPanel("Start",
                       fluidPage(id = "navbar",
                                 useShinyjs(),
                                 fluidRow(column(12,img(src='BannerApp2.png', align = "center",width="100%"))),
-                                #h2("The full model is based on a Bayesian hierarchical structure."),# that provides the following estimates:"),
                                 br(),
-                                #                                         h3("(i) a",tags$strong(" comparison between animal-level apparent"), "and", tags$strong("true prevalence of infection/disease within each herd,")),
-                                #                                        h3("(ii) the ", tags$strong("true prevalence within each region,")),
-                                #                                       h3("(iii) the", tags$strong(" probability of freedom of disease/infection in each region,")),
-                                #                                      h3("(iv) the", tags$strong(" probability that the prevalence in each region is lower than a minimum acceptable threshold,")),
-                                #                                     h3("(v) the", tags$strong(" probability that the whole country is free from infection,")),
-                                #                                    h3("(vi) the", tags$strong(" probability that the prevalence within the country is lower than a minimum acceptable threshold.")),
                                 h4("Below the user can find a brief description of the shiny application functions and options."),
-                                br(),
-                                h5("After a tab has been set by the user, settings may still be changed, though, we advise users to perform a Reset pf |tPRiors| when they want to change a previously set setting."),
-                                br(),
                                 h5("(a) In tab (Set up) the user following questions can fix the parameters of the analysis (Choose model, priors, special characteristics) "),
                                 h5("(b) In tab (Priors) the user can elicitate the prior distribution(s) with the aid of sliders and visual confirmation"),
                                 h5("(c) In tab (Model) the user inputs the observed data and Jags sampling characteristics. A basic inference plot is presented. For multiple population the model may take some time to run."),
                                 h5("(d) In tab (Report) the program returns a dynamic output that changes based on (a), (b) and (c)."),
                                 h5("(e) In tab (Acks) acknoweledgments and useful links can be found."),
+                                br(),
+                                h5("Settings may still be changed even after a tab has been fixed by the user. Though, we advise users to perform a Reset 0f |tPRiors| when they want to change a previously fixed setting."),
                                 br(),
                                 #h5("Note: If the sliders in tab (Priors) act not normal, press the Reset button and try again."),
                                 #hr(),
@@ -43,7 +34,7 @@ shinyUI(
                         shinyjs::useShinyjs(), # Platform for reset button
                         id = "setup-panel",
                         radioButtons(inputId = 'ID_Informative', choices=c("Yes",
-                                                                       "No"),
+                                                                           "No"),
                                      label = 'Would you define informative priors?',
                                      selected = "Yes",inline = TRUE),
                         hr(),
@@ -105,87 +96,7 @@ shinyUI(
                       shinydashboard::valueBoxOutput("Boxsetup4", width = 60),
                       uiOutput("report_fb"),
                       uiOutput("report_fb_side")
-                      # sidebarLayout(
-                      #   sidebarPanel(width=4,
-                      #     radioButtons("dimens", label = "Figure dimensions:",choices = c(200,400,600,800),selected =400,inline = TRUE),
-                      #     radioButtons("format", "Download report:", 
-                      #                  c("PDF"),inline = TRUE #  "PDF", "Word"
-                      #     ),
-                      #  #   checkboxInput("echo", "Show code in report?", FALSE),
-                      #     downloadButton("downloadReport"),
-                      #   ),
-                      #  mainPanel(
-                      #            )
-                      
-                      
-                      # tags$b("Your data:"),
-                      # # DT::dataTableOutput("tbl"),
-                      # br(),
-                      # # uiOutput("data"),
-                      # br(),
-                      # tags$b("Compute parameters by hand:"),
-                      # # uiOutput("by_hand"),
-                      # br(),
-                      # tags$b("Compute parameters in R/Rjags:"),
-                      # # verbatimTextOutput("summary"),
-                      # br(),
-                      # tags$b("Prevelance plot:"),
-                      # #uiOutput("results"),
-                      # # plotlyOutput("plot"),
-                      # br(),
-                      # tags$b("Interpretation:"),
-                      # #uiOutput("interpretation"),
-                      # br(),
-                      # br(),
-                      # fluidRow(
-                      #   splitLayout(cellWidths = c("46%", "46%"), 
-                      #               uiOutput("APar5_Plot_fb"), 
-                      #               uiOutput("APar6_Plot_fb")))
-                      
-                      #  )
              ),
-             # tabPanel("Demos",
-             #          sidebarLayout(
-             #            sidebarPanel(selectInput(inputId = "Prior4options",
-             #                                     label="Prior set Ups", choices = c("Beta(89,2) - Unif(0,1) - TN(0.1)T[0,1]]",
-             #                                                                        "Beta(50,50) - Unif(0,1) - TN(1000)T[0,1]",
-             #                                                                        "Beta(2,89) - Unif(0,1) - TN(1)T[0,1]",
-             #                                                                        "Beta(1,1) - Unif(0,1) - TN(5)T[0,1]"),
-             #                                     selected="Beta(89,2) - Unif(0.5,1) - TN(0.5)T[0,1]]"),
-             #                         sliderInput(inputId = "y1", 
-             #                                     label = "Number of positive tests: ", 
-             #                                     min=1, max=3000, value=14,step = 1),
-             #                         sliderInput(inputId = "n1", 
-             #                                     label = "Sample size: ", 
-             #                                     min=1, max=3000, value=72,step = 1),
-             #                         sliderInput(inputId = "nniter1", 
-             #                                     label = "Number of MCMC iterations: ", 
-             #                                     min=10, max=100000, value=10000,step = 1000),
-             #                         sliderInput(inputId = "nnthin1", 
-             #                                     label = " Thinning interval: ",
-             #                                     min=1, max=500, value=2,step = 1)
-             #                         
-             #            ),
-             #            mainPanel(plotOutput("demo_APpre"))
-             #            #,
-             #            #              radioButtons(inputId = "inputYesNo",
-             #            #                           label="Type of Yes on No", choices=c("No",
-             #            #                                                                "Yes"),
-             #            #                           selected="No",inline = T),
-             #            # 
-             #            #              verbatimTextOutput("info1"),
-             #            #              verbatimTextOutput("info2"),
-             #            #              verbatimTextOutput("info3"),
-             #            #              verbatimTextOutput("info4")
-             #            # ),
-             #            # mainPanel(splitLayout(cellWidths = c("50%", "50%"),
-             #            #                       plotOutput("plot1", click = "plot_click1"),
-             #            #                       plotOutput("plot2", click = "plot_click2")),
-             #            #           splitLayout(cellWidths = c("50%", "50%"),
-             #            #                       plotOutput("plot3", click = "plot_click3"),
-             #            #                       plotOutput("plot4", click = "plot_click4")),
-             #          )
-             # ),
              tabPanel("Acks",
                       fluidPage(
                         fluidRow(box(align="center",width = 12,background = "black",
@@ -210,15 +121,7 @@ shinyUI(
                           box(align="center",width = 4,background = "orange",h3("R2jags")),
                           box(align="center",width = 4,background = "orange",h3("ggmcmc")),
                           box(align="center",width = 4,background = "orange",h3("PriorGen")))
-#                         fluidRow(box(align="left",width = 12,background = "black",
-#                                      h3("The development of tPRiors was funded by H2020 project unCoVer:Unravelling Data for Rapid Evidence-Based Response. More details can be found in the manuscript Pateras K, ..., Kostoulas P. tPRiors: An R Shiny tool for generating prior and
-# producing posterior distributions for disease prevalence")))
-                        #)
-                        
-                        #                                           box(width = 4,background = "olive",tags$a(href="www.rstudio.com", "Click here!")))
-                        
                       )    
-                      
              )
   )
   

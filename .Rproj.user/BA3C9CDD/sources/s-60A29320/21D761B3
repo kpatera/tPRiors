@@ -1,0 +1,25 @@
+{
+    "id": "21D761B3",
+    "path": "~/GitHub/tPRiors/ui.R",
+    "project_path": "ui.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1610651873425.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "cursorPosition": "13,64",
+        "scrollLine": "10",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1620977654,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1620977654476,
+    "read_only": false,
+    "read_only_alternatives": []
+}
