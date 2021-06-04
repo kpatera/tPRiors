@@ -35,8 +35,8 @@ SaveParams <- c("main.ap","main.psi","main.tau0","main.Sp","main.Se","sub.p","y.
                 "pre.plessthan0.05","plessthanSetvalue")
 
 dtst<-dataset()
-dtst$region<-factor(dtst$region)
-dtst$ID<-1:length(dtst$region)
+#dtst$region<-factor(dtst$region)
+#dtst$ID<-1:length(dtst$region)
 
 generic_jags<-jagsoutput_TruezeroMult<-rjags::jags.model(data=list(n=dtst$n,y=dtst$positive, k=length(dtst$n),
                                               ase=fb_SE$a, bse=fb_SE$b,m=100,

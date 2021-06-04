@@ -96,6 +96,8 @@ renderPlotly({
       xlim(0, 1)+ theme(legend.position="top")
     ggplotly(p1)
   })
+summary(Model1.mcmc_df$main.ap)
+
 ```
 
 ## Predictions

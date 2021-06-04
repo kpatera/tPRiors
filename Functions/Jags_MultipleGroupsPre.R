@@ -31,9 +31,9 @@ plessthanSetvalue <- step(perVal-main.ap)
 SaveParams <- c("main.ap","main.psi","main.Sp","main.Se","y.pre",
                 "main.pstar.rep","pre.pequal0","pre.plessthan0.05","sub.p","plessthanSetvalue")
 dtst<-dataset()
-dtst$region<-factor(dtst$region)
-dtst$country<-factor(dtst$country)
-dtst$ID<-1:length(dtst$region)
+#dtst$region<-factor(dtst$region)
+#dtst$country<-factor(dtst$country)
+#dtst$ID<-1:length(dtst$region)
 
 
 generic_jags<-jagsoutput_TrueMult<-rjags::jags.model(data=list(n=dtst$n,y=dtst$positive, k=length(dtst$n),m=100,

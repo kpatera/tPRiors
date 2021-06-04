@@ -88,6 +88,7 @@ renderPlotly({
       xlim(0, 1)+ theme(legend.position="top")
     ggplotly(p1)
   })
+summary(Model1.mcmc_df$main.pstar.rep)
 ```
 
 ### Study-level boxplot or posterior prevalence samples
@@ -122,15 +123,8 @@ Predictive distribution of $y$ for a single new study with $n=100$.
 The predictive prevalence mean of a future study equals to 
 ```{r echo=FALSE} 
 R.Temp3=data.frame(Model1.mcmc[[1]])
-round(mean(R.Temp3$pre.pstar.rep),3)
+round(mean(R.Temp3$main.pstar.rep),3)
 ```
-
-The probability that the prevalence equals to 0 (zero) equals to 
-```{r echo=FALSE} 
-R.Temp1=data.frame(Model1.mcmc[[1]])
-round(mean(R.Temp1$pre.pequal0),3)
-```
-
 
 ------------------------------------------------------------------------
 
