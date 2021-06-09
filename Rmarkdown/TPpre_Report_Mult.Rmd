@@ -45,7 +45,7 @@ summary(sample_beta)
 
 ```{r echo = FALSE}
 renderPlotly({
-    x<-seq(0,1,length.out = 2000)
+    x<-seq(0,1,length.out = 10000)
     fig1 <- plot_ly(x = ~x, y = ~dbeta(x = x,shape1 = fb$atotalbeta, shape2 = fb$btotalbeta), type = 'scatter', mode = 'lines', colors = "#e69138", fill = 'tozeroy', width=NULL, height=NULL)
     fig1 <- fig1 %>% layout(xaxis = list(title = 'Beta'), yaxis = list(title = 'Density'))
     fig1
@@ -63,11 +63,9 @@ A summary of the input data is provided below
 
 ```{r echo=FALSE}
 #"Position of Data Table"
-paste0("The assumed probability for non-zero prevalence was set equal to ", input$tau0)
+paste0("If modelled, the assumed probability for non-zero prevalence was set equal to ", input$tau0)
+dataTableOutput("dtst")
 
-paste0("The probability that the posterior prevalence is higher than ", input$perVal," equals to")
-Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
-sum(Model1.mcmc_df$main.ap>input$perVal)/length(Model1.mcmc_df$main.ap)
 ```
 
 ------------------------------------------------------------------------
@@ -84,34 +82,54 @@ renderPlotly({
     #Lik <- data.frame(density=rbinom(n = 10000, size =  input$n, prob = input$y/input$n)/input$n)
     post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' #; Lik$Distribution <- 'likelihood'
     triple <- rbind(post, pri)#, Lik)
-    p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust = 1)+
-      xlim(0, 1)+ theme(legend.position="top")
+    p1<-ggplot(triple, aes(density, fill = Distribution)) +
+      xlim(0, 1)+ theme(legend.position="top")+
+      geom_density(alpha = 0.2, adjust=0.2)
     ggplotly(p1)
   })
-summary(Model1.mcmc_df$main.pstar.rep)
+round(summary(Model1.mcmc_df$main.pstar.rep),2)
+
+paste0("The probability that the posterior prevalence is higher than ", input$perVal," equals to")
+Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
+sum(Model1.mcmc_df$main.pstar.rep>input$perVal)/length(Model1.mcmc_df$main.pstar.rep)
 ```
 
-### Study-level boxplot or posterior prevalence samples
+### Study-level boxplot and numerical summaries of posterior prevalence samples
 
 ```{r echo=FALSE}
 renderPlotly({
-data_out<-(data.frame(Model1.mcmc[[1]]))
+  data_out<<-Model1.mcmc_df
 data_out_sub<-data_out[,grepl( "sub" , names( data_out ) )]
 data_out_sub_wide<-gather(data_out_sub, group, prevalence, names( data_out_sub ), factor_key=TRUE)
-
 levels(data_out_sub_wide$group)<-1:length(levels(data_out_sub_wide$group))
 
-p2 <- data_out_sub_wide %>%
-  ggplot( aes(x=group, y=prevalence, fill=group)) +
-  geom_boxplot() +
+ #data_out_sub_wide %>%
+p2 <-  ggplot( aes(x=group, y=prevalence,fill=group),data=data_out_sub_wide) +
+  geom_boxplot()
 #  geom_violin() +
-  xlab("class") +
+  # xlab("class") +
   theme(legend.position="none") +
   xlab("")
-  #p2
+  # #p2
   ggplotly(p2)
 })
 ```
+
+```{r echo=FALSE}
+data_out<<-Model1.mcmc_df
+data_out_sub<-data_out[,grepl( "sub" , names( data_out ) )]
+data_out_sub_wide<-gather(data_out_sub, group, prevalence, names( data_out_sub ), factor_key=TRUE)
+levels(data_out_sub_wide$group)<-1:length(levels(data_out_sub_wide$group))
+
+T_prev_sub_mean<-aggregate(data_out_sub_wide$prevalence, list(data_out_sub_wide$group), mean)[,2]
+T_prev_sub_med<-aggregate(data_out_sub_wide$prevalence, list(data_out_sub_wide$group), median)[,2]
+data.frame(T_prev_mean=round(T_prev_sub_mean,3),LL95=round(T_prev_sub_mean-1.96*sqrt(T_prev_sub_mean*(1-T_prev_sub_mean)/temp_data$n),3),UL95=round(T_prev_sub_mean+1.96*sqrt(T_prev_sub_mean*(1-T_prev_sub_mean)/temp_data$n),3),
+           T_prev_median=round(T_prev_sub_med,3),
+           Q025=round(aggregate(data_out_sub_wide$prevalence, list(data_out_sub_wide$group), FUN = function(x) quantile(x,c(0.025,0.975)))[,2][,1],3),
+           Q975=round(aggregate(data_out_sub_wide$prevalence, list(data_out_sub_wide$group), FUN = function(x) quantile(x,c(0.025,0.975)))[,2][,2],3))
+
+```
+
 
 ## Predictions
 Predictive distribution of $y$ for a single new study with $n=100$.
@@ -125,6 +143,11 @@ The predictive prevalence mean of a future study equals to
 R.Temp3=data.frame(Model1.mcmc[[1]])
 round(mean(R.Temp3$main.pstar.rep),3)
 ```
+
+The probability that the prevalence equals to 0 (zero) equals to 
+```{r echo=FALSE} 
+R.Temp1=Model1.mcmc_df
+round(mean(R.Temp1$pre.pequal0),3)
 
 ------------------------------------------------------------------------
 

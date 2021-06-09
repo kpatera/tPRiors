@@ -1,5 +1,5 @@
 findbetamupsi2<-function (themean, percentile = 0.95, lower.v = T, percentile.value, 
-          psi.percentile = 0.9, percentile.median, percentile95value) 
+                          psi.percentile = 0.9, percentile.median, percentile95value) 
 {
   if (lower.v == T) {
     pr_n = percentile
@@ -33,16 +33,21 @@ findbetamupsi2<-function (themean, percentile = 0.95, lower.v = T, percentile.va
                                 (1 - mu)) - percentile95value)
   r <- optim(1, f, lower = 0, upper = 10^4, method = "Brent")
   beta_t = r$par[1]
+  
+  
   model <- function(x) c(F1 = qgamma(0.5, shape = x[1], scale = 1/x[2]) - 
                            alpha_t, F2 = qgamma(0.05, shape = x[1], scale = 1/x[2]) - 
                            beta_t)
   ss2 <- multiroot(f = model, start = c(5, 2), positive = T,useFortran = F)
+  
+  
   qgamma(0.5, ss2$root[1], ss2$root[2])
   qgamma(0.95, ss2$root[1], ss2$root[2])
   a = rgamma(10000, ss2$root[1], ss2$root[2])
   b = rbeta(10000, finalshape1, finalshape2)
+  
   print(summary((rbeta(10000, a * b, a * (1 - b)))))
-
+  
   return(
     list(abeta = round(finalshape1, 2), 
          bbeta = round(finalshape2, 2),

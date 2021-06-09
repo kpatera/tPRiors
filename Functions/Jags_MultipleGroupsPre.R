@@ -17,7 +17,7 @@ main.Se ~ dbeta(ase, bse) I(0.001,0.999)
 main.Sp ~ dbeta(asp, bsp) I(0.001,0.999)
 
 #predictions
-y.pre ~ dbin(main.ap,m)
+y.pre ~ dbin(main.pstar.rep,m)
 
 main.pstar.rep ~ dbeta(alpha,beta)
 pre.pequal0 <- equals(main.pstar.rep,0)

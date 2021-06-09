@@ -21,7 +21,7 @@ main.Sp ~ dbeta(asp, bsp) T(0.001,0.999)
 main.tau0 ~ dbeta(atau0, btau0) T(0.001,0.999) 
 
 #predictions
-y.pre ~ dbin(main.ap,m)
+y.pre ~ dbin(main.pstar.rep,m)
 pre.z.rep ~ dbern(main.tau0)
 main.pstar.rep ~ dbeta(alpha,beta)
 pre.p.rep <- pre.z.rep*main.pstar.rep
