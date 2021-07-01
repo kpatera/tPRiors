@@ -22,13 +22,14 @@ sidebarPanel(width = 4,
                         sliderInput(inputId = "PriorMetric_tau0", 
                                     label = paste("Specify your prior belief about the Specificity: "), 
                                     min=0, max=1, value=0.6,step = 0.01),
+                        radioButtons(inputId = "lower.value_tau0", 
+                                     label=paste("Is the percentile  the upper limit of the",input$ID_MeanMedianMode,"?"), choices=c("Yes","No"),
+                                     selected="No",inline = T),
                         sliderInput(inputId = "Percentile1_tau0", 
                                     label = paste("Specify the level of confidence that the true value of the",input$ID_MeanMedianMode,"is greater or lower than the percentile.value: "),
                                     min=0, max=1, value=0.95,step = 0.01),
-                        uiOutput("sliders_fb_tau0"),
-                        radioButtons(inputId = "lower.value_tau0", 
-                                     label=paste("Is the percentile  the upper limit of the",input$ID_MeanMedianMode,"?"), choices=c("Yes","No"),
-                                     selected="No",inline = T)
+                        uiOutput("sliders_fb_tau0")
+
                         
                ),
                tabPanel("Se",  
@@ -38,13 +39,14 @@ sidebarPanel(width = 4,
                         sliderInput(inputId = "PriorMetric_SE", 
                                     label = paste("Specify your prior belief about the Sensitivity: "), 
                                     min=0, max=1, value=0.6,step = 0.01),
+                        radioButtons(inputId = "lower.value_SE", 
+                                     label=paste("Is the percentile  the upper limit of the",input$ID_MeanMedianMode,"?"), choices=c("Yes","No"),
+                                     selected="No",inline = T),
                         sliderInput(inputId = "Percentile1_SE", 
                                     label = paste("Specify the level of confidence that the true value of the",input$ID_MeanMedianMode,"is greater or lower than the percentile.value: "),
                                     min=0, max=1, value=0.95,step = 0.01),
-                        uiOutput("sliders_fb_SE"),
-                        radioButtons(inputId = "lower.value_SE", 
-                                     label=paste("Is the percentile  the upper limit of the",input$ID_MeanMedianMode,"?"), choices=c("Yes","No"),
-                                     selected="No",inline = T)
+                        uiOutput("sliders_fb_SE")
+
                ),
                tabPanel("Sp",             
                         hr(),

@@ -589,7 +589,7 @@ shinyServer(function(input, output, session) {
           }
         }
       }else{
-        if(input$ID_SingleMultiple=="Single population"){
+        if(input$ID_SingleMultiple=="Single"){
           if(input$ID_TrueApp!="True prevalence"){
             source("Functions/Interface_findBeta.R",local = TRUE)$value
           }else{
@@ -599,7 +599,7 @@ shinyServer(function(input, output, session) {
               source("Functions/Interface_findBeta_SE_SP.R",local = TRUE)$value
             }
           }
-        }else if(input$ID_SingleMultiple=="Multiple populations"){
+        }else if(input$ID_SingleMultiple=="Multiple"){
           if(input$ID_TrueApp=="True prevalence"){
             if(input$ID_ZeroPrevalence=="Yes"){
               source("Functions/Interface_findBetamupsi2_SE_SP_tau0.R",local = TRUE)$value
@@ -633,7 +633,7 @@ shinyServer(function(input, output, session) {
               }
             }
           }else{
-            if(input$ID_SingleMultiple=="Single population"){
+            if(input$ID_SingleMultiple=="Single"){
               if(input$ID_TrueApp!="True prevalence"){
                 plotlyOutput("PriorGenPlot1")
               }else{
@@ -643,7 +643,7 @@ shinyServer(function(input, output, session) {
                   plotlyOutput(width = '100%',height = '100%',"PriorGenPlot1_true_zero")
                 }
               }
-            }else if(input$ID_SingleMultiple=="Multiple populations"){
+            }else if(input$ID_SingleMultiple=="Multiple"){
               if(input$ID_TrueApp!="True prevalence"){
                 plotlyOutput("PriorGenPlot2")
               }else{
@@ -892,27 +892,27 @@ shinyServer(function(input, output, session) {
   #----- Interactive conditional interface and inference plot for each model ------#
   output$Bayesian_fb<-renderUI({
     if(input$ID_Informative=="No"){
-      if(input$ID_SingleMultiple=="Single population"){
+      if(input$ID_SingleMultiple=="Single"){
         source("Functions/Interface_Jags_ApparentPre.R",local = TRUE)$value # Done
       }else{
         source("Functions/Interface_Jags_MultipleGroupsAppPre.R",local = TRUE)$value # Done
       }
     }else{
-      if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
+      if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single" & input$ID_ZeroPrevalence=="No"){
         source("Functions/Interface_Jags_ApparentPre.R",local = TRUE)$value # Done
-      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
+      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single" & input$ID_ZeroPrevalence=="No"){
         source("Functions/Interface_Jags_TruePre.R",local = TRUE)$value # Done
-        #    }else if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+        #    }else if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Multiple" & input$ID_ZeroPrevalence=="No"){
         #      source("Functions/Interface_Jags_MultipleGroupsApPreNozero.R",local = TRUE) # File ready
-        #    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+        #    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple" & input$ID_ZeroPrevalence=="No"){
         #      source("Functions/Interface_Jags_MultipleGroupsTruePreNozero.R",local = TRUE) # File ready
-      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="Yes"){
+      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single" & input$ID_ZeroPrevalence=="Yes"){
         source("Functions/Interface_Jags_TruePreZero.R",local = TRUE)$value # Done
-      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="Yes"){
+      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple" & input$ID_ZeroPrevalence=="Yes"){
         source("Functions/Interface_Jags_MultipleGroupsTruePreZero.R",local = TRUE)$value # Done
-      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+      }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple" & input$ID_ZeroPrevalence=="No"){
         source("Functions/Interface_Jags_MultipleGroupsTruePre.R",local = TRUE)$value # Done
-      }else if(input$ID_TrueApp!="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+      }else if(input$ID_TrueApp!="True prevalence" & input$ID_SingleMultiple=="Multiple" & input$ID_ZeroPrevalence=="No"){
         source("Functions/Interface_Jags_MultipleGroupsAppPre.R",local = TRUE)$value # Done 
       }
     }
@@ -921,27 +921,27 @@ shinyServer(function(input, output, session) {
   observeEvent(input$buttonFixModel, {
   output$APar1_Plot_fb <- renderUI({
     if(input$ID_Informative=="No"){
-      if(input$ID_SingleMultiple=="Single population"){
+      if(input$ID_SingleMultiple=="Single"){
         plotOutput("APpre_Plot")
       }else{
         plotOutput("MultTRapp_Plot")
       }
     }else{
-    if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
+    if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single" & input$ID_ZeroPrevalence=="No"){
       plotOutput("APpre_Plot")
-    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
+    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single" & input$ID_ZeroPrevalence=="No"){
       plotOutput("TRpre_Plot")
-      #    }else if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+      #    }else if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Multiple" & input$ID_ZeroPrevalence=="No"){
       #      source("Functions/Interface_Jags_MultipleGroupsApPreNozero.R",local = TRUE) # File ready
-      #    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+      #    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple" & input$ID_ZeroPrevalence=="No"){
       #      source("Functions/Interface_Jags_MultipleGroupsTruePreNozero.R",local = TRUE) # File ready
-    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="Yes"){
+    }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single" & input$ID_ZeroPrevalence=="Yes"){
       plotOutput("TRpreZero_Plot")
-     }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="Yes"){
+     }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple" & input$ID_ZeroPrevalence=="Yes"){
        plotOutput("MultTRpreZero_Plot")
-     }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+     }else if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Multiple" & input$ID_ZeroPrevalence=="No"){
        plotOutput("MultTRpre_Plot")
-    }else if(input$ID_TrueApp!="True prevalence" & input$ID_SingleMultiple=="Multiple populations" & input$ID_ZeroPrevalence=="No"){
+    }else if(input$ID_TrueApp!="True prevalence" & input$ID_SingleMultiple=="Multiple" & input$ID_ZeroPrevalence=="No"){
       plotOutput("MultTRapp_Plot")
     }
     }
@@ -954,7 +954,7 @@ shinyServer(function(input, output, session) {
       }else{
       radioButtons(inputId = 'ID_TrueApp', choices=c("True prevalence",
                                                      "Apparent prevalence"),
-                   label = 'Do you want to model the true prevalence or the apparent prevalence?',
+                   label = 'Do you want to model the true or the apparent prevalence?',
                    selected = "True prevalence",inline = TRUE)
       
     }
@@ -969,17 +969,19 @@ shinyServer(function(input, output, session) {
     }
   })
   output$metric_fb <- renderUI({
-    if(input$ID_SingleMultiple=="Single population"){
+    if(input$ID_Informative=="Yes" & input$ID_SingleMultiple=="Single"){
       radioButtons(inputId = 'ID_MeanMedianMode', choices=c("Mean",
                                                             "Median",
                                                             "Mode",
                                                             "Percentiles"),
-                   label = 'Which prevelance statistical measure would you like to use for prior elicitation?',
+                   label = 'Which measure of central tendency or dispersion would you like to use for the true prevalence prior?',
                    selected = "Mean",inline = TRUE)
-    }else{
+    }else if(input$ID_Informative=="Yes" & input$ID_SingleMultiple=="Multiple"){
       radioButtons(inputId = 'ID_MeanMedianMode', choices=c("Mean"),
-                   label = 'Which prevelance statistical measure would you like to use for prior elicitation?',
+                   label = 'Which measure of central tendency or dispersion would you like to use for the true prevalence prior?',
                    selected = "Mean",inline = TRUE)
+    }else if(input$ID_Informative=="No"){
+      
     }
   })
   output$report_fb <- renderUI({
@@ -993,14 +995,14 @@ shinyServer(function(input, output, session) {
   })
   output$MultiDatasets_Out_fb <- renderUI({
     
-    if(input$ID_SingleMultiple=="Multiple populations"){
+    if(input$ID_SingleMultiple=="Multiple"){
       source("Functions/Interface_MultiDatasetYes.R",local = TRUE)$value
     }else{
       source("Functions/Interface_MultiDatasetNo.R",local = TRUE)$value
     }
   })
   output$MultiDataset_fb <- renderUI({
-    if(input$ID_SingleMultiple=="Multiple populations"){
+    if(input$ID_SingleMultiple=="Multiple"){
       if(input$LoadData=="Option1Preload"){
         selectInput("Indata1", "Dataset:",
                     c("Example1_4Studies" = "Example1_4Studies",
@@ -1015,7 +1017,7 @@ shinyServer(function(input, output, session) {
                     ".xls")
         )    }
     }
-    else if(input$ID_SingleMultiple!="Multiple populations"){
+    else if(input$ID_SingleMultiple!="Multiple"){
     }
     
   })
@@ -1031,7 +1033,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb_SE <- renderUI({
-    if(input$lower.value_SE=="No" | input$lower.value2_SE=="No"){
+    if(input$lower.value_SE=="No" ){
       sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the upper or lower limit for the sensitivity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SE,input$PriorMetric_SE), min=0, max=1,step = 0.01)
     }else{
@@ -1041,7 +1043,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb_SP <- renderUI({
-    if(input$lower.value_SP=="No" | input$lower.value2_SP=="No"){
+    if(input$lower.value_SP=="No" ){
       sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SP,input$PriorMetric_SP), min=0, max=1,step = 0.01)
     }else{
@@ -1258,7 +1260,7 @@ shinyServer(function(input, output, session) {
       paste("InputData.RData")
     },
     content = function(file) {
-      if(input$ID_SingleMultiple=="Single population"){
+      if(input$ID_SingleMultiple=="Single"){
         Multi_data=temp_data
       save(Multi_data, file = file)
       }
@@ -1374,15 +1376,15 @@ shinyServer(function(input, output, session) {
   })
   observeEvent(input$buttonPrior,{
     priors$PriorSelect<-TRUE
-    if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="Νο"){
+    if(input$ID_TrueApp=="Apparent prevalence" & input$ID_SingleMultiple=="Single" & input$ID_ZeroPrevalence=="Νο"){
       priors$prior<<-list(a=fb$a,b=fb$b)
     }
-    if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single population" & input$ID_ZeroPrevalence=="No"){
+    if(input$ID_TrueApp=="True prevalence" & input$ID_SingleMultiple=="Single" & input$ID_ZeroPrevalence=="No"){
       priors$prior<<-list(a=fb$a,b=fb$b)
     }
   })
   observeEvent(input$buttonFixModel, {
-    if(input$ID_SingleMultiple=="Multiple populations"){
+    if(input$ID_SingleMultiple=="Multiple"){
       if(input$LoadData=="Option1Preload"){
         req(!is.na(input$Indata1))
         name_data <<- input$Indata1
@@ -1426,7 +1428,7 @@ shinyServer(function(input, output, session) {
   #--------  Report rmakdown --------#
   output$Rmark <- renderUI({
     if(input$ID_Informative=="No"){
-      if(input$ID_SingleMultiple=="Multiple populations"){
+      if(input$ID_SingleMultiple=="Multiple"){
         temp<-"TPpre_Report_Mult.Rmd"
       }else{
         temp<-"TPpre_Report.Rmd"
@@ -1437,7 +1439,7 @@ shinyServer(function(input, output, session) {
       }else{
         temp<-"TPpre_Report.Rmd"
       }
-      if(input$ID_SingleMultiple=="Multiple populations"){
+      if(input$ID_SingleMultiple=="Multiple"){
         if(input$ID_TrueApp=="True prevalence"){
           temp<-"TPpre_Report_Mult_True.Rmd"
         }else{
@@ -1450,7 +1452,7 @@ shinyServer(function(input, output, session) {
   
   #------- Load multiple datasets -------#
   dataset<<- reactive({
-    if(input$ID_SingleMultiple=="Multiple populations"){
+    if(input$ID_SingleMultiple=="Multiple"){
       if(input$LoadData=="Option1Preload"){
         req(!is.na(input$Indata1))
         temp_data <<- data.frame(get(input$Indata1)) 
@@ -1467,7 +1469,7 @@ shinyServer(function(input, output, session) {
   
   #------- Export dataset to print in Shiny GUI -------#
   output$table2 <- renderDataTable({
-    if(input$ID_SingleMultiple=="Multiple populations"){
+    if(input$ID_SingleMultiple=="Multiple"){
       if(input$LoadData=="Option1Preload"){
         req(!is.na(input$Indata1))
         DT::datatable(data.frame(get(input$Indata1)))     

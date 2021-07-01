@@ -76,8 +76,10 @@ paste0("The observed (apparent) prevalence was equal to ", 100*round(input$y/inp
 #priors$priorT<<-list(a=fb$a,b=fb$b, ase=fb_SE$a,bse=fb_SE$b, asp=fb_SP$a,bsp=fb_SP$b)
 Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
 post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
-paste0("Summary of Posterior prevalence")
-summary(post$density)
+paste0("Summary of posterior prevalence")
+round(summary(post$density),5)
+paste0("Quantiles of posterior prevalence")
+round(quantile(post$density,probs =c(0,0.01,0.025,0.1,0.2,0.5,0.8,0.9,0.975,0.99,1)),5)
 paste0("Probability that the posterior prevalence is higher than ", input$perVal," equals to")
 sum(Model1.mcmc_df$main.ap>input$perVal)/length(Model1.mcmc_df$main.ap)
 ```
@@ -104,7 +106,7 @@ summary(Model1.mcmc_df$main.ap)
 Predictive distribution of $y$ for a single new study with $n=100$.
 ```{r echo=FALSE}
     S<-ggs(Model1.mcmc)
-    ggs_density(S,family = "pre")
+    ggs_density(S,family = "pre",)
 ```
 
 

@@ -9,8 +9,8 @@ sub.p[i] ~ dbeta(alpha,beta) T(0.001,0.999)
 
 alpha <- main.ap*main.psi
 beta <- main.psi*(1-main.ap)
-main.ap ~ dbeta(amu, bmu) T(0.001,0.999)
-main.psi ~ dgamma(apsi, bpsi) T(0.001,0.999)
+main.ap ~ dbeta(aa, bb) T(0.001,0.999)
+main.psi ~ dgamma(0.01, 0.01) T(0.001,0.999)
 
 #informative prior for Se and Sp
 main.Se <- 1

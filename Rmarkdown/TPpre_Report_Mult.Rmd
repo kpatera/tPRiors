@@ -89,6 +89,12 @@ renderPlotly({
   })
 round(summary(Model1.mcmc_df$main.pstar.rep),2)
 
+post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
+paste0("Summary of posterior prevalence")
+round(summary(post$density),5)
+paste0("Quantiles of posterior prevalence")
+round(quantile(post$density,probs =c(0,0.01,0.025,0.1,0.2,0.5,0.8,0.9,0.975,0.99,1)),5)
+
 paste0("The probability that the posterior prevalence is higher than ", input$perVal," equals to")
 Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
 sum(Model1.mcmc_df$main.pstar.rep>input$perVal)/length(Model1.mcmc_df$main.pstar.rep)
@@ -103,13 +109,13 @@ data_out_sub<-data_out[,grepl( "sub" , names( data_out ) )]
 data_out_sub_wide<-gather(data_out_sub, group, prevalence, names( data_out_sub ), factor_key=TRUE)
 levels(data_out_sub_wide$group)<-1:length(levels(data_out_sub_wide$group))
 
- #data_out_sub_wide %>%
-p2 <-  ggplot( aes(x=group, y=prevalence,fill=group),data=data_out_sub_wide) +
-  geom_boxplot()
+
+p2 <-  data_out_sub_wide %>%
+  ggplot( aes(x=group, y=prevalence,fill=group)) +
+  geom_boxplot() +
 #  geom_violin() +
-  # xlab("class") +
-  theme(legend.position="none") +
-  xlab("")
+  xlab("") +
+   theme(legend.position="none")
   # #p2
   ggplotly(p2)
 })

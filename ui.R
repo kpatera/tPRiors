@@ -33,19 +33,20 @@ shinyUI(
                       sidebarPanel(
                         shinyjs::useShinyjs(), # Platform for reset button
                         id = "setup-panel",
-                        radioButtons(inputId = 'ID_Informative', choices=c("Yes",
-                                                                           "No"),
-                                     label = 'Would you define informative priors?',
-                                     selected = "Yes",inline = TRUE),
+
+                        radioButtons(inputId = 'ID_SingleMultiple', choices=c("Single",
+                                                                              "Multiple"),
+                                     label = 'Do you have single or multiple populations/clusters',
+                                     selected = "Multiple",inline = TRUE),
                         hr(),
                         uiOutput("TrueApp_fb"), 
                         hr(),
-                        radioButtons(inputId = 'ID_SingleMultiple', choices=c("Single population",
-                                                                              "Multiple populations"),
-                                     label = 'Do you want to model single or multiple population prevelances?',
-                                     selected = "Multiple populations",inline = TRUE),
-                        hr(),
                         uiOutput("zero_fb"),
+                        hr(),
+                        radioButtons(inputId = 'ID_Informative', choices=c("Yes",
+                                                                           "No"),
+                                     label = 'Would you specify informative priors?',
+                                     selected = "Yes",inline = TRUE),
                         hr(),
                         uiOutput("metric_fb"),
                         hr(),
@@ -81,7 +82,7 @@ shinyUI(
                       #   )
                       #  )
              ),
-             tabPanel("Model",
+             tabPanel("I|nput & O|utput",
                       #radioButtons(inputId = 'Model_general', choices=c("Apparent prevalence estimation",
                       #                                                   "True prevalence estimation",
                       #                                                   "Allow for zero prevalence (in true prevalence estimation)",
