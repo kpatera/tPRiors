@@ -44,13 +44,13 @@ summary(sample_beta)
 ```
 
 ```{r echo = FALSE}
-renderPlotly({
-    x<-seq(0,1,length.out = 10000)
-    fig1 <- plot_ly(x = ~x, y = ~dbeta(x = x,shape1 = fb$atotalbeta, shape2 = fb$btotalbeta), type = 'scatter', mode = 'lines', colors = "#e69138", fill = 'tozeroy', width=NULL, height=NULL)
-    fig1 <- fig1 %>% layout(xaxis = list(title = 'Beta'), yaxis = list(title = 'Density'))
-    fig1
-
-  })
+# renderPlotly({
+#     x<-seq(0,1,length.out = 10000)
+#     fig1 <- plot_ly(x = ~x, y = ~dbeta(x = x,shape1 = fb$atotalbeta, shape2 = fb$btotalbeta), type = 'scatter', mode = 'lines', colors = "#e69138", fill = 'tozeroy', width=NULL, height=NULL)
+#     fig1 <- fig1 %>% layout(xaxis = list(title = 'Beta'), yaxis = list(title = 'Density'))
+#     fig1
+# 
+#   })
 ```
 <br>
 <br>
