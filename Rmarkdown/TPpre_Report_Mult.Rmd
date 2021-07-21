@@ -75,7 +75,7 @@ dataTableOutput("dtst")
 ## The model
 
 ```{r echo=FALSE}
-renderPlotly({
+#renderPlotly({
     Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
     post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
     pri <-  data.frame(density=rbeta(10000,shape1 = fb$atotalbeta,shape2=fb$btotalbeta))
@@ -85,8 +85,8 @@ renderPlotly({
     p1<-ggplot(triple, aes(density, fill = Distribution)) +
       xlim(0, 1)+ theme(legend.position="top")+
       geom_density(alpha = 0.2, adjust=0.2)
-    ggplotly(p1)
-  })
+    p1
+#  })
 round(summary(Model1.mcmc_df$main.pstar.rep),2)
 
 post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
@@ -103,7 +103,7 @@ sum(Model1.mcmc_df$main.pstar.rep>input$perVal)/length(Model1.mcmc_df$main.pstar
 ### Study-level boxplot and numerical summaries of posterior prevalence samples
 
 ```{r echo=FALSE}
-renderPlotly({
+#renderPlotly({
   data_out<<-Model1.mcmc_df
 data_out_sub<-data_out[,grepl( "sub" , names( data_out ) )]
 data_out_sub_wide<-gather(data_out_sub, group, prevalence, names( data_out_sub ), factor_key=TRUE)
@@ -117,8 +117,8 @@ p2 <-  data_out_sub_wide %>%
   xlab("") +
    theme(legend.position="none")
   # #p2
-  ggplotly(p2)
-})
+  p2
+#})
 ```
 
 ```{r echo=FALSE}
@@ -154,14 +154,13 @@ The probability that the prevalence equals to 0 (zero) equals to
 ```{r echo=FALSE} 
 R.Temp1=Model1.mcmc_df
 round(mean(R.Temp1$pre.pequal0),3)
-
+```
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
 
 ## Diagnostics 
-
 ```{r echo=FALSE, figures-side, fig.show="hold", out.width="50%"}
     oldw <- getOption("warn") # silence warnings for diagnostic plots
     options(warn = -1)

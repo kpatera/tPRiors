@@ -1,0 +1,13 @@
+model{ #ap denotes apparent, #main.ap denotes true prevalence
+    y ~ dbin(ap, n) 
+    y.pre ~ dbin(ap, m)
+    ap<-main.ap*main.Se+(1-main.ap)*(1-main.Sp)
+    main.ap <- z* pstar
+    z ~ dbern(main.tau0)
+    pequal0 <- equals(main.ap, 0)    
+    main.Se ~ dbeta(ase, bse) 
+    main.Sp ~ dbeta(asp, bsp)
+    main.tau0 ~ dbeta(atau0, btau0) T(0.001,0.999) 
+    pstar ~ dbeta(astar, bstar) 
+    plessthanSetvalue <- step(perVal-main.ap)
+    }

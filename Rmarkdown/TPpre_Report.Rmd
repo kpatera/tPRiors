@@ -86,7 +86,7 @@ sum(Model1.mcmc_df$main.ap>input$perVal)/length(Model1.mcmc_df$main.ap)
 
 
 ```{r echo=FALSE}
-renderPlotly({
+#renderPlotly({
   Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
     priors$prior<<-list(a=priors$prior$a,b=priors$prior$b)
     post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
@@ -96,8 +96,8 @@ renderPlotly({
     triple <- rbind(post, pri, Lik)
     p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust = 3)+
       xlim(0, 1)+ theme(legend.position="top")
-    ggplotly(p1)
-  })
+    p1
+#})
 summary(Model1.mcmc_df$main.ap)
 
 ```

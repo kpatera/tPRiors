@@ -44,7 +44,7 @@ summary(sample_beta)
 ```
 
 ```{r echo = FALSE}
-renderPlotly({
+#renderPlotly({
     x<-seq(0,1,length.out = 2000)
     Prevalence<-dbeta(x = x,shape1 = fb$a,shape2 = fb$b)
     df1 <- data.frame(x, Prevalence)
@@ -61,9 +61,9 @@ renderPlotly({
     gg1 <- gg1 + theme(panel.border=element_blank())
     gg1 <- gg1 + theme(axis.line=element_line(size=0.15, color="#2b2b2b"))
 
-    ply1 <- ggplotly(gg1)
+    gg1# <- ggplotly(gg1)
 
-  })
+#  })
 ```
 <br>
 <br>
@@ -85,7 +85,7 @@ summary(sample_beta_SP)
 
 
 ```{r echo = FALSE}
-renderPlotly({
+#renderPlotly({
     x<-seq(0,1,length.out = 2000)
     Sensitivity<-dbeta(x = x,shape1 = fb_SE$a,shape2 = fb_SE$b)
     Specificity<-dbeta(x = x,shape1 = fb_SP$a,shape2 = fb_SP$b)
@@ -102,8 +102,8 @@ renderPlotly({
     gg2 <- gg2 + theme_bw()
     gg2 <- gg2 + theme(panel.border=element_blank())
     gg2 <- gg2 + theme(axis.line=element_line(size=0.15, color="#2b2b2b"))
-    ply2 <- ggplotly(gg2)
-  })
+    gg2# <- ggplotly(gg2)
+#  })
 ```
 <br>
 <br>
@@ -141,7 +141,7 @@ round(quantile(post$density,probs =c(0,0.01,0.025,0.1,0.2,0.5,0.8,0.9,0.975,0.99
 ```
 
 ```{r echo=FALSE}
-renderPlotly({
+#renderPlotly({
   Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
    # priors$prior<<-list(a=fb$a,b=fb$b)
     post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
@@ -151,8 +151,8 @@ renderPlotly({
     triple <- rbind(post, pri, Lik)
     p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust = 2)+
       xlim(0, 1)+ theme(legend.position="top")
-    ggplotly(p1)
-  })
+    p1
+#  })
 summary(Model1.mcmc_df$main.ap)
 
 ```

@@ -1463,7 +1463,7 @@ shinyServer(function(input, output, session) {
         name_data<<-"Uploaded dataset"
       }
     }
-    save(temp_data,file = "temp_data.rdata")
+    #save(temp_data,file = "temp_data.rdata")
     return(temp_data)
   })
   
