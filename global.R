@@ -9,7 +9,8 @@ packages.list<-c("shiny","shinythemes","shinyWidgets","shinydashboard",
 #packages.new <- packages.list[!(packages.list %in% installed.packages()[,"Package"])]
 #install.packages(packages.new);rm(packages.new)
 lapply(packages.list, require, character.only = TRUE); rm(packages.list)
-
+#devtools::install_github('ropensci/plotly')
+#require("ropensci/plotly")
 #---- Load functions and extra functionss ----#
 Funcs<-c("findbeta2.R","findbetaqq2.R","findbetamupsi.R","findbetamupsi2.R","ggs_density.R",
          "get_family.R","multiroot.R","perturb.R","gss.R")

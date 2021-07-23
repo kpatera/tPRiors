@@ -35,7 +35,7 @@ If the true prevalence (inline equation test: ($\pi_{t}$) is modelled the follow
 
 ## The elicited prior
 
-The selected prior distribution of the `r input$ID_TrueApp` has the following descriptive characteristics.
+The selected prior distribution of the `r input$ID_TrueApp` has the following descriptive characteristics and density plot.
 
 ```{r echo=FALSE}
 paste0("Summary of ",input$ID_TrueApp," Beta(",round(fb$a,4),",", round(fb$b,4),") prior")
@@ -44,13 +44,13 @@ summary(sample_beta)
 ```
 
 ```{r echo = FALSE}
-renderPlotly({
-    x<-seq(0,1,length.out = 2000)
-    fig1 <- plot_ly(x = ~x, y = ~dbeta(x = x,shape1 = fb$a, shape2 = fb$b), type = 'scatter', mode = 'lines', colors="#e69138", fill = 'tozeroy', width=NULL, height=NULL)
-    fig1 <- fig1 %>% layout(xaxis = list(title = 'Beta'), yaxis = list(title = 'Density'))
-    fig1
-
-  })
+# renderPlotly({
+#     x<-seq(0,1,length.out = 2000)
+#     fig1 <- plot_ly(x = ~x, y = ~dbeta(x = x,shape1 = fb$a, shape2 = fb$b), type = 'scatter', mode = 'lines', colors="#e69138", fill = 'tozeroy', width=NULL, height=NULL)
+#     fig1 <- fig1 %>% layout(xaxis = list(title = 'Beta'), yaxis = list(title = 'Density'))
+#     fig1
+# 
+#   })
 ```
 <br>
 <br>
@@ -86,7 +86,7 @@ sum(Model1.mcmc_df$main.ap>input$perVal)/length(Model1.mcmc_df$main.ap)
 
 
 ```{r echo=FALSE}
-renderPlotly({
+#renderPlotly({
   Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
     priors$prior<<-list(a=priors$prior$a,b=priors$prior$b)
     post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
@@ -96,8 +96,8 @@ renderPlotly({
     triple <- rbind(post, pri, Lik)
     p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust = 3)+
       xlim(0, 1)+ theme(legend.position="top")
-    ggplotly(p1)
-  })
+    p1
+#})
 summary(Model1.mcmc_df$main.ap)
 
 ```
