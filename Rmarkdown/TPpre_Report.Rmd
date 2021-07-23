@@ -35,7 +35,7 @@ If the true prevalence (inline equation test: ($\pi_{t}$) is modelled the follow
 
 ## The elicited prior
 
-The selected prior distribution of the `r input$ID_TrueApp` has the following descriptive characteristics and density plot.
+The selected prior distribution of the `r input$ID_TrueApp` has the following descriptive characteristics.
 
 ```{r echo=FALSE}
 paste0("Summary of ",input$ID_TrueApp," Beta(",round(fb$a,4),",", round(fb$b,4),") prior")
