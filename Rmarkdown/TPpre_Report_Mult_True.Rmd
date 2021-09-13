@@ -133,18 +133,18 @@ paste0("If modelled, the assumed probability for non-zero prevalence was set equ
 #renderPlotly({
     #priors$prior<<-list(a=fb$a,b=fb$b)
     Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
-    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
+    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
     pri <-  data.frame(density=rbeta(10000,shape1 = fb$atotalbeta,shape2=fb$btotalbeta))
     #Lik <- data.frame(density=rbinom(n = 10000, size =  input$n, prob = input$y/input$n)/input$n)
     post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' #; Lik$Distribution <- 'likelihood'
     triple <- rbind(post,pri)#, Lik)
-    p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2, adjust=0.2)+
+    p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2, adjust=1)+
       xlim(0, 1)+ theme(legend.position="top")
     p1
 #  })
-round(summary(Model1.mcmc_df$main.pstar.rep),2)
+#round(summary(Model1.mcmc_df$main.ap),2)
 
-post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
+post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
 paste0("Summary of posterior prevalence")
 round(summary(post$density),5)
 paste0("Quantiles of posterior prevalence")
@@ -153,7 +153,7 @@ round(quantile(post$density,probs =c(0,0.01,0.025,0.1,0.2,0.5,0.8,0.9,0.975,0.99
 
 paste0("The probability that the posterior prevalence is higher than ", input$perVal," equals to")
 Model1.mcmc_df<-data.frame(Model1.mcmc[[1]])
-sum(Model1.mcmc_df$main.pstar.rep>input$perVal)/length(Model1.mcmc_df$main.pstar.rep)
+sum(Model1.mcmc_df$main.ap>input$perVal)/length(Model1.mcmc_df$main.ap)
 
 ```
 
@@ -195,19 +195,19 @@ data.frame(T_prev_mean=round(T_prev_sub_mean,3),LL95=round(T_prev_sub_mean-1.96*
 
 
 ## Predictions
-Predictive distribution of $y$ for a single new study with $n=100$.
+Predictive distribution of $y$ for a single new study with $n=100$. (Unstable for less than 10 clusters)
 ```{r echo=FALSE}
     S<-ggs(Model1.mcmc)
     ggs_density(S,family = "y.pre")
 ```
 
-The predictive prevalence mean of a future study equals to 
+The predictive prevalence mean of a future study equals to  (Unstable for less than 10 clusters)
 ```{r echo=FALSE} 
 R.Temp3=Model1.mcmc_df
 round(mean(R.Temp3$main.pstar.rep),3)
 ```
 
-The probability that the prevalence equals to 0 (zero) equals to 
+The probability that the prevalence equals to 0 (zero) equals to  
 ```{r echo=FALSE} 
 R.Temp1=Model1.mcmc_df
 round(mean(R.Temp1$pre.pequal0),3)

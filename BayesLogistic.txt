@@ -1,0 +1,13 @@
+
+model {
+  ## sampling
+  for (i in 1:N){
+    y[i] ~ dbern(p[i])
+    logit(p[i]) <- beta0 + beta1*x[i]
+  }
+  ## priors
+  beta1 <- (logit(p1) - logit(p2)) / (x1 - x2)
+  beta0 <- logit(p1) - beta1 * x1
+  p1 ~ dbeta(a1, b1)
+  p2 ~ dbeta(a2, b2)
+}

@@ -24,7 +24,7 @@ main.tau0 ~ dbeta(atau0, btau0) T(0.001,0.999)
 y.pre ~ dbin(main.pstar.rep,m)
 pre.z.rep ~ dbern(main.tau0)
 main.pstar.rep ~ dbeta(alpha,beta)
-pre.p.rep <- pre.z.rep*main.pstar.rep
+pre.p.rep <- pre.z.rep*main.ap
 pre.pequal0 <- equals(pre.p.rep,0)
 pre.plessthan0.05 <- step(0.05-pre.p.rep)
 plessthanSetvalue <- step(perVal-main.ap)
@@ -51,4 +51,7 @@ generic_jags<-jagsoutput_TruezeroMult<-rjags::jags.model(data=list(n=dtst$n,y=dt
 Model1.mcmc <<- coda.samples(jagsoutput_TruezeroMult,  
                              n.iter=input$nniter,thin =input$nnthin,
                              variable.names=SaveParams,seed=998)
+model_out<<-generic_jags$model()
+
+
 return(Model1.mcmc)

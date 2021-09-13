@@ -36,6 +36,8 @@ shinyServer(function(input, output, session) {
   
   output$PriorGenPlot0 <- plotly::renderPlotly({
     #source("Functions/multiroot.R",local = TRUE)
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     fb<<-findbeta2(themean =0.2, percentile=0.9,lower.v=TRUE, percentile.value=0.5)
     if(input$priorNonInf=="Beta(1,1)") {
       fb$a<<-1;fb$atotalbeta<<-1; fb$b<<-1;fb$btotalbeta<<-1}
@@ -65,9 +67,11 @@ shinyServer(function(input, output, session) {
     #               width=400, height=400)
     #fig <- fig %>% layout(xaxis = list(title = 'Beta'), yaxis = list(title = 'Density'))
     #fig
-  })
+  })})
   
   output$PriorGenPlot1 <- plotly::renderPlotly({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     #source("Functions/multiroot.R",local = TRUE)
     if(input$lower.value=="Yes"){lower.value=TRUE}else{lower.value=FALSE}
     if(input$ID_MeanMedianMode=="Mean" & !is.null(input[["PriorMetric"]])){
@@ -100,9 +104,11 @@ shinyServer(function(input, output, session) {
     #               width=400, height=400)
     #fig <- fig %>% layout(xaxis = list(title = 'Beta'), yaxis = list(title = 'Density'))
     #fig
-  })
+  })})
   
   output$PriorGenPlot1_true <- plotly::renderPlotly({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     #source("Functions/multiroot.R",local = TRUE)
     if(input$lower.value=="Yes"){lower.value=TRUE}else{lower.value=FALSE}
     if(input$lower.value_SP=="Yes"){lower.value_SP=TRUE}else{lower.value_SP=FALSE}
@@ -175,9 +181,11 @@ shinyServer(function(input, output, session) {
     # 
     # fig_total<-subplot(fig,fig_SE,fig_SP, shareX = TRUE, shareY = TRUE)
     # fig_total
-  })
+  })})
   
   output$PriorGenPlot1_true_zero <- plotly::renderPlotly({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     #source("Functions/multiroot.R",local = TRUE)
     if(input$lower.value=="Yes"){lower.value=TRUE}else{lower.value=FALSE}
     if(input$lower.value_SP=="Yes"){lower.value_SP=TRUE}else{lower.value_SP=FALSE}
@@ -236,9 +244,11 @@ shinyServer(function(input, output, session) {
     ply1 <- ggplotly(gg1)
     ply2 <- ggplotly(gg2)
     subplot(ply1, ply2, nrows=1,titleX = TRUE)
-  })
+  })})
   
   output$PriorGenPlot2 <- plotly::renderPlotly({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
   #  require(rootSolve);require(PriorGen) 
   # source("Functions/multiroot.R",local = TRUE)
    #source("Functions/findbetamupsi2.R",local = TRUE)
@@ -284,9 +294,11 @@ shinyServer(function(input, output, session) {
     #fig2 <- fig2 %>% layout(xaxis = list(title = 'Gamma'), yaxis = list(title = 'Density'))
     
     #subplot(fig1, fig2, nrows = 2, margin = 0.04, heights = c(0.5, 0.5))
-  })
+  })})
   
   output$PriorGenPlot2_true <- plotly::renderPlotly({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     #source("Functions/multiroot.R",local = TRUE)
     source("Functions/findbetamupsi2.R")
     if(input$lower.value2=="Yes"){lower.value2=TRUE}else{lower.value2=FALSE}
@@ -361,9 +373,11 @@ shinyServer(function(input, output, session) {
     ply1 <- ggplotly(gg1)
     ply2 <- ggplotly(gg2)
     subplot(ply1, ply2, nrows=1,titleX = TRUE)
-  })
+  })})
   
   output$PriorGenPlot2_true_zero <- plotly::renderPlotly({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     #source("Functions/multiroot.R",local = TRUE)
     source("Functions/findbetamupsi2.R")
     if(input$lower.value2=="Yes"){lower.value2=TRUE}else{lower.value2=FALSE}
@@ -446,9 +460,11 @@ shinyServer(function(input, output, session) {
     ply1 <- ggplotly(gg1)
     ply2 <- ggplotly(gg2)
     subplot(ply1, ply2, nrows=1,titleX = TRUE)
-  })
+  })})
   
   output$PriorGenPlot3 <- plotly::renderPlotly({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     #source("Functions/multiroot.R",local = TRUE)
     # Find alpha and beta of a beta dist based on percentiles
     fb<<-findbetaqq2(percentile.value1=input$PercentileValue3_1,percentile1=input$Percentile3_1,
@@ -470,9 +486,11 @@ shinyServer(function(input, output, session) {
     gg <- gg + theme(panel.border=element_blank(),plot.margin=unit(c(1,1,1.5,1.2),"cm"))
     gg <- gg + theme(axis.line=element_line(size=0.15, color="#2b2b2b"))
     ggplotly(gg)
-  })
+  })})
   
   output$PriorGenPlot3_true <- plotly::renderPlotly({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
    #source("Functions/multiroot.R",local = TRUE)
     # Find alpha and beta of a beta dist based on percentiles Prevalence
     fb<<-findbetaqq2(percentile.value1=input$PercentileValue3_1,percentile1=input$Percentile3_1,
@@ -518,9 +536,11 @@ shinyServer(function(input, output, session) {
     ply1 <- ggplotly(gg1)
     ply2 <- ggplotly(gg2)
     subplot(ply1, ply2, nrows=1,titleX = TRUE)
-  })
+  })})
   
   output$PriorGenPlot3_true_zero <- plotly::renderPlotly({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     #source("Functions/multiroot.R",local = TRUE)
     # Find alpha and beta of a beta dist based on percentiles Prevalence
     fb<<-findbetaqq2(percentile.value1=input$PercentileValue3_1,percentile1=input$Percentile3_1,
@@ -570,7 +590,7 @@ shinyServer(function(input, output, session) {
     ply1 <- ggplotly(gg1)
     ply2 <- ggplotly(gg2)
     subplot(ply1, ply2, nrows=1,titleX = TRUE)
-  })
+  })})
   
   
   #------- Interactive conditional interface for prior elication and ploting ------#
@@ -617,6 +637,8 @@ shinyServer(function(input, output, session) {
   
   observeEvent(once = TRUE,input$buttonPrior,{
     output$Priors_Plot_Sum_fb <- renderUI({
+      withProgress(message = 'Calculation in progress',
+                   detail = 'This may take a while...', value = 1, {
       if(priors$SetupPriors==TRUE){
         if(input$ID_Informative=="No"){
           plotlyOutput("PriorGenPlot0")
@@ -658,7 +680,7 @@ shinyServer(function(input, output, session) {
         }
       }
       
-      
+                   }) 
     })
   })
   
@@ -666,6 +688,8 @@ shinyServer(function(input, output, session) {
   #----- Plot inference for each model ------#
   
   output$APpre_Plot <- renderPlot({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     source("Functions/gss.R",local=TRUE)
     source("Functions/Jags_ApparentPre.R",local=TRUE)$value
     # Simple plot
@@ -678,7 +702,7 @@ shinyServer(function(input, output, session) {
     post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' ; Lik$Distribution <- 'likelihood'
     triple <- rbind(post, pri, Lik)
     
-    p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust = 2)+
+    p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust = 1.5)+
       xlim(0, 1)+ theme(legend.position="top")
     S <- ggmcmc::ggs(Model1.mcmc)
     levels(S$Parameter)[levels(S$Parameter)=="main.ap"]<-"Apparent p (main)"
@@ -692,10 +716,12 @@ shinyServer(function(input, output, session) {
     pright<-grid.arrange(p1,ncol=1)
     pleft <-grid.arrange(p2,p3,ncol=1)
     gridExtra::grid.arrange(pright,pleft,ncol=2)
-    
+                 })
   },width = 'auto', heigh='auto')
   
   output$TRpre_Plot <- renderPlot({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     source("Functions/gss.R",local=TRUE)
     source("Functions/Jags_TruePre.R",local=TRUE)$value
     # Simple plot
@@ -725,9 +751,12 @@ shinyServer(function(input, output, session) {
     pleft <-grid.arrange(p2,p3,ncol=1)
     gridExtra::grid.arrange(pright,pleft,ncol=2)
     #  ggs_pairs(S, lower = list(continuous = "density"))
+                 })
   },width = 'auto', heigh='auto')
   
   output$TRpreZero_Plot <- renderPlot({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     source("Functions/gss.R",local=TRUE)
     source("Functions/Jags_TruePreZero.R",local=TRUE)$value
     #simple plot
@@ -758,23 +787,25 @@ shinyServer(function(input, output, session) {
     pleft <-grid.arrange(p2,p3,ncol=1)
     gridExtra::grid.arrange(pright,pleft,ncol=2)
     #  ggs_pairs(S, lower = list(continuous = "density"))
-    
+                 })
   },width = 'auto', heigh='auto')
   
   output$MultTRpre_Plot <- renderPlot({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     source("Functions/gss.R",local=TRUE)
     source("Functions/Jags_MultipleGroupsPre.R",local=TRUE)$value
     
     Model1.mcmc_df<<-data.frame(Model1.mcmc[[1]])
-    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
+    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
     pri <-  data.frame(density=rbeta(10000,shape1 = fb$atotalbeta,shape2=fb$btotalbeta))
     post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' 
     triple <- rbind(post, pri)
-    p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust=0.2) +
+    p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust=1) +
       xlim(0, 1) + theme(legend.position="top") + scale_fill_brewer(palette="Dark2")
     
     S <- ggmcmc::ggs(Model1.mcmc)
-    levels(S$Parameter)[levels(S$Parameter)=="main.pstar.rep"]<-"True prevalence"
+    levels(S$Parameter)[levels(S$Parameter)=="main.ap"]<-"True prevalence"
     levels(S$Parameter)[levels(S$Parameter)=="main.tau0"]<-"Pr(zero prevalence)"
     p2<-ggs_traceplot(S,family = "main")
     #    SPre<-get_family(D = S,family = "pre")
@@ -790,10 +821,12 @@ shinyServer(function(input, output, session) {
     pright<-grid.arrange(p1,ncol=1)
     pleft <-grid.arrange(p2,p3,ncol=1)
     gridExtra::grid.arrange(pright,pleft,ncol=2)
-
+})
   },width = 'auto', heigh='auto')
 
   output$MultTRpreZero_Plot <- renderPlot({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     source("Functions/gss.R",local=TRUE)
     source("Functions/Jags_MultipleGroupsPreZero.R",local=TRUE)$value
     #Simple plot 
@@ -801,16 +834,16 @@ shinyServer(function(input, output, session) {
     #lines(1:1000/1000,dbeta(seq(0,1,length.out = 1000),a,b),type = "l",col="red",lwd=5)
     #ggplot
     Model1.mcmc_df<<-data.frame(Model1.mcmc[[1]])
-    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
+    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
     pri <-  data.frame(density=rbeta(10000,shape1 = fb$atotalbeta,shape2=fb$btotalbeta))
     #Lik <- data.frame(density=rbinom(n = 10000, size =  sum(input$n), prob = sum(input$y/input$n))/sum(input$n))
     post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' #; Lik$Distribution <- 'likelihood'
     triple <- rbind(post, pri)#, Lik)
-    p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust=0.2) +
+    p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust=1) +
       xlim(0, 1) + theme(legend.position="top") + scale_fill_brewer(palette="Dark2")
     
     S <- ggmcmc::ggs(Model1.mcmc)
-    levels(S$Parameter)[levels(S$Parameter)=="main.pstar.rep"]<-"True prevalence"
+    levels(S$Parameter)[levels(S$Parameter)=="main.ap"]<-"True prevalence"
     levels(S$Parameter)[levels(S$Parameter)=="main.tau0"]<-"Pr(zero prevalence)"
     p2<-ggs_traceplot(S,family = "main")
 #    SPre<-get_family(D = S,family = "pre")
@@ -834,10 +867,12 @@ shinyServer(function(input, output, session) {
     #   Parameter=paste("alpha[", radon$counties$id.county, "]", sep=""),
     #   value=radon$counties$uranium)
     # ggs_caterpillar(ggs(radon$s.radon, family="^alpha"), X=Z, horizontal=FALSE)
-    
+                 })
   },width = 'auto', heigh='auto')
   
   output$MultTRapp_Plot <- renderPlot({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 1, {
     source("Functions/gss.R",local=TRUE)
     if(input$ID_Informative=="Yes"){
       source("Functions/Jags_MultipleGroupsApp.R",local=TRUE)$value
@@ -850,7 +885,7 @@ shinyServer(function(input, output, session) {
     #lines(1:1000/1000,dbeta(seq(0,1,length.out = 1000),a,b),type = "l",col="red",lwd=5)
     #ggplot
     Model1.mcmc_df<<-data.frame(Model1.mcmc[[1]])
-    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
+    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
     pri <-  data.frame(density=rbeta(10000,shape1 = fb$atotalbeta,shape2=fb$btotalbeta))
     #mn=mean((sum(dataset()$positive/dataset()$n))/sum(dataset()$n))
     #tau=sd(dataset()$positive/dataset()$n)
@@ -860,11 +895,11 @@ shinyServer(function(input, output, session) {
     #                                 ))
     post$Distribution <- 'posterior' ; pri$Distribution <- 'prior'# ; Lik$Distribution <- 'likelihood'
     triple <- rbind(post, pri)#, Lik)
-     p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust=0.2) +
+     p1<-ggplot(triple, aes(density, fill = Distribution)) + geom_density(alpha = 0.2,adjust=1) +
        xlim(0, 1) + theme(legend.position="top") + scale_fill_brewer(palette="Dark2")
    
      S <- ggmcmc::ggs(Model1.mcmc)
-     levels(S$Parameter)[levels(S$Parameter)=="main.pstar.rep"]<-"Apparent prevalence"
+     levels(S$Parameter)[levels(S$Parameter)=="main.ap"]<-"Apparent prevalence"
      p2<-ggs_traceplot(S,family = "prevalence")
      
      SPre<-get_family(D = S,family = "pre")
@@ -886,7 +921,7 @@ shinyServer(function(input, output, session) {
     #   Parameter=paste("alpha[", radon$counties$id.county, "]", sep=""),
     #   value=radon$counties$uranium)
     # ggs_caterpillar(ggs(radon$s.radon, family="^alpha"), X=Z, horizontal=FALSE)
-    
+                 })
   },width = 'auto', heigh='auto')
   
   #----- Interactive conditional interface and inference plot for each model ------#
@@ -1023,6 +1058,8 @@ shinyServer(function(input, output, session) {
   })
 
   output$sliders_fb <- renderUI({
+    if(input$lower.value.fix=="Fixed"){
+      
     if(input$lower.value=="No"){
       sliderInput(inputId = "PercentileValue1",label = paste("Specify the upper or lower limit for the ",input$ID_MeanMedianMode," at the specified level of confidence: "), 
                   value = min(input$PercentileValue1,input$PriorMetric), min=0, max=1,step = 0.01)
@@ -1031,9 +1068,11 @@ shinyServer(function(input, output, session) {
                   value = max(input$PercentileValue1,input$PriorMetric), min=0, max=1,step = 0.01)
       
     }
+    }
   })
   output$sliders_fb_SE <- renderUI({
-    if(input$lower.value_SE=="No" ){
+    if(input$lower.value.fix=="Fixed"){
+      if(input$lower.value_SE=="No" ){
       sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the upper or lower limit for the sensitivity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SE,input$PriorMetric_SE), min=0, max=1,step = 0.01)
     }else{
@@ -1041,9 +1080,11 @@ shinyServer(function(input, output, session) {
                   value = max(input$PercentileValue1_SE,input$PriorMetric_SE), min=0, max=1,step = 0.01)
       
     }
+    }
   })
   output$sliders_fb_SP <- renderUI({
-    if(input$lower.value_SP=="No" ){
+    if(input$lower.value.fix=="Fixed"){
+      if(input$lower.value_SP=="No" ){
       sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SP,input$PriorMetric_SP), min=0, max=1,step = 0.01)
     }else{
@@ -1051,9 +1092,11 @@ shinyServer(function(input, output, session) {
                   value = max(input$PercentileValue1_SP,input$PriorMetric_SP), min=0, max=1,step = 0.01)
       
     }
+    }
   })
   output$sliders_fb2_SE <- renderUI({
-    if(input$lower.value2_SE=="No"){
+    if(input$lower.value.fix=="Fixed"){
+      if(input$lower.value2_SE=="No"){
       sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the upper or lower limit for the sensitivity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SE,input$PriorMetric2_SE), min=0, max=1,step = 0.01)
     }else{
@@ -1061,18 +1104,23 @@ shinyServer(function(input, output, session) {
                   value = max(input$PercentileValue1_SE,input$PriorMetric2_SE), min=0, max=1,step = 0.01)
       
     }
+    }
   })
   output$sliders_fb2_SP <- renderUI({
+    if(input$lower.value.fix=="Fixed"){
+      
     if(input$lower.value2_SP=="No"){
       sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SP,input$PriorMetric2_SP), min=0, max=1,step = 0.01)
     }else{
       sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
                   value = max(input$PercentileValue1_SP,input$PriorMetric2_SP), min=0, max=1,step = 0.01)
-      
+    }
     }
   })
   output$sliders_fb_tau0 <- renderUI({
+    if(input$lower.value.fix=="Fixed"){
+      
     if(input$lower.value_tau0=="No"){
       sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_tau0,input$PriorMetric_tau0), min=0, max=1,step = 0.01)
@@ -1081,8 +1129,11 @@ shinyServer(function(input, output, session) {
                   value = max(input$PercentileValue1_tau0,input$PriorMetric_tau0), min=0, max=1,step = 0.01)
       
     }
+    }
   })
   output$sliders_fb2_tau0 <- renderUI({
+    if(input$lower.value.fix=="Fixed"){
+      
     if(input$lower.value2_tau0=="No"){
       sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_tau0,input$PriorMetric2_tau0), min=0, max=1,step = 0.01)
@@ -1090,6 +1141,7 @@ shinyServer(function(input, output, session) {
       sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
                   value = max(input$PercentileValue1_tau0,input$PriorMetric2_tau0), min=0, max=1,step = 0.01)
       
+    }
     }
   })
   
@@ -1102,6 +1154,7 @@ shinyServer(function(input, output, session) {
   
   
   output$sliders2_fb <- renderUI({
+    if(input$lower.value.fix=="Fixed"){
     if(input$lower.value2=="No"){
       updateSliderInput(session = session,inputId = "PercentileValue2", label = "Specify the lower limit for the mean/median/mode at the specified level of confidence: ",
                   value = min(input$PercentileValue2,input$PriorMean2-0.01), min=0, max=1,step = 0.01)
@@ -1109,8 +1162,11 @@ shinyServer(function(input, output, session) {
       updateSliderInput(session = session,inputId = "PercentileValue2", label = "Specify the upper limit for the mean/median/mode at the specified level of confidence: ",
                   value = max(input$PercentileValue2,input$PriorMean2+0.01), min=0, max=1,step = 0.01)
     }
+    }
   })
   output$sliders22_fb <- renderUI({
+    if(input$lower.value.fix=="Fixed"){
+      
     if(input$lower.value2=="No"){
       updateSliderInput(session = session,inputId = "PercentileMedian2", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
                   value = max(input$PercentileValue2+0.001,input$PercentileMedian2,input$PriorMean2+0.001), min=0, max=1,step = 0.001)
@@ -1118,8 +1174,11 @@ shinyServer(function(input, output, session) {
       updateSliderInput(session = session,inputId = "PercentileMedian2", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
                   value = max(input$PercentileValue2+0.01,input$PercentileMedian2,input$PriorMean2+0.01), min=0, max=1,step = 0.01)
     }
+    }
   })
   output$sliders23_fb <- renderUI({
+    if(input$lower.value.fix=="Fixed"){
+      
     if(input$lower.value2=="No"){
       updateSliderInput(session = session,inputId = "Percentile95value2", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
                   value=max(input$Percentile95value2,input$PercentileMedian2+0.01), min=0, max=1, step = 0.01)
@@ -1127,9 +1186,12 @@ shinyServer(function(input, output, session) {
       updateSliderInput(session = session,inputId = "Percentile95value2", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
                   value=max(input$Percentile95value2,input$PercentileMedian2+0.01), min=0, max=1, step = 0.01)
     }
+    }
   })
  
   output$sliders2_SP_fb <- renderUI({
+    if(input$lower.value.fix=="Fixed"){
+      
     if(input$lower.value2_SP=="No"){
       updateSliderInput(session = session,inputId = "PercentileValue2_SP", label = "Specify the upper or lower limit for the mean/median/mode at the specified level of confidence: ",
                   value = min(input$PercentileValue2_SP,input$PriorMean2_SP-0.01), min=0, max=1,step = 0.01)
@@ -1137,8 +1199,11 @@ shinyServer(function(input, output, session) {
       updateSliderInput(session = session,inputId = "PercentileValue2_SP", label = "Specify the upper or lower limit for the mean/median/mode at the specified level of confidence: ",
                   value = max(input$PercentileValue2_SP,input$PriorMean2_SP+0.01), min=0, max=1,step = 0.01)
     }
+    }
   })
   output$sliders22_SP_fb <- renderUI({
+    if(input$lower.value.fix=="Fixed"){
+      
     if(input$lower.value2_SP=="No"){
       updateSliderInput(session = session,inputId = "PercentileMedian2_SP", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
                   value = max(input$PercentileValue2_SP+0.01,input$PercentileMedian2_SP,input$PriorMean2_SP+0.01), min=0, max=1,step = 0.01)
@@ -1146,18 +1211,23 @@ shinyServer(function(input, output, session) {
       updateSliderInput(session = session,inputId = "PercentileMedian2_SP", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
                   value = max(input$PercentileValue2_SP+0.01,input$PercentileMedian2_SP,input$PriorMean2_SP+0.01), min=0, max=1,step = 0.01)
     }
+    }
   })
   output$sliders23_SP_fb <- renderUI({
-    if(input$lower.value2_SP=="No"){
+    if(input$lower.value.fix=="Fixed"){
+      if(input$lower.value2_SP=="No"){
       updateSliderInput(session = session,inputId = "Percentile95value2_SP", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
                   min=0, max=1, value=max(input$Percentile95value2_SP,input$PercentileMedian2_SP+0.01),step = 0.01)
     }else{
       updateSliderInput(session = session,inputId = "Percentile95value2_SP", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
                   min=0, max=1, value=max(input$Percentile95value2_SP,input$PercentileMedian2_SP+0.01),step = 0.01)
+    }
     }
   })
 
   output$sliders2_SE_fb <- renderUI({
+    if(input$lower.value.fix=="Fixed"){
+      
     if(input$lower.value2_SE=="No"){
       updateSliderInput(session = session,inputId = "PercentileValue2_SE", label = "Specify the lower limit for the mean/median/mode at the specified level of confidence: ",
                   value = min(input$PercentileValue2_SE,input$PriorMean2_SE-0.01), min=0, max=1,step = 0.01)
@@ -1165,51 +1235,62 @@ shinyServer(function(input, output, session) {
       updateSliderInput(session = session,inputId = "PercentileValue2_SE", label = "Specify the upper limit for the mean/median/mode at the specified level of confidence: ",
                   value = max(input$PercentileValue2_SE,input$PriorMean2_SE+0.01), min=0, max=1,step = 0.01)
     }
+    }
   })
   output$sliders22_SE_fb <- renderUI({
-    if(input$lower.value2_SE=="No"){
+    if(input$lower.value.fix=="Fixed"){
+      if(input$lower.value2_SE=="No"){
       updateSliderInput(session = session,inputId = "PercentileMedian2_SE", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
                   value = max(input$PercentileValue2_SE+0.01,input$PercentileMedian2_SE,input$PriorMean2_SE+0.01), min=0, max=1,step = 0.01)
     }else{
       updateSliderInput(session = session,inputId = "PercentileMedian2_SE", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
                   value = max(input$PercentileValue2_SE+0.01,input$PercentileMedian2_SE,input$PriorMean2_SE+0.01), min=0, max=1,step = 0.01)
     }
+    }
   })
   output$sliders23_SE_fb <- renderUI({
-    if(input$lower.value2_SE=="No"){
+    if(input$lower.value.fix=="Fixed"){
+      if(input$lower.value2_SE=="No"){
       updateSliderInput(session = session,inputId = "Percentile95value2_SE", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
                   value=max(input$Percentile95value2_SE,input$PercentileMedian2_SE+0.01), min=0, max=1, step = 0.01)
     }else{
       updateSliderInput(session = session,inputId = "Percentile95value2", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
                   value=max(input$Percentile95value2_SE,input$PercentileMedian2_SE+0.01), min=0, max=1, step = 0.01)
     }
+    }
   })
 
   output$sliders_qq_fb<-renderUI({ 
+    if(input$lower.value.fix=="Fixed"){
     sliderInput(inputId = "PercentileValue3_2", label = "Specify the value for the 2nd percentile", 
                 min=0, max=1, value=max(input$PercentileValue3_1+0.01,input$PercentileValue3_2),step = 0.01)
-    
+    }
   })
   output$sliders_qq22_fb<-renderUI({ 
+    if(input$lower.value.fix=="Fixed"){
+      
     sliderInput(inputId = "PercentileValue3_2", label = "Specify the value for the 2nd percentile", 
                 min=0, max=1, value=max(input$PercentileValue3_1+0.01,input$PercentileValue3_2),step = 0.01)
-    
+    }
   })
   output$sliders_qq22_SE_fb<-renderUI({ 
-    sliderInput(inputId = "PercentileValue3_2_SE", label = "Specify the value for the 2nd percentile", 
+    if(input$lower.value.fix=="Fixed"){
+      sliderInput(inputId = "PercentileValue3_2_SE", label = "Specify the value for the 2nd percentile", 
                 min=0, max=1, value=max(input$PercentileValue3_1_SE+0.01,input$PercentileValue3_2_SE),step = 0.01)
-    
+    }
   })
   output$sliders_qq22_SP_fb<-renderUI({ 
-    sliderInput(inputId = "PercentileValue3_2_SP", label = "Specify the value for the 2nd percentile", 
+    if(input$lower.value.fix=="Fixed"){
+      sliderInput(inputId = "PercentileValue3_2_SP", label = "Specify the value for the 2nd percentile", 
                 min=0, max=1, value=max(input$PercentileValue3_1_SP+0.01,input$PercentileValue3_2_SP),step = 0.01)
-    
+    }
   })
   output$sliders_qq22_tau0_fb<-renderUI({ 
-    sliderInput(inputId = "PercentileValue3_2_tau0", label = "Specify the value for the 2nd percentile", 
+    if(input$lower.value.fix=="Fixed"){
+      sliderInput(inputId = "PercentileValue3_2_tau0", label = "Specify the value for the 2nd percentile", 
                 min=0, max=1, value=max(input$PercentileValue3_1_tau0+0.01,input$PercentileValue3_2_tau0),step = 0.01)
-    
-  })  
+    }
+  })
   
   
   outputOptions(output, "sliders2_fb", suspendWhenHidden = FALSE)
@@ -1252,7 +1333,7 @@ shinyServer(function(input, output, session) {
       paste("JagsModel.rData")
     },
     content = function(file) {
-      save(generic_jags, file = file)
+      save(model_out, file = file)
     }
   )
   output$downloadData <- downloadHandler(
@@ -1427,6 +1508,8 @@ shinyServer(function(input, output, session) {
   
   #--------  Report rmakdown --------#
   output$Rmark <- renderUI({
+    withProgress(message = 'Calculation in progress',
+                 detail = 'This may take a while...', value = 0.8, {
     if(input$ID_Informative=="No"){
       if(input$ID_SingleMultiple=="Multiple"){
         temp<-"TPpre_Report_Mult.Rmd"
@@ -1448,7 +1531,8 @@ shinyServer(function(input, output, session) {
       }
     }
     includeHTML(render(paste0("./Rmarkdown/",temp), quiet = TRUE,output_format = "html_document"))
-  })
+                 })
+      })
   
   #------- Load multiple datasets -------#
   dataset<<- reactive({

@@ -17,5 +17,6 @@ generic_jags<-jagsoutput_Appa<-rjags::jags.model(data=list(n=input$n,y=input$y,m
 Model1.mcmc <<- coda.samples(jagsoutput_Appa,  n.iter=input$nniter,thin =input$nnthin,
                              variable.names=SaveParams,seed=998)
 
+model_out<<-generic_jags$model()
 
 return(Model1.mcmc)

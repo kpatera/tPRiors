@@ -20,8 +20,8 @@ main.Sp ~ dbeta(asp, bsp) I(0.001,0.999)
 y.pre ~ dbin(main.pstar.rep,m)
 
 main.pstar.rep ~ dbeta(alpha,beta)
-pre.pequal0 <- equals(main.pstar.rep,0)
-pre.plessthan0.05 <- step(0.05-main.pstar.rep)
+pre.pequal0 <- equals(main.ap,0)
+pre.plessthan0.05 <- step(0.05-main.ap)
 plessthanSetvalue <- step(perVal-main.ap)
 
 }", file=paste("TrePreMultiple.txt"))
@@ -65,5 +65,6 @@ Model1.mcmc <<- coda.samples(jagsoutput_TrueMult,
                             n.iter=10000,thin =4,
                             variable.names=SaveParams,seed=998)
 
+model_out<<-generic_jags$model()
 
 return(Model1.mcmc)

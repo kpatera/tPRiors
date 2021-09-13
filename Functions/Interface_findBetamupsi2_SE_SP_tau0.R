@@ -21,7 +21,11 @@ sidebarPanel(width = 4,
                         sliderInput(inputId = "PercentileMedian2", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ", 
                                     value = 0.8, min=0, max=1,step = 0.005),
                         sliderInput(inputId = "Percentile95value2", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile", 
-                                    value=0.9, min=0, max=1, step = 0.005)
+                                    value=0.9, min=0, max=1, step = 0.005),
+                        h5("Caution! Press 'set priors' only when all values are set. "),
+                        radioButtons(inputId = "lower.value.fix", 
+                                     label=paste("In case 1 slider gets stuck, select 'Patch', wait and select 'Fixed' to continue"),choices=c("Fixed","Patch"),
+                                     selected="Fixed", inline = T)
                ),
                tabPanel("ZeroP",
                         hr(),
@@ -33,10 +37,10 @@ sidebarPanel(width = 4,
                         radioButtons(inputId = "lower.value2_tau0", 
                                      label=paste("Is the percentile the upper limit of the",input$ID_MeanMedianMode,"?"), choices=c("Yes","No"),
                                      selected="No",inline = T),
+                        uiOutput("sliders_fb2_tau0"),
                         sliderInput(inputId = "Percentile2_tau0", 
                                     label = paste("Specify the level of confidence that the true value of the",input$ID_MeanMedianMode,"is greater or lower than the percentile.value: "),
-                                    min=0, max=1, value=0.95,step = 0.01),
-                        uiOutput("sliders_fb2_tau0")
+                                    min=0, max=1, value=0.95,step = 0.01)
                         
                ),
                tabPanel("Se",
@@ -49,10 +53,10 @@ sidebarPanel(width = 4,
                         radioButtons(inputId = "lower.value2_SE", 
                                      label=paste("Is the percentile the upper limit of the",input$ID_MeanMedianMode,"?"), choices=c("Yes","No"),
                                      selected="No",inline = T),
+                        uiOutput("sliders_fb2_SE"),
                         sliderInput(inputId = "Percentile2_SE", 
                                     label = paste("Specify the level of confidence that the true value of the",input$ID_MeanMedianMode,"is greater or lower than the percentile.value: "),
-                                    min=0, max=1, value=0.95,step = 0.01),
-                        uiOutput("sliders_fb2_SE")
+                                    min=0, max=1, value=0.95,step = 0.01)
                ),
                tabPanel("Sp",
                         hr(),
@@ -64,10 +68,10 @@ sidebarPanel(width = 4,
                         radioButtons(inputId = "lower.value2_SP", 
                                      label=paste("Is the percentile the upper limit of the",input$ID_MeanMedianMode,"?"), choices=c("Yes","No"),
                                      selected="No",inline = T),
+                        uiOutput("sliders_fb2_SP"),
                         sliderInput(inputId = "Percentile2_SP", 
                                     label = paste("Specify the level of confidence that the true value of the",input$ID_MeanMedianMode,"is greater or lower than the percentile.value: "),
-                                    min=0, max=1, value=0.95,step = 0.01),
-                        uiOutput("sliders_fb2_SP")
+                                    min=0, max=1, value=0.95,step = 0.01)
                )
              ),
              div(style="display:inline-block;width:30%;text-align: left;",actionButton("buttonPriorReset", "Reset tPriors"),style=icon("check")),
