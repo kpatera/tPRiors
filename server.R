@@ -214,6 +214,7 @@ shinyServer(function(input, output, session) {
     x<-seq(0,1,length.out = 10000)
     Prevalence<-dbeta(x = x,shape1 = fb$a,shape2 = fb$b)
     Prob.Zero.Prev<-dbeta(x = x,shape1 = fb_tau0$a,shape2 = fb_tau0$b)
+    mean.Prob.Zero.Prev<<-round((fb_tau0$a)/(fb_tau0$a+fb_tau0$b),3)
     Sensitivity<-dbeta(x = x,shape1 = fb_SE$a,shape2 = fb_SE$b)
     Specificity<-dbeta(x = x,shape1 = fb_SP$a,shape2 = fb_SP$b)
     df1 <- data.frame(x, Prevalence,Prob.Zero.Prev)
@@ -428,6 +429,7 @@ shinyServer(function(input, output, session) {
     x<-seq(0,1,length.out = 10000)
     Prev.Prevalence<-dbeta(x = x,shape1 = fb$atotalbeta,shape2 = fb$btotalbeta)
     Prob.Zero.Prev<-dbeta(x = x,shape1 = fb_tau0$a,shape2 = fb_tau0$b)
+    mean.Prob.Zero.Prev<<-round((fb_tau0$a)/(fb_tau0$a+fb_tau0$b),3)
     
     Sensitivity<-dbeta(x = x,shape1 = fb_SE$a,shape2 = fb_SE$b)
     Specificity<-dbeta(x = x,shape1 = fb_SP$a,shape2 = fb_SP$b)
@@ -559,6 +561,7 @@ shinyServer(function(input, output, session) {
     x<-seq(0,1,length.out = 10000)
     Prevalence<-dbeta(x = x,shape1 = fb$a,shape2 = fb$b)
     Prob.Zero.Prev<-dbeta(x = x,shape1 = fb_tau0$a,shape2 = fb_tau0$b)
+    mean.Prob.Zero.Prev<<-round((fb_tau0$a)/(fb_tau0$a+fb_tau0$b),3)
     Sensitivity<-dbeta(x = x,shape1 = fb_SE$a,shape2 = fb_SE$b)
     Specificity<-dbeta(x = x,shape1 = fb_SP$a,shape2 = fb_SP$b)
     df1 <- data.frame(x, Prevalence,Prob.Zero.Prev)
@@ -1350,6 +1353,16 @@ shinyServer(function(input, output, session) {
       
     }
   )
+  
+  output$downloadFile <- downloadHandler(
+    filename <- function(){
+      paste("ExampleFile.xlsx")
+    },
+    content = function(file) {
+      write.xlsx(x = Example2_40Studies_2cols, file = file)
+    }
+  )
+  
   output$downloadReport <- downloadHandler( # STILL OPEN
     filename = function() {
       paste("my-report", sep = ".", switch(
@@ -1449,8 +1462,13 @@ shinyServer(function(input, output, session) {
   })
   #-------- Fix buttons ----------#
   observeEvent(input$buttonSetup,{
+    if(input$ID_Informative=="Yes"){
+      TrueApp<-input$ID_TrueApp
+    }else{
+      TrueApp<-"Apparent prevalence"
+    }
     priors$temp<-"Status: 'Set'";
-    priors$temp2<-paste("Your input assumes that: \n 1. ",input$ID_SingleMultiple," will be modelled, \n 2. ",input$ID_ZeroPrevalence,", zero prevalence will be modelled, 3. the ",input$ID_TrueApp," will be modelled and \n 4. ",input$ID_Informative," informative prior(s) will be modelled",sep="")
+    priors$temp2<-paste("Your input assumes that: \n 1. ",input$ID_SingleMultiple," will be modelled, \n 2. ",input$ID_ZeroPrevalence,", zero prevalence will be modelled, 3. the ",TrueApp, " will be modelled and \n 4. ",input$ID_Informative," informative prior(s) will be modelled",sep="")
     priors$icons<-"thumbs-up"#   prior_cond<<-" "
     priors$color<-"green"
     priors$SetupPriors<-TRUE

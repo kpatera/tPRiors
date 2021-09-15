@@ -63,7 +63,7 @@ A summary of the input data is provided below
 
 ```{r echo=FALSE}
 #"Position of Data Table"
-paste0("If modelled, the assumed probability for non-zero prevalence was set equal to ", input$tau0)
+paste0("If modelled, the assumed mean probability for non-zero prevalence was set equal to ", mean.Prob.Zero.Prev)
 dataTableOutput("dtst")
 
 ```

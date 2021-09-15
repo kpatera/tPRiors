@@ -1,11 +1,11 @@
 # OPEN (Moderate) Timer for priors/analysis.
 # 2. OPEN (Large) - Allow for the ability to change different options (i.e. mean median percentile)  
-  #for different prior specifications. So can we move this option at the beginning of each prior tag?
+#for different prior specifications. So can we move this option at the beginning of each prior tag?
 #---- Load packages ----#
-packages.list<-c("shiny","shinythemes","shinyWidgets","shinydashboard",
-                 "PriorGen","R2jags","ggplot2","tidyr","rjags",
+packages.list<-c("shiny","shinythemes","shinyWidgets","shinydashboard","shinycssloaders",
+                 "PriorGen","R2jags","ggplot2","tidyr","rjags","xlsx",
                  "shinyjs","rmarkdown","markdown","plotly","ggmcmc","knitr","shinyalert",
-                 "grid","DT","readxl","gridExtra","psych","rootSolve","devtools") # ,
+                 "grid","DT","readxl","gridExtra","psych","rootSolve","devtools","gdata","gtools","waiter") # ,
 #packages.new <- packages.list[!(packages.list %in% installed.packages()[,"Package"])]
 #install.packages(packages.new);rm(packages.new)
 lapply(packages.list, require, character.only = TRUE); rm(packages.list)
@@ -26,3 +26,4 @@ Example2_40Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_At
 #Example3_102Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_NonAttica.xlsx"))
 Example4_129studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d.xlsx"))
 name_data<-"sidebar user input"
+Example2_40Studies_2cols <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_Attica.xlsx"))[,1:2]

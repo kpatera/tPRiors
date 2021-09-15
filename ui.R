@@ -47,6 +47,7 @@ shinyUI(
                                                                            "No"),
                                      label = 'Would you specify informative priors?',
                                      selected = "Yes",inline = TRUE),
+                        h6("If No, then the apparent prevalence will be modelled"),
                         hr(),
                         uiOutput("metric_fb"),
                         hr(),
