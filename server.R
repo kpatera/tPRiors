@@ -1125,10 +1125,10 @@ shinyServer(function(input, output, session) {
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value_tau0=="No"){
-      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the non-zero prevalence at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_tau0,input$PriorMetric_tau0), min=0, max=1,step = 0.01)
     }else{
-      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the non-zero prevalence at the specified level of confidence: "), 
                   value = max(input$PercentileValue1_tau0,input$PriorMetric_tau0), min=0, max=1,step = 0.01)
       
     }
@@ -1138,10 +1138,10 @@ shinyServer(function(input, output, session) {
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value2_tau0=="No"){
-      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the non-zero prevalence at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_tau0,input$PriorMetric2_tau0), min=0, max=1,step = 0.01)
     }else{
-      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the non-zero prevalence at the specified level of confidence: "), 
                   value = max(input$PercentileValue1_tau0,input$PriorMetric2_tau0), min=0, max=1,step = 0.01)
       
     }

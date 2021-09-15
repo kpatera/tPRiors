@@ -13,7 +13,7 @@ sidebarPanel(width = 4,
                         uiOutput("sliders_fb"),
                         sliderInput(inputId = "Percentile1", 
                                     label = paste("Specify the level of confidence that the true value of the",input$ID_MeanMedianMode,"is greater or lower than the percentile.value: "),
-                                    min=0, max=1, value=0.95,step = 0.01),
+                                    min=0.51, max=1, value=0.95,step = 0.01),
                         h5("Caution! Press 'set priors' only when all values are set. "),
                         radioButtons(inputId = "lower.value.fix", 
                                      label=paste("In case 1 slider gets stuck, select 'Patch', wait and select 'Fixed' to continue"),choices=c("Fixed","Patch"),
@@ -32,7 +32,7 @@ sidebarPanel(width = 4,
                         uiOutput("sliders_fb_SE"),
                         sliderInput(inputId = "Percentile1_SE", 
                                     label = paste("Specify the level of confidence that the true value of the",input$ID_MeanMedianMode,"is greater or lower than the percentile.value: "),
-                                    min=0, max=1, value=0.95,step = 0.01)
+                                    min=0.51, max=1, value=0.95,step = 0.01)
                ),
                tabPanel("Specificity",  
                         hr(),
@@ -47,7 +47,7 @@ sidebarPanel(width = 4,
                         uiOutput("sliders_fb_SP"),
                         sliderInput(inputId = "Percentile1_SP", 
                                     label = paste("Specify the level of confidence that the true value of the",input$ID_MeanMedianMode,"is greater or lower than the percentile.value: "),
-                                    min=0, max=1, value=0.95,step = 0.01)
+                                    min=0.51, max=1, value=0.95,step = 0.01)
                )
              ),
              div(style="display:inline-block;width:30%;text-align: left;",actionButton("buttonPriorReset", "Reset tPriors"),style=icon("check")),
