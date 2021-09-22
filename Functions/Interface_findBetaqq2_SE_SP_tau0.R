@@ -13,7 +13,11 @@ sidebarPanel(width = 4,
                         uiOutput("sliders_qq22_fb"),
                         sliderInput(inputId = "Percentile3_2", 
                                     label="Specify which is the percentile that corresponds to the above 2nd percentile: ",
-                                    min=0, max=1, value=0.8,step = 0.01)
+                                    min=0, max=1, value=0.8,step = 0.01),
+                        h5("Caution! Press 'set priors' only when all values are set. "),
+                        radioButtons(inputId = "lower.value.fix", 
+                                     label=paste("In case 1 slider gets stuck, select 'Patch', wait and select 'Fixed' to continue"),choices=c("Fixed","Patch"),
+                                     selected="Fixed", inline = T)
                ),
                tabPanel("ZeroP",
                         hr(),

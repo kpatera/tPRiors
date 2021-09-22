@@ -15,7 +15,7 @@ lapply(packages.list, require, character.only = TRUE); rm(packages.list)
 Funcs<-c("findbeta2.R","findbetaqq2.R","findbetamupsi.R","findbetamupsi2.R","ggs_density.R",
          "get_family.R","multiroot.R","perturb.R","gss.R")
 invisible(lapply(Funcs,function(i){ source(paste("Functions/",i,sep="")) }))
-
+Model1.mcmc<<-NULL
 #---- Create temp variable for Rmarkdown reports and plotting ----#
 fb<-list(1,1)
 

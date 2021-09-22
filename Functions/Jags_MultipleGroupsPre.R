@@ -62,7 +62,7 @@ generic_jags<-jagsoutput_TrueMult<-rjags::jags.model(data=list(n=dtst$n,y=dtst$p
 #                             variable.names=SaveParams,seed=998)
 
 Model1.mcmc <<- coda.samples(jagsoutput_TrueMult,
-                            n.iter=10000,thin =4,
+                            n.iter=input$nniter,thin =input$nnthin,
                             variable.names=SaveParams,seed=998)
 
 model_out<<-generic_jags$model()
