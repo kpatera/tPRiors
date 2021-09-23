@@ -1055,7 +1055,7 @@ shinyServer(function(input, output, session) {
                       "Example2_40Studies" = "Example2_40Studies",
                       "Example4_129studies" = "Example4_129studies"))
       }else{
-        fileInput(inputId = "Indata2", label = "Choose .xls/.csv file",
+        fileInput(inputId = "Indata2", label = "Choose .xls/.xlsx file",
                   accept = c(
                     "text/csv",
                     "text/comma-separated-values,text/plain",
@@ -1370,6 +1370,13 @@ shinyServer(function(input, output, session) {
       write.xlsx(x = Example2_40Studies_2cols, file = file)
     }
   )
+  
+  url <- a("Click here", href="https://1drv.ms/x/s!Ag8vFzeTRzBthzImmQV_nEDdj4Uy?e=BjwmQL")
+  output$tab <- renderUI({
+    tagList("For an example file:", url)
+  })
+  
+  
   
   output$downloadReport <- downloadHandler( # STILL OPEN
     filename = function() {

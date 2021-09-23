@@ -1,7 +1,8 @@
 sidebarPanel(width = 4,
              tabsetPanel(
                tabPanel("Data input",
-                        downloadButton("downloadFile",label = "Download example file"),
+                        uiOutput("tab"),
+                        #downloadButton("downloadFile",label = "Download example file"),
                         radioButtons("LoadData", "Load dataset:",
                                      c("Preload" = "Option1Preload",
                                        "Upload" = "Option2Upload"),inline = TRUE),
