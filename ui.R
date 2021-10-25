@@ -12,7 +12,7 @@ shinyUI(
                                 h4("Below the user can find a brief description of the shiny application functions and options."),
                                 h5("(a) In tab (Set up) the user following questions can fix the parameters of the analysis (Choose model, priors, special characteristics) "),
                                 h5("(b) In tab (Priors) the user can elicitate the prior distribution(s) with the aid of sliders and visual confirmation"),
-                                h5("(c) In tab (Model) the user inputs the observed data and Jags sampling characteristics. A basic inference plot is presented. For multiple population the model may take some time to run."),
+                                h5("(c) In tab (I & O) the user inputs the observed data and Jags sampling characteristics. A basic inference plot is presented. For multiple population both step 1 and step 2 should be selected before you proceed."),
                                 h5("(d) In tab (Report) the program returns a dynamic output that changes based on (a), (b) and (c)."),
                                 h5("(e) In tab (Acks) acknoweledgments and useful links can be found."),
                                 br(),
@@ -20,7 +20,7 @@ shinyUI(
                                 br(),
                                 #h5("Note: If the sliders in tab (Priors) act not normal, press the Reset button and try again."),
                                 #hr(),
-                                h5("The development of tPRiors was funded by H2020 project unCoVer:Unravelling Data for Rapid Evidence-Based Response. More details can be found in the manuscript, K Pateras and P Kostoulas, tPRiors: An R Shiny tool for generating prior and producing posterior distributions for disease prevalence"),
+                                h5("The development of tPRiors was funded by H2020 project unCoVer:Unravelling Data for Rapid Evidence-Based Response. More details can be found in the manuscript, K Pateras and P Kostoulas, tPRiors: tPRiors: A tool for prior elicitation and obtaining posterior distributions of true disease prevalence"),
                                 hr(),
                                 br(),
                                 fluidRow(
