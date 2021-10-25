@@ -1,10 +1,10 @@
-# OPEN - Allow for the ability to change different options (i.e. mean median percentile)  
-#for different prior specifications. So can we move this option at the beginning of each prior tag?
 #---- Load packages ----#
 packages.list<-c("shiny","shinythemes","shinyWidgets","shinydashboard","shinycssloaders",
                  "PriorGen","R2jags","ggplot2","tidyr","rjags","xlsx","writexl",
                  "shinyjs","rmarkdown","markdown","plotly","ggmcmc","knitr","shinyalert",
                  "grid","DT","readxl","gridExtra","psych","rootSolve","devtools","gdata","gtools","waiter") # ,
+
+# Remove comment # of the next 2 lines during the first local run.
 #packages.new <- packages.list[!(packages.list %in% installed.packages()[,"Package"])]
 #install.packages(packages.new);rm(packages.new)
 lapply(packages.list, require, character.only = TRUE); rm(packages.list)
