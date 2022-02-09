@@ -24,6 +24,8 @@ Example1_4Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_4st
 Example2_40Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_Attica.xlsx"))
 #Example3_102Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_NonAttica.xlsx"))
 Example4_129studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d.xlsx"))
+Dementia_Motivating <<- data.frame(read_excel("Data/Dementia_Updated.xls"))
+
 name_data<-"sidebar user input"
 # Example2_40Studies_2cols <<- structure(list(positive = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
 #                                                          1, 0, 1, 1, 2, 3, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 2, 0, 2, 1, 2, 

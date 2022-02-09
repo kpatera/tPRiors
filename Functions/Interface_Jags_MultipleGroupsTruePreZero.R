@@ -8,9 +8,10 @@ sidebarPanel(width = 4,
                                        "Upload" = "Option2Upload"),inline = TRUE),
                         uiOutput("MultiDataset_fb"),
                         # sliderInput("tau0", "Probability for non-zero prevalence: ",min = 0, max = 1, value = 0.01, step=0.01),
-                        sliderInput("perVal", "Set prevalence checkpoint: ",min = 0, max = 1, value = 0.05, step=0.01),
-                        div(style="display:inline-block;width:45%;text-align: left;",actionButton("buttonModelReset", "Reset tPriors"),style=icon("check")),
-                        div(style="display:inline-block;width:45%;text-align: right;",actionButton("buttonFixModel", "Fix model"),style=icon("check"))             
+                        sliderInput("perVal", "Set a prevalence checkpoint/threshold value (c), to calculate the Pr(Prevalence>c): ",min = 0, max = 1, value = 0.05,step= 0.01),
+                        div(style="display:inline-block;width:45%;text-align: left;",actionButton("buttonModelReset", "Soft reset"),style=icon("check")),
+                        div(style="display:inline-block;width:45%;text-align: right;",actionButton("buttonFixModel", "Fix model "),style=icon("check")),
+                        h5("(After fixing the model, click on Step 2 tab before moving to the report)")
                ),
                tabPanel("MCMC input",
                         numericInput("nniter", "Number of MCMC iterations: ",min = 10, max = 100000, value = 10000),

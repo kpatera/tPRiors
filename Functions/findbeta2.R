@@ -60,6 +60,9 @@ findbeta2<-function (themean = NULL, themedian = NULL, themode = NULL,
   }
   
   sample_beta = rbeta(10000, finalshape1, finalshape2)
+  summary(sample_beta)
+  var(sample_beta)
+  print(round(quantile(sample_beta,probs=c(0.01,0.1,0.5,0.9,0.99)),3))
   
   return(
     list(a = round(finalshape1, 2), 

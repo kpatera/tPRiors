@@ -13,9 +13,10 @@ findbeta2<-function (themean = 0.3, percentile = 0.95, lower.v = F, variance=0.6
   shape1=themean-k
   shape2=themean+k
   shape1;shape2
-  summary(runif(100000,shape1,shape2))
-  var(runif(100000,shape1,shape2))
-  
+  out<-runif(100000,shape1,shape2)
+  summary(out)
+  var(out)
+  print(round(quantile(out,probs=c(0.01,0.1,0.5,0.9,0.99)),3))
   return(
     list(a = round(shape1, 2), 
          b = round(shape2, 2),

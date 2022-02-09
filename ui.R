@@ -11,15 +11,15 @@ shinyUI(
                                 br(),
                                 h4("Below the user can find a brief description of the shiny application functions and options."),
                                 h5("(a) In tab (Set up) the user following questions can fix the parameters of the analysis (Choose model, priors, special characteristics) "),
-                                h5("(b) In tab (Priors) the user can elicitate the prior distribution(s) with the aid of sliders and visual confirmation"),
-                                h5("(c) In tab (I & O) the user inputs the observed data and Jags sampling characteristics. A basic inference plot is presented. For multiple population both step 1 and step 2 should be selected before you proceed."),
+                                h5("(b) In tab (Prior(s)) the user can elicitate the prior distribution(s) with the aid of sliders and visual confirmation"),
+                                h5("(c) In tab (I|nput & O|utput) the user inputs the observed data and Jags sampling characteristics. A basic inference plot is presented. For multiple population both step 1 and step 2 should be selected before you proceed."),
                                 h5("(d) In tab (Report) the program returns a dynamic output that changes based on (a), (b) and (c)."),
-                                h5("(e) In tab (Acks) acknoweledgments and useful links can be found."),
+                                h5("(e) In tab (Acks) acknoweledgments and Frequently Asked Questions (FAQ) can be found."),
                                 br(),
-                                h5("Settings may still be changed even after a tab has been fixed by the user. Though, we advise users to perform a 'Reset' of |tPRiors| when they want to change a previously fixed setting."),
+                                h5("Settings may still be changed even after a tab has been fixed by the user. Though, we advise users to perform a 'Reset' of |tPRiors| when they want to change a previously fixed setting. We also advice users to perform a 'Refresh' of the web page tPRiors when they perform a different analysis"),
                                 br(),
-                                #h5("Note: If the sliders in tab (Priors) act not normal, press the Reset button and try again."),
-                                #hr(),
+                                h5("A template file of a multiple population example can be found ", a("here", href="https://1drv.ms/x/s!Ag8vFzeTRzBthzImmQV_nEDdj4Uy?e=BjwmQL"),". It is essential that at least two columns exist in the spreasheet one named 'positive' and one named 'n'"),
+                                hr(),
                                 h5("The development of tPRiors was funded by H2020 project unCoVer:Unravelling Data for Rapid Evidence-Based Response. More details can be found in the manuscript, K Pateras and P Kostoulas, tPRiors: tPRiors: A tool for prior elicitation and obtaining posterior distributions of true disease prevalence"),
                                 hr(),
                                 br(),
@@ -51,7 +51,7 @@ shinyUI(
                         hr(),
                         uiOutput("metric_fb"),
                         hr(),
-                        div(style="display:inline-block;width:45%;text-align: left;",actionButton("buttonReset", "Reset tPRiors"),style=icon("check")),
+                        div(style="display:inline-block;width:45%;text-align: left;",actionButton("buttonReset", "Soft reset"),style=icon("check")),
                         div(style="display:inline-block;width:45%;text-align: right;",actionButton("buttonSetup", "Fix setup!"),style=icon("check")),
                       ),
                       mainPanel(
@@ -122,7 +122,31 @@ shinyUI(
                         fluidRow(
                           box(align="center",width = 4,background = "orange",h3("R2jags")),
                           box(align="center",width = 4,background = "orange",h3("ggmcmc")),
-                          box(align="center",width = 4,background = "orange",h3("PriorGen")))
+                          box(align="center",width = 4,background = "orange",h3("PriorGen"))),
+                        
+                        br(),
+                        h2("Frequently asked questions (FAQ)"),
+                        h3("Q1: I run a single population example and instead for a report, I receive an error 'Error: An error has occurred. Check your logs or contact the app author for clarification'. What should I do? "),
+                        h5("Answer: The most common reason for this error in the single population setting would be improper prior spefications. Avoid eliciting extreme prior densities (very informative as in a single point or very vague densities across the parameter space) "),
+                        h3("Q2: What to do if a set-up does not produce a valid prior firuge in page 'priors'?"),
+                        h5("Answer: If the movement of a slider produces a warning message, slightly move the slider to the other direction."),
+                        h3("Q3: What do to if a slider in the page 'priors' gets stuck and it starts jumping around?"),
+                        h5("Answer: This behaviour is only observed if the button 'Set priors' has been clicked and consequently the user performs ad-hoc changes. We suggest eliciting priors before visualizing them by pressing the 'set priors' button. We provide an ad-hoc solution to the user, in case the situation appears. In case any slider gets stuck, select 'Patch', wait and select 'Fixed' to continue. The analysis can continue and finish properly."),
+                        h3("Q4: When using the percentile approach to elicit priors, the prior is not defined and error occurs"),
+                        h5("Answer: If the user inputs a very small value for the 1st percentile and a very large value for the 2nd percentile the prior will not be defined."),
+                        h3("Q5: I run a multiple population example and instead for a report, I receive an error 'Error: An error has occurred. Check your logs or contact the app author for clarification'. What should I do? "),
+                        h5("Answer: Before cliking on the report page, make sure that both Step 1. and Step 2. tabs have to be selected to run the multiple-population models."),
+                        h3("Q6: When should I press the 'Set prior' button?"),
+                        h5("Answer: This button is only displayed on the 1st prior tab and it should be clicked when priors for all parameters are elicited. Then, the user should wait until the prior figures are plotted on the white space on the right side of the application. If no figure is properly plotted, then the prior elicitation has not been performed properly. "),
+                        h3("Q7: How to perform a reset of the |tPRiors| application?"),
+                        h5("Answer: We advise users to reset the application by refreshing the webpage. For a quicker soft reset the corresponding button can be clicked on each page."),
+                        h3("Q8: How to interpret the diagnostic plots? Is my analysis valid?"),
+                        h5("Answer: Most diagnostic plots show convergence issues. Some points to consider 1. The simple density plots can show abnormalities in the posterior densities ,2. The multiple chain density plots must contain densities of different chains that mostly coincide ,3. MCMC trace plots should depict chains that cross often  4. The ergodic mean and the correlation plot should very quickly move towards the mean and zero respectively, otherwise the user should increase the thinning interval and/or the number of MCMC samples."),
+                        h3("Q9: Some diagnostic plots look abnormal, can I still use the final report?"),
+                        h5("Answer: First, the user should try to make corrections (see accompanying manuscript). In case one of the diagnostics still slightly point towards non-convergence or high autocorrelation the users should read the report with caution if not at all."),
+                        br(),
+                        h6("In case you have a question that is not covered by this FAQ, please contact the authors on the following e-mails: kostas.pateras(at)gmail.com, pkost(at)uth.gr")
+                        
                       )    
              )
   )

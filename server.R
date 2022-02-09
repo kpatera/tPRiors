@@ -1051,9 +1051,11 @@ shinyServer(function(input, output, session) {
     if(input$ID_SingleMultiple=="Multiple"){
       if(input$LoadData=="Option1Preload"){
         selectInput("Indata1", "Dataset:",
-                    c("Example1_4Studies" = "Example1_4Studies",
+                    c("Dementia_Motivating"="Dementia_Motivating",
+                      "Example1_4Studies" = "Example1_4Studies",
                       "Example2_40Studies" = "Example2_40Studies",
-                      "Example4_129studies" = "Example4_129studies"))
+                      "Example4_129studies" = "Example4_129studies"),
+                    selected = "Dementia_Motivating")
       }else{
         fileInput(inputId = "Indata2", label = "Choose .xls/.xlsx file",
                   accept = c(
@@ -1072,10 +1074,10 @@ shinyServer(function(input, output, session) {
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value=="No"){
-      sliderInput(inputId = "PercentileValue1",label = paste("Specify the upper or lower limit for the ",input$ID_MeanMedianMode," at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1",label = paste("Specify the percentile limit (pev) for the ",input$ID_MeanMedianMode,"of the",input$ID_TrueApp," at the specified level of confidence: "), 
                   value = min(input$PercentileValue1,input$PriorMetric), min=0, max=1,step = 0.01)
     }else{
-      sliderInput(inputId = "PercentileValue1",label = paste("Specify the upper or lower limit for the ",input$ID_MeanMedianMode," at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1",label = paste("Specify the percentile limit (pev) for the ",input$ID_MeanMedianMode,"of the",input$ID_TrueApp," at the specified level of confidence: "), 
                   value = max(input$PercentileValue1,input$PriorMetric), min=0, max=1,step = 0.01)
       
     }
@@ -1084,10 +1086,10 @@ shinyServer(function(input, output, session) {
   output$sliders_fb_SE <- renderUI({
     if(input$lower.value.fix=="Fixed"){
       if(input$lower.value_SE=="No" ){
-      sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the upper or lower limit for the sensitivity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the percentile limit (pev) for the",input$ID_MeanMedianMode,"of the Sensitivity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SE,input$PriorMetric_SE), min=0, max=1,step = 0.01)
     }else{
-      sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the upper or lower limit for the sensitivity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the percentile limit (pev) for the",input$ID_MeanMedianMode,"of the Sensitivity at the specified level of confidence: "), 
                   value = max(input$PercentileValue1_SE,input$PriorMetric_SE), min=0, max=1,step = 0.01)
       
     }
@@ -1096,22 +1098,23 @@ shinyServer(function(input, output, session) {
   output$sliders_fb_SP <- renderUI({
     if(input$lower.value.fix=="Fixed"){
       if(input$lower.value_SP=="No" ){
-      sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the percentile limit (pev) for the specificity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SP,input$PriorMetric_SP), min=0, max=1,step = 0.01)
     }else{
-      sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the percentile limit (pev) for the specificity at the specified level of confidence: "), 
                   value = max(input$PercentileValue1_SP,input$PriorMetric_SP), min=0, max=1,step = 0.01)
       
     }
     }
   })
+  
   output$sliders_fb2_SE <- renderUI({
     if(input$lower.value.fix=="Fixed"){
       if(input$lower.value2_SE=="No"){
-      sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the upper or lower limit for the sensitivity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the percentile limit (pev) for the sensitivity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SE,input$PriorMetric2_SE), min=0, max=1,step = 0.01)
     }else{
-      sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the upper or lower limit for the sensitivity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the percentile limit (pev) for the sensitivity at the specified level of confidence: "), 
                   value = max(input$PercentileValue1_SE,input$PriorMetric2_SE), min=0, max=1,step = 0.01)
       
     }
@@ -1121,10 +1124,10 @@ shinyServer(function(input, output, session) {
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value2_SP=="No"){
-      sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the percentile limit (pev) for the specificity at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_SP,input$PriorMetric2_SP), min=0, max=1,step = 0.01)
     }else{
-      sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the upper or lower limit for the specificity at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the percentile limit (pev) for the specificity at the specified level of confidence: "), 
                   value = max(input$PercentileValue1_SP,input$PriorMetric2_SP), min=0, max=1,step = 0.01)
     }
     }
@@ -1133,10 +1136,10 @@ shinyServer(function(input, output, session) {
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value_tau0=="No"){
-      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the non-zero prevalence at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the percentile limit (pev) for the non-zero prevalence at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_tau0,input$PriorMetric_tau0), min=0, max=1,step = 0.01)
     }else{
-      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the non-zero prevalence at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the percentile limit (pev) for the non-zero prevalence at the specified level of confidence: "), 
                   value = max(input$PercentileValue1_tau0,input$PriorMetric_tau0), min=0, max=1,step = 0.01)
       
     }
@@ -1146,10 +1149,10 @@ shinyServer(function(input, output, session) {
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value2_tau0=="No"){
-      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the non-zero prevalence at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the percentile limit (pev) for the non-zero prevalence at the specified level of confidence: "), 
                   value = min(input$PercentileValue1_tau0,input$PriorMetric2_tau0), min=0, max=1,step = 0.01)
     }else{
-      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the upper or lower limit for the non-zero prevalence at the specified level of confidence: "), 
+      sliderInput(inputId = "PercentileValue1_tau0",label = paste("Specify the percentile limit (pev) for the non-zero prevalence at the specified level of confidence: "), 
                   value = max(input$PercentileValue1_tau0,input$PriorMetric2_tau0), min=0, max=1,step = 0.01)
       
     }
@@ -1273,32 +1276,32 @@ shinyServer(function(input, output, session) {
 
   output$sliders_qq_fb<-renderUI({ 
     if(input$lower.value.fix=="Fixed"){
-    sliderInput(inputId = "PercentileValue3_2", label = "Specify the value for the 2nd percentile", 
+    sliderInput(inputId = "PercentileValue3_2", label = paste("What is the most likely 2nd percentile value for the",input$ID_MeanMedianMode,"of the",input$ID_TrueApp," (pev2):"), 
                 min=0, max=1, value=max(input$PercentileValue3_1+0.01,input$PercentileValue3_2),step = 0.01)
     }
   })
   output$sliders_qq22_fb<-renderUI({ 
     if(input$lower.value.fix=="Fixed"){
       
-    sliderInput(inputId = "PercentileValue3_2", label = "Specify the value for the 2nd percentile", 
+    sliderInput(inputId = "PercentileValue3_2", label = paste("What is the most likely 2nd percentile value for the",input$ID_MeanMedianMode,"of the",input$ID_TrueApp," (pev2):"), 
                 min=0, max=1, value=max(input$PercentileValue3_1+0.01,input$PercentileValue3_2),step = 0.01)
     }
   })
   output$sliders_qq22_SE_fb<-renderUI({ 
     if(input$lower.value.fix=="Fixed"){
-      sliderInput(inputId = "PercentileValue3_2_SE", label = "Specify the value for the 2nd percentile", 
+      sliderInput(inputId = "PercentileValue3_2_SE", label = paste("What is the most likely 2nd percentile value for the",input$ID_MeanMedianMode,"of the Sensitivity (pev2):"), 
                 min=0, max=1, value=max(input$PercentileValue3_1_SE+0.01,input$PercentileValue3_2_SE),step = 0.01)
     }
   })
   output$sliders_qq22_SP_fb<-renderUI({ 
     if(input$lower.value.fix=="Fixed"){
-      sliderInput(inputId = "PercentileValue3_2_SP", label = "Specify the value for the 2nd percentile", 
+      sliderInput(inputId = "PercentileValue3_2_SP", label = paste("What is the most likely 2nd percentile value for the",input$ID_MeanMedianMode,"of the Specificity (pev2):"), 
                 min=0, max=1, value=max(input$PercentileValue3_1_SP+0.01,input$PercentileValue3_2_SP),step = 0.01)
     }
   })
   output$sliders_qq22_tau0_fb<-renderUI({ 
     if(input$lower.value.fix=="Fixed"){
-      sliderInput(inputId = "PercentileValue3_2_tau0", label = "Specify the value for the 2nd percentile", 
+      sliderInput(inputId = "PercentileValue3_2_tau0", label = paste("What is the most likely 2nd percentile value for the",input$ID_MeanMedianMode,"of the non-zero prevalence (pev2):"), 
                 min=0, max=1, value=max(input$PercentileValue3_1_tau0+0.01,input$PercentileValue3_2_tau0),step = 0.01)
     }
   })
@@ -1427,23 +1430,32 @@ shinyServer(function(input, output, session) {
   output$Boxsetup2 <- shinydashboard::renderValueBox({
     if(priors$PriorSelect==FALSE){
       shinydashboard::valueBox(
-        paste0("Prior setup:"),if(priors$SetupPriors==FALSE){"Please set up the model in Tab 'Set up' before you move forward"}else{"Setup done - Please elicite a prior and press select"},
+        paste0("Prior setup:"),if(priors$SetupPriors==FALSE){"Please set up the model in Tab 'Set up' before you move forward"}else{"Setup done - Please elicite prior(s) and press 'Set prior(s)!'"},
         icon = if(priors$SetupPriors==FALSE){icon("thumbs-down")}else{icon("thumbs-up")},color = if(priors$SetupPriors==FALSE){"red"}else{"yellow"}
       )}
     else if(priors$PriorSelect==TRUE){
       shinydashboard::valueBox(
-        paste0("Prior setup:"),if(priors$SetupPriors==FALSE){"Please set up the model in Tab 'Set up' before you move forward"}else{"Model and prior setup ready! - Move to tab 'Model'"},
+        paste0("Prior setup:"),if(priors$SetupPriors==FALSE){"Please set up the model in Tab 'Set up' before you move forward"}else{"Model and prior setup ready! - When the figures load, then move to the tab 'I|nput & O|utput'"},
         icon = if(priors$SetupPriors==FALSE){icon("thumbs-down")}else{icon("thumbs-up")},color = if(priors$SetupPriors==FALSE){"red"}else{"green"}
       )
     }
   })
   output$Boxsetup3 <- shinydashboard::renderValueBox({
-    shinydashboard::valueBox(
-      
-      paste0("Model setup:"),if(priors$PriorSelect==FALSE | priors$SetupPriors==FALSE | priors$mSetupmodel==FALSE){"Please set up the model, priors and input data in Tabs 'Set up', 'Priors' and 'Model' before you move forward"}else{paste0("Model is selected and (", name_data, ") data are currently loaded- press (Step 2. Output) and then go to report")},
+    if(input$ID_SingleMultiple=="Single"){
+      name_data<-"user input"
+      shinydashboard::valueBox(
+      paste0("Model setup:"),if(priors$PriorSelect==FALSE | priors$SetupPriors==FALSE | priors$mSetupmodel==FALSE){"Please set up the model, priors and input data in Tabs 'Set up', 'Priors' and 'Model' before you move forward"}else{paste0("Model is selected and (", name_data, ") data are currently loaded-. Go to the report")},
       icon = if(priors$PriorSelect==FALSE | priors$SetupPriors==FALSE | priors$mSetupmodel==FALSE){icon("thumbs-down")}else{icon("thumbs-up")},
       color = if(priors$PriorSelect==FALSE | priors$SetupPriors==FALSE | priors$mSetupmodel==FALSE){"red"}else{"green"}
     )
+    }else{
+      shinydashboard::valueBox(
+        
+        paste0("Model setup:"),if(priors$PriorSelect==FALSE | priors$SetupPriors==FALSE | priors$mSetupmodel==FALSE){"Please set up the model, priors and input data in Tabs 'Set up', 'Priors' and 'Model' before you move forward"}else{paste0("Model is selected and (", name_data, ") data are currently loaded- press Step 2. Output' and then go to the report")},
+        icon = if(priors$PriorSelect==FALSE | priors$SetupPriors==FALSE | priors$mSetupmodel==FALSE){icon("thumbs-down")}else{icon("thumbs-up")},
+        color = if(priors$PriorSelect==FALSE | priors$SetupPriors==FALSE | priors$mSetupmodel==FALSE){"red"}else{"green"}
+      )
+    }
 
   })
   output$Boxsetup4 <- shinydashboard::renderValueBox({
@@ -1515,7 +1527,8 @@ shinyServer(function(input, output, session) {
     showModal(modalDialog(
       title = "Example 3",
       paste0("Let assume that the mean prevalence of a disease/infection for the units within an area/region is thought to be 0.20 and we are 99% confident that it is not more than 0.40. Within this area/group, we are also confident that 90% of all units have a prevalence less or equal to 0.50 and we are 95% certain that it does not exceed 0.60. 
-             Then we have to set <<themean=0.20, percentile=0.99, lower.v=TRUE, percentile.value=0.30, psi.percentile=0.90, percentile.median=0.50, percentile95value=0.60>>. Caution: If the movement of a slider produces a warning message, slightly move the slider to the other direction."),
+             Then we have to set <<tm=0.20, per=0.99, lv=TRUE, pev=0.30, perpsi=0.90, perm=0.50, per95v=0.60>>. Let assume that based on the available literature the mean value for the sensitivity of a test is expected to be 0.90 and we can be 95% sure that it is higher than 0.80. 
+             Then we have to set, <<tm=0.90, lv=FALSE, pev=0.80, per=0.95>>. "),
       easyClose = TRUE,
       footer = NULL
     ))
@@ -1524,7 +1537,7 @@ shinyServer(function(input, output, session) {
     showModal(modalDialog(
       title = "Example 2",
       paste0("Let assume that our beliefs point that 20% of the units in an area/region have a prevalence of disease/infection less than or equal to 0.30 while at the same time we are 90% certain that the prevalence is less than 0.60. 
-      Then we have to set <<percentile.value1=0.30, percentile1=0.20, percentile.value2=0.60, percentile2=0.90>>. Caution: If the user inputs a very small value for the 1st percentile and a very large value for the 2nd percentile the prior will not be defined."),
+      Then we have to set <<pev1=0.30, per1=0.20, pev2=0.60, per2=0.90>>."),
       easyClose = TRUE,
       footer = NULL
     ))
@@ -1533,7 +1546,7 @@ shinyServer(function(input, output, session) {
     showModal(modalDialog(
       title = "Example 1",
       paste0("Let assume that based on the available literature the mean value for the sensitivity of a test is expected to be 0.90 and we can be 95% sure that it is higher than 0.80. 
-             Then we have to set, <<themean=0.90, percentile=0.95,lower.v=FALSE, percentile.value=0.80>>"),
+             Then we have to set, <<tm=0.90, lv=FALSE, pev=0.80, per=0.95>>"),
       easyClose = TRUE,
       footer = NULL
     ))

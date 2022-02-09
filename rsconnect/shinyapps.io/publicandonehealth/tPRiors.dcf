@@ -1,0 +1,13 @@
+name: tPRiors
+title: tPRiors
+username:
+account: publicandonehealth
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5546486
+bundleId: 5543353
+url: https://publicandonehealth.shinyapps.io/tPRiors/
+when: 1643991531.21595
+lastSyncTime: 1643991531.21595
+asMultiple: FALSE
+asStatic: FALSE
