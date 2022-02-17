@@ -1418,7 +1418,7 @@ shinyServer(function(input, output, session) {
   })
   output$NumberDemos <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
-      paste0("3"),"preloaded datasets for demonstration",
+      paste0("4"),"preloaded datasets for demonstration",
       icon = icon("thumbs-up"),color = "red")
   })
   #-------- Intermediate screen banners --------#
