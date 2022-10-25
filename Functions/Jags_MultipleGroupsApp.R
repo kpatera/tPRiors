@@ -49,6 +49,24 @@ generic_jags<-jagsoutput_AppMult<-rjags::jags.model(data=list(n=dtst$n,y=dtst$po
 Model1.mcmc <<- coda.samples(jagsoutput_AppMult,
                              n.iter=input$nniter,thin = input$nnthin,
                              variable.names=SaveParams,seed=998)
+
+
+
+
+# generic_jags<-jagsoutput_AppMult<-rjags::jags.model(data=list(n=dtst$n,y=dtst$positive,m=100,
+#                                                               k=length(dtst$n),
+#                                                               amu=75, bmu=300,
+#                                                               apsi=2447881490, bpsi=403157841,
+#                                                               perVal=0.5),
+#                                                     inits=NULL, n.chains=3,
+#                                                     n.adapt = floor(10000/10),
+#                                                     file=paste("AppPreMultiple.txt"),quiet=TRUE)
+# 
+# Model1.mcmc <<- coda.samples(jagsoutput_AppMult,
+#                              n.iter=10000,thin = 2,
+#                              variable.names=SaveParams,seed=998)
+
+
 model_out<<-generic_jags$model()
 
 return(Model1.mcmc)

@@ -1,6 +1,6 @@
 model{ #ap denotes apparent prevalences #main.ap true prevalence
     y ~ dbin(ap, n)
-    y.pre ~ dbin(ap, m)
+    y.pre ~ dbin(main.ap, m)
     ap<-main.ap*main.Se+(1-main.ap)*(1-main.Sp)
     #Uniform (non-informative) prior for apparent prevalence (ap)
     main.ap  ~ dbeta(a,b) 

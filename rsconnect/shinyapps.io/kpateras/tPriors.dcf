@@ -5,9 +5,9 @@ account: kpateras
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3992308
-bundleId: 5546164
+bundleId: 6254775
 url: https://kpateras.shinyapps.io/tPRiors/
-when: 1644061536.60596
-lastSyncTime: 1644061536.60596
+when: 1661936638.60249
+lastSyncTime: 1661936638.6025
 asMultiple: FALSE
 asStatic: FALSE

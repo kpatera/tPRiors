@@ -1,6 +1,6 @@
 cat("model{ #ap denotes apparent, #main.ap denotes true prevalence
     y ~ dbin(ap, n) 
-    y.pre ~ dbin(ap, m)
+    y.pre ~ dbin(main.ap, m)
     ap<-main.ap*main.Se+(1-main.ap)*(1-main.Sp)
     main.ap <- z* pstar
     z ~ dbern(main.tau0)

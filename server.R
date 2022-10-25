@@ -806,7 +806,7 @@ shinyServer(function(input, output, session) {
                  detail = 'This may take a while...', value = 1, {
                    
     
-    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
+    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
     pri <-  data.frame(density=rbeta(10000,shape1 = fb$atotalbeta,shape2=fb$btotalbeta))
     post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' 
     triple <- rbind(post, pri)
@@ -844,7 +844,7 @@ shinyServer(function(input, output, session) {
     
     withProgress(message = 'Calculation in progress',
                  detail = 'This may take a while...', value = 1, {
-    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
+    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
     pri <-  data.frame(density=rbeta(10000,shape1 = fb$atotalbeta,shape2=fb$btotalbeta))
     #Lik <- data.frame(density=rbinom(n = 10000, size =  sum(input$n), prob = sum(input$y/input$n))/sum(input$n))
     post$Distribution <- 'posterior' ; pri$Distribution <- 'prior' #; Lik$Distribution <- 'likelihood'
@@ -896,7 +896,7 @@ shinyServer(function(input, output, session) {
     withProgress(message = 'Calculation in progress',
                  detail = 'This may take a while...', value = 1, {
     
-    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.ap))
+    post <-  data.frame(density=data.frame(density=Model1.mcmc_df$main.pstar.rep))
     pri <-  data.frame(density=rbeta(10000,shape1 = fb$atotalbeta,shape2=fb$btotalbeta))
     #mn=mean((sum(dataset()$positive/dataset()$n))/sum(dataset()$n))
     #tau=sd(dataset()$positive/dataset()$n)

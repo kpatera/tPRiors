@@ -34,7 +34,8 @@ dtst<-dataset()
 #dtst$region<-factor(dtst$region)
 #dtst$country<-factor(dtst$country)
 #dtst$ID<-1:length(dtst$region)
-
+#library(readxl)
+#dtst <- read_excel("Data/Dementia_Updated.xls")
 
 generic_jags<-jagsoutput_TrueMult<-rjags::jags.model(data=list(n=dtst$n,y=dtst$positive, k=length(dtst$n),m=100,
                                                                ase=fb_SE$a, bse=fb_SE$b,
@@ -47,23 +48,23 @@ generic_jags<-jagsoutput_TrueMult<-rjags::jags.model(data=list(n=dtst$n,y=dtst$p
 
 
 # generic_jags<-jagsoutput_TrueMult<-rjags::jags.model(data=list(n=dtst$n,y=dtst$positive, k=length(dtst$n),m=100,
-#                                                                ase=21, bse=1,
-#                                                                asp=21, bsp=1,
-#                                                                amu=21, bmu=1,
-#                                                                apsi=21, bpsi=1,
+#                                                                ase=1, bse=210,
+#                                                                asp=1, bsp=210,
+#                                                                amu=1, bmu=100,
+#                                                                apsi=5, bpsi=1,
 #                                                                perVal=0.5),
 #                                                      inits=NULL, n.chains=2,n.adapt = floor(3000/10),
 #                                                      file=paste("TrePreMultiple.txt"),quiet=TRUE)
-# 
 
 
-# Model1.mcmc <<- coda.samples(jagsoutput_TrueMult,
-#                             n.iter=input$nniter,thin =input$nnthin,
-#                             variable.names=SaveParams,seed=998)
 
 Model1.mcmc <<- coda.samples(jagsoutput_TrueMult,
                             n.iter=input$nniter,thin =input$nnthin,
                             variable.names=SaveParams,seed=998)
+
+# Model1.mcmc <<- coda.samples(jagsoutput_TrueMult,
+#                             n.iter=10000,thin =5,
+#                             variable.names=SaveParams,seed=998)
 
 model_out<<-generic_jags$model()
 
