@@ -1,5 +1,6 @@
 shinyUI(
-  navbarPage(inverse=TRUE,
+  navbarPage(title="",
+             inverse=TRUE,
              #theme = shinytheme("yeti"),
              shinyWidgets::useShinydashboard(),
              #shinythemes::themeSelector(), 

@@ -1251,6 +1251,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb_SE <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       if(input$lower.value_SE=="No" ){
       sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the percentile limit (pev) for the",input$ID_MeanMedianMode,"of the Sensitivity at the specified level of confidence: "), 
@@ -1263,6 +1264,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb_SP <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       if(input$lower.value_SP=="No" ){
       sliderInput(inputId = "PercentileValue1_SP",label = paste("Specify the percentile limit (pev) for the specificity at the specified level of confidence: "), 
@@ -1276,6 +1278,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$sliders_fb2_SE <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       if(input$lower.value2_SE=="No"){
       sliderInput(inputId = "PercentileValue1_SE",label = paste("Specify the percentile limit (pev) for the sensitivity at the specified level of confidence: "), 
@@ -1288,6 +1291,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb2_SP <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value2_SP=="No"){
@@ -1300,6 +1304,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb_tau0 <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value_tau0=="No"){
@@ -1313,6 +1318,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_fb2_tau0 <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value2_tau0=="No"){
@@ -1335,6 +1341,7 @@ shinyServer(function(input, output, session) {
   
   
   output$sliders2_fb <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
     if(input$lower.value2=="No"){
       updateSliderInput(session = session,inputId = "PercentileValue2", label = "Specify the lower limit for the mean/median/mode at the specified level of confidence: ",
@@ -1346,6 +1353,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders22_fb <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value2=="No"){
@@ -1358,6 +1366,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders23_fb <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value2=="No"){
@@ -1371,6 +1380,7 @@ shinyServer(function(input, output, session) {
   })
  
   output$sliders2_SP_fb <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value2_SP=="No"){
@@ -1383,6 +1393,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders22_SP_fb <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       
     if(input$lower.value2_SP=="No"){
@@ -1395,6 +1406,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders23_SP_fb <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       if(input$lower.value2_SP=="No"){
       updateSliderInput(session = session,inputId = "Percentile95value2_SP", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
@@ -1407,8 +1419,8 @@ shinyServer(function(input, output, session) {
   })
 
   output$sliders2_SE_fb <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
-      
     if(input$lower.value2_SE=="No"){
       updateSliderInput(session = session,inputId = "PercentileValue2_SE", label = "Specify the lower limit for the mean/median/mode at the specified level of confidence: ",
                   value = min(input$PercentileValue2_SE,input$PriorMean2_SE-0.01), min=0, max=1,step = 0.01)
@@ -1419,6 +1431,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders22_SE_fb <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       if(input$lower.value2_SE=="No"){
       updateSliderInput(session = session,inputId = "PercentileMedian2_SE", label = "Specify the median value that corresponds to the defined psi.percentile. has to be higher than both themean and the percentile: ",
@@ -1430,6 +1443,7 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders23_SE_fb <- renderUI({
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       if(input$lower.value2_SE=="No"){
       updateSliderInput(session = session,inputId = "Percentile95value2_SE", label = "Specify the value that the percentile.median does not exceed with 95% confidence. has to be higher than the percentile",
@@ -1442,12 +1456,14 @@ shinyServer(function(input, output, session) {
   })
 
   output$sliders_qq_fb<-renderUI({ 
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
     sliderInput(inputId = "PercentileValue3_2", label = paste("What is the most likely 2nd percentile value for the",input$ID_MeanMedianMode,"of the",input$ID_TrueApp," (pev2):"), 
                 min=0, max=1, value=max(input$PercentileValue3_1+0.01,input$PercentileValue3_2),step = 0.01)
     }
   })
   output$sliders_qq22_fb<-renderUI({ 
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       
     sliderInput(inputId = "PercentileValue3_2", label = paste("What is the most likely 2nd percentile value for the",input$ID_MeanMedianMode,"of the",input$ID_TrueApp," (pev2):"), 
@@ -1455,18 +1471,21 @@ shinyServer(function(input, output, session) {
     }
   })
   output$sliders_qq22_SE_fb<-renderUI({ 
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       sliderInput(inputId = "PercentileValue3_2_SE", label = paste("What is the most likely 2nd percentile value for the",input$ID_MeanMedianMode,"of the Sensitivity (pev2):"), 
                 min=0, max=1, value=max(input$PercentileValue3_1_SE+0.01,input$PercentileValue3_2_SE),step = 0.01)
     }
   })
   output$sliders_qq22_SP_fb<-renderUI({ 
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       sliderInput(inputId = "PercentileValue3_2_SP", label = paste("What is the most likely 2nd percentile value for the",input$ID_MeanMedianMode,"of the Specificity (pev2):"), 
                 min=0, max=1, value=max(input$PercentileValue3_1_SP+0.01,input$PercentileValue3_2_SP),step = 0.01)
     }
   })
   output$sliders_qq22_tau0_fb<-renderUI({ 
+    req(input$lower.value.fix)
     if(input$lower.value.fix=="Fixed"){
       sliderInput(inputId = "PercentileValue3_2_tau0", label = paste("What is the most likely 2nd percentile value for the",input$ID_MeanMedianMode,"of the non-zero prevalence (pev2):"), 
                 min=0, max=1, value=max(input$PercentileValue3_1_tau0+0.01,input$PercentileValue3_2_tau0),step = 0.01)
