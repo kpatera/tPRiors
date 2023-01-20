@@ -76,7 +76,8 @@ shinyUI(
                         fluidRow(shinydashboard::valueBoxOutput("Boxsetup2", width = 60)),
                         #     textOutput("PriorSelectionText"),
                         # div(style="margin-top:+2.5em",
-                        uiOutput("Priors_Plot_Sum_fb")
+                        uiOutput("Priors_Plot_Sum_fb"),
+                        textOutput("PriorValues")
                         #  )
                       )
                       

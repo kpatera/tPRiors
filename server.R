@@ -640,6 +640,173 @@ shinyServer(function(input, output, session) {
     
   })
   
+  output$PriorValues <- renderText({
+    if(priors$SetupPriors==TRUE){
+      if(input$ID_Informative=="No"){
+        fb<<-findbeta2(themean =0.2, percentile=0.9,lower.v=TRUE, percentile.value=0.5)
+        if(input$priorNonInf=="Beta(1,1)") {
+          fb$a<<-1;fb$atotalbeta<<-1; fb$b<<-1;fb$btotalbeta<<-1}
+        if(input$priorNonInf=="Beta(0.5,0.5)") {
+          fb$a<<-0.5;fb$atotalbeta<<-0.5; fb$b<<-0.5;fb$btotalbeta<<-0.5}
+        if(input$priorNonInf=="Beta(2,2)") {
+          fb$a<<-2;fb$atotalbeta<<-2; fb$b<<-2;fb$btotalbeta<<-2}
+        if(input$priorNonInf=="Beta(0.5,2)") {
+          fb$a<<-0.5;fb$atotalbeta<<-0.5; fb$b<<-2;fb$btotalbeta<<-2}
+        paste("Prior parameteres - a =",fb$a,", b =",fb$b)
+        }else{
+        if(input$ID_MeanMedianMode=="Percentiles"){
+          if(input$ID_TrueApp!="True prevalence"){
+            fb<<-findbetaqq2(percentile.value1=input$PercentileValue3_1,percentile1=input$Percentile3_1,
+                             percentile.value2=input$PercentileValue3_2,percentile2=input$Percentile3_2)
+            paste("Prior parameteres - a =",fb$a,", b =",fb$b)
+            }else{
+            if(input$ID_ZeroPrevalence=="No"){
+              fb<<-findbetaqq2(percentile.value1=input$PercentileValue3_1,percentile1=input$Percentile3_1,
+                               percentile.value2=input$PercentileValue3_2,percentile2=input$Percentile3_2)
+              # Find alpha and beta of a beta dist based on percentiles Sensitivity
+              fb_SE<<-findbetaqq2(percentile.value1=input$PercentileValue3_1_SE,percentile1=input$Percentile3_1_SE,
+                                  percentile.value2=input$PercentileValue3_2_SE,percentile2=input$Percentile3_2_SE)
+              # Find alpha and beta of a beta dist based on percentiles Specificity
+              fb_SP<<-findbetaqq2(percentile.value1=input$PercentileValue3_1_SP,percentile1=input$Percentile3_1_SP,
+                                  percentile.value2=input$PercentileValue3_2_SP,percentile2=input$Percentile3_2_SP)
+              paste("Prior parameteres - a =",fb$a,", b =",fb$b, ", ase =", fb_SE$a, ", bse =",fb_SE$b, ", asp =",fb_SP$a,", bsp =",fb_SP$b)
+            }else{
+              fb<<-findbetaqq2(percentile.value1=input$PercentileValue3_1,percentile1=input$Percentile3_1,
+                               percentile.value2=input$PercentileValue3_2,percentile2=input$Percentile3_2)
+              # Find alpha and beta of a beta dist based on percentiles Sensitivity
+              fb_SE<<-findbetaqq2(percentile.value1=input$PercentileValue3_1_SE,percentile1=input$Percentile3_1_SE,
+                                  percentile.value2=input$PercentileValue3_2_SE,percentile2=input$Percentile3_2_SE)
+              # Find alpha and beta of a beta dist based on percentiles Specificity
+              fb_SP<<-findbetaqq2(percentile.value1=input$PercentileValue3_1_SP,percentile1=input$Percentile3_1_SP,
+                                  percentile.value2=input$PercentileValue3_2_SP,percentile2=input$Percentile3_2_SP)
+              # Find alpha and beta of a beta dist based on percentiles of zero probability
+              fb_tau0<<-findbetaqq2(percentile.value1=input$PercentileValue3_1_tau0,percentile1=input$Percentile3_1_tau0,
+                                    percentile.value2=input$PercentileValue3_2_tau0,percentile2=input$Percentile3_2_tau0)
+              paste("Prior parameteres - a =",fb$a,", b =",fb$b, ", ase =", fb_SE$a, ", bse =",fb_SE$b, ", asp =",fb_SP$a,", bsp =",fb_SP$b,
+                    ", atau0 =",fb_tau0$a,", btau0 =", fb_tau0$b)
+            }
+          }
+        }else{
+          if(input$ID_SingleMultiple=="Single"){
+            if(input$ID_TrueApp!="True prevalence"){
+              if(input$lower.value=="Yes"){lower.value=TRUE}else{lower.value=FALSE}
+              if(input$ID_MeanMedianMode=="Mean" & !is.null(input[["PriorMetric"]])){
+                fb<<-findbeta2(themean =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+              }else if(input$ID_MeanMedianMode=="Median"){
+                fb<<-findbeta2(themedian=input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+              }else if(input$ID_MeanMedianMode=="Mode"){
+                fb<<-findbeta2(themode =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+              }
+              paste("Prior parameteres - a =",fb$a,", b =",fb$b)
+            }else{
+              if(input$ID_ZeroPrevalence=="No"){
+                if(input$lower.value=="Yes"){lower.value=TRUE}else{lower.value=FALSE}
+                if(input$lower.value_SP=="Yes"){lower.value_SP=TRUE}else{lower.value_SP=FALSE}
+                if(input$lower.value_SE=="Yes"){lower.value_SE=TRUE}else{lower.value_SE=FALSE}
+                if(input$ID_MeanMedianMode=="Mean"){
+                  fb<<-findbeta2(themean =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+                  fb_SE<<-findbeta2(themean =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+                  fb_SP<<-findbeta2(themean =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
+                }else if(input$ID_MeanMedianMode=="Median"){
+                  fb<<-findbeta2(themedian=input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+                  fb_SE<<-findbeta2(themedian =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+                  fb_SP<<-findbeta2(themedian =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
+                }else if(input$ID_MeanMedianMode=="Mode"){
+                  fb<<-findbeta2(themode =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+                  fb_SE<<-findbeta2(themode =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+                  fb_SP<<-findbeta2(themode =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
+                }
+                paste("Prior parameteres - a =",fb$a,", b =",fb$b, ", ase =", fb_SE$a, ", bse =",fb_SE$b, ", asp =",fb_SP$a,", bsp =",fb_SP$b)
+                      
+              }else{
+                if(input$lower.value=="Yes"){lower.value=TRUE}else{lower.value=FALSE}
+                if(input$lower.value_SP=="Yes"){lower.value_SP=TRUE}else{lower.value_SP=FALSE}
+                if(input$lower.value_SE=="Yes"){lower.value_SE=TRUE}else{lower.value_SE=FALSE}
+                if(input$lower.value_tau0=="Yes"){lower.value_tau0=TRUE}else{lower.value_tau0=FALSE}
+                if(input$ID_MeanMedianMode=="Mean"){
+                  fb<<-findbeta2(themean =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+                  fb_SE<<-findbeta2(themean =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+                  fb_SP<<-findbeta2(themean =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
+                  fb_tau0<<-findbeta2(themean =input$PriorMetric_tau0, percentile=input$Percentile1_tau0,lower.v=lower.value_tau0, percentile.value=input$PercentileValue1_tau0)
+                }else if(input$ID_MeanMedianMode=="Median"){
+                  fb<<-findbeta2(themedian=input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+                  fb_SE<<-findbeta2(themedian =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+                  fb_SP<<-findbeta2(themedian =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
+                  fb_tau0<<-findbeta2(themedian =input$PriorMetric_tau0, percentile=input$Percentile1_tau0,lower.v=lower.value_tau0, percentile.value=input$PercentileValue1_tau0)
+                }else if(input$ID_MeanMedianMode=="Mode"){
+                  fb<<-findbeta2(themode =input$PriorMetric, percentile=input$Percentile1,lower.v=lower.value, percentile.value=input$PercentileValue1)
+                  fb_SE<<-findbeta2(themode =input$PriorMetric_SE, percentile=input$Percentile1_SE,lower.v=lower.value_SE, percentile.value=input$PercentileValue1_SE)
+                  fb_SP<<-findbeta2(themode =input$PriorMetric_SP, percentile=input$Percentile1_SP,lower.v=lower.value_SP, percentile.value=input$PercentileValue1_SP)
+                  fb_tau0<<-findbeta2(themode =input$PriorMetric_tau0, percentile=input$Percentile1_tau0,lower.v=lower.value_tau0, percentile.value=input$PercentileValue1_tau0)
+                }
+                paste("Prior parameteres - a =",fb$a,", b =",fb$b, ", ase =", fb_SE$a, ", bse =",fb_SE$b, ", asp =",fb_SP$a,", bsp =",fb_SP$b,
+                      ", atau0 =",fb_tau0$a,", btau0 =", fb_tau0$b)
+              }
+            }
+          }else if(input$ID_SingleMultiple=="Multiple"){
+            if(input$ID_TrueApp!="True prevalence"){
+              if(input$lower.value2=="Yes"){lower.value2=TRUE}else{lower.value2=FALSE}
+              fb<<-findbetamupsi2(themean=input$PriorMean2, percentile=input$Percentile2,
+                                  lower.v=lower.value2,percentile.value=input$PercentileValue2,
+                                  psi.percentile=input$PercentilePsi2, percentile.median=input$PercentileMedian2,
+                                  percentile95value=input$Percentile95value2)
+              # fb<-NULL
+              fb$aa<<-fb$atotalbeta; fb$bb<<-fb$btotalbeta
+              fb$a<<-fb$abeta; fb$b<<-fb$bbeta
+              fb$ag<<-fb$agamma; fb$bg<<-fb$bgamma
+              paste("Prior parameteres - a_total =",fb$a,", b_total =",fb$b, ", am =", fb$abeta, ", bm =",fb$bbeta, 
+                    ", ag =",fb$agamma,", bg =",fb$bgamma)
+            }else{
+              if(input$ID_ZeroPrevalence=="Yes"){
+                if(input$lower.value2=="Yes"){lower.value2=TRUE}else{lower.value2=FALSE}
+                if(input$lower.value2_SP=="Yes"){lower.value2_SP=TRUE}else{lower.value2_SP=FALSE}
+                if(input$lower.value2_SE=="Yes"){lower.value2_SE=TRUE}else{lower.value2_SE=FALSE}
+                if(input$lower.value2_tau0=="Yes"){lower.value2_tau0=TRUE}else{lower.value2_tau0=FALSE}
+                
+                fb<<-findbetamupsi2(themean=input$PriorMean2, percentile=input$Percentile2,
+                                    lower.v=lower.value2,percentile.value=input$PercentileValue2,
+                                    psi.percentile=input$PercentilePsi2, percentile.median=input$PercentileMedian2,
+                                    percentile95value=input$Percentile95value2)
+                fb$aa<<-fb$atotalbeta; fb$bb<<-fb$btotalbeta
+                fb$a<<-fb$abeta; fb$b<<-fb$bbeta
+                fb$ag<<-fb$agamma; fb$bg<<-fb$bgamma
+                
+                fb_SE<<-findbeta2(themean =input$PriorMetric2_SE, percentile=input$Percentile2_SE,lower.v=lower.value2_SE, percentile.value=input$PercentileValue1_SE)
+                fb_SP<<-findbeta2(themean =input$PriorMetric2_SP, percentile=input$Percentile2_SP,lower.v=lower.value2_SP, percentile.value=input$PercentileValue1_SP)
+                fb_tau0<<-findbeta2(themean =input$PriorMetric2_tau0, percentile=input$Percentile2_tau0,lower.v=lower.value2_tau0, percentile.value=input$PercentileValue1_tau0)
+                
+                paste("Prior parameteres - a_total =",fb$a,", b_total =",fb$b, ", am =", fb$abeta, ", bm =",fb$bbeta, 
+                      ", ag =",fb$agamma,", bg =",fb$bgamma, ", atau0 =",fb_tau0$a,", btau0 =", fb_tau0$b)
+                
+              }else if(input$ID_ZeroPrevalence=="No"){
+                if(input$lower.value2=="Yes"){lower.value2=TRUE}else{lower.value2=FALSE}
+                if(input$lower.value2_SP=="Yes"){lower.value2_SP=TRUE}else{lower.value2_SP=FALSE}
+                if(input$lower.value2_SE=="Yes"){lower.value2_SE=TRUE}else{lower.value2_SE=FALSE}
+                
+                fb<<-findbetamupsi2(themean=input$PriorMean2, percentile=input$Percentile2,
+                                    lower.v=lower.value2,percentile.value=input$PercentileValue2,
+                                    psi.percentile=input$PercentilePsi2, percentile.median=input$PercentileMedian2,
+                                    percentile95value=input$Percentile95value2)
+                fb$aa<<-fb$atotalbeta; fb$bb<<-fb$btotalbeta
+                fb$a<<-fb$abeta; fb$b<<-fb$bbeta
+                fb$ag<<-fb$agamma; fb$bg<<-fb$bgamma
+                
+              fb_SE<<-findbeta2(themean =input$PriorMetric2_SE, percentile=input$Percentile2_SE,lower.v=lower.value2_SE, percentile.value=input$PercentileValue1_SE)
+              fb_SP<<-findbeta2(themean =input$PriorMetric2_SP, percentile=input$Percentile2_SP,lower.v=lower.value2_SP, percentile.value=input$PercentileValue1_SP)
+                
+                paste("Prior parameteres - a_total =",fb$a,", b_total =",fb$b, ", am =", fb$abeta, ", bm =",fb$bbeta, 
+                      ", ag =",fb$agamma,", bg =",fb$bgamma, 
+                      ", ase =",fb_SE$a,"bse =",fb_SE$b,"asp =",fb_SP$a,", bsp =",fb_SP$b)
+                
+              }
+            }
+          }
+        }
+      }
+    }
+    
+  })
+  
   observeEvent(once = TRUE,input$buttonPrior,{
     output$Priors_Plot_Sum_fb <- renderUI({
       withProgress(message = 'Calculation in progress',
@@ -1052,9 +1219,9 @@ shinyServer(function(input, output, session) {
       if(input$LoadData=="Option1Preload"){
         selectInput("Indata1", "Dataset:",
                     c("Dementia_Motivating"="Dementia_Motivating",
-                      "Example1_4Studies" = "Example1_4Studies",
-                      "Example2_40Studies" = "Example2_40Studies",
-                      "Example4_129studies" = "Example4_129studies"),
+                      "ElisaData_4Studies" = "ElisaData_4Studies",
+                      "ElisaData_40Studies" = "ElisaData_40Studies",
+                      "ElisaData_129Studies" = "ElisaData_129Studies"),
                     selected = "Dementia_Motivating")
       }else{
         fileInput(inputId = "Indata2", label = "Choose .xls/.xlsx file",

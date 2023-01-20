@@ -1,6 +1,6 @@
 #---- Load packages ----#
 packages.list<-c("shiny","shinythemes","shinyWidgets","shinydashboard","shinycssloaders",
-                 "PriorGen","R2jags","ggplot2","tidyr","rjags","xlsx","writexl",
+                 "PriorGen","R2jags","ggplot2","tidyr","rjags","xlsx","writexl","readxl",
                  "shinyjs","rmarkdown","markdown","plotly","ggmcmc","knitr","shinyalert",
                  "grid","DT","readxl","gridExtra","psych","rootSolve","devtools","gdata","gtools","waiter") # ,
 
@@ -20,10 +20,10 @@ fb<-list(1,1)
 
 #---- Load pre-loaded datasets ----#
 require(readxl)
-ElisaData_4Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_4studies.xlsx"))
-ElisaData_40Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_Attica.xlsx"))
+ElisaData_4Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_4studies.xls"))
+ElisaData_40Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_Attica.xls"))
 #Example3_102Studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d_NonAttica.xlsx"))
-ElisaData_129studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d.xlsx"))
+ElisaData_129studies <<- data.frame(read_excel("Data/efs31678e-sup-0004-annex_d.xls"))
 Dementia_Motivating <<- data.frame(read_excel("Data/Dementia_Updated.xls"))
 
 name_data<-"sidebar user input"
