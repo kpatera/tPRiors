@@ -45,6 +45,8 @@ shinyServer(function(input, output, session) {
       fb$a<<-0.5;fb$atotalbeta<<-0.5; fb$b<<-0.5;fb$btotalbeta<<-0.5}
     if(input$priorNonInf=="Beta(2,2)") {
       fb$a<<-2;fb$atotalbeta<<-2; fb$b<<-2;fb$btotalbeta<<-2}
+    if(input$priorNonInf=="Beta(0.5,2)") {
+      fb$a<<-0.5;fb$atotalbeta<<-0.5; fb$b<<-2;fb$btotalbeta<<-2}
     priors$prior<<-list(a=fb$a,b=fb$b)
     
     x<-seq(0,1,length.out = 10000)
